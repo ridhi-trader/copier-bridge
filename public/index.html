@@ -648,6 +648,37 @@
     transition: opacity 0.65s ease, transform 0.65s ease;
   }
   .reveal.vis { opacity:1; transform:translateY(0); }
+
+  /* ===== Floating Help Button ===== */
+  .help-float{position:fixed;bottom:24px;right:24px;z-index:998;display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem}
+  .help-bubble{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;padding:1rem 1.2rem;max-width:260px;box-shadow:0 10px 40px rgba(0,0,0,0.4);display:none;animation:slideUp 0.3s ease}
+  .help-bubble.show{display:block}
+  .help-bubble p{font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.8rem}
+  .help-bubble a{display:block;padding:0.5rem;border-radius:8px;font-size:0.82rem;font-weight:600;color:var(--text-primary);transition:background 0.2s;text-decoration:none}
+  .help-bubble a:hover{background:rgba(201,168,76,0.08)}
+  .help-bubble a span{margin-right:0.5rem}
+  .help-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));border:none;cursor:pointer;font-size:1.5rem;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(201,168,76,0.3);transition:transform 0.2s,box-shadow 0.3s}
+  .help-btn:hover{transform:scale(1.08);box-shadow:0 8px 32px rgba(201,168,76,0.4)}
+
+  /* ===== Community Section ===== */
+  .community-section{background:var(--bg-primary);padding:5rem 0}
+  .community-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:3rem}
+  .comm-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:1.5rem;text-align:center;transition:transform 0.3s,border-color 0.3s;text-decoration:none;display:block}
+  .comm-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,0.25)}
+  .comm-card .comm-icon{font-size:2rem;margin-bottom:0.8rem}
+  .comm-card h4{font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-bottom:0.3rem}
+  .comm-card p{font-size:0.78rem;color:var(--text-muted)}
+
+  /* ===== Live Stats Banner ===== */
+  .live-stats{background:linear-gradient(135deg,rgba(107,29,58,0.12),rgba(201,168,76,0.06));border-top:1px solid rgba(201,168,76,0.06);border-bottom:1px solid rgba(201,168,76,0.06);padding:3.5rem 0}
+  .live-stats .container{display:flex;justify-content:space-around;flex-wrap:wrap;gap:2rem}
+  .live-stat{text-align:center}
+  .live-stat .ls-val{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .live-stat .ls-label{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-muted);margin-top:0.2rem}
+  .live-stat .ls-sub{font-size:0.68rem;color:var(--text-muted);margin-top:0.15rem;font-style:italic}
+
+  @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
 </style>
 </head>
 <body>
@@ -738,6 +769,33 @@
       <div class="platform-item"><span class="p-dot"></span> Rithmic</div>
       <div class="platform-item"><span class="p-dot"></span> Tradovate</div>
       <div class="platform-item"><span class="p-dot"></span> ProjectX</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== LIVE STATS ===== -->
+<section class="live-stats">
+  <div class="container">
+    <div class="live-stat reveal">
+      <div class="ls-val" data-count="500">0</div>
+      <div class="ls-label">Active Masters</div>
+      <div class="ls-sub">And growing daily</div>
+    </div>
+    <div class="live-stat reveal">
+      <div class="ls-val" data-count="12000">0</div>
+      <div class="ls-label">Client Accounts</div>
+      <div class="ls-sub">Connected worldwide</div>
+    </div>
+    <div class="live-stat reveal">
+      <div class="ls-val" data-count="85000">0</div>
+      <div class="ls-label">Trades Copied</div>
+      <div class="ls-sub">Last 30 days</div>
+    </div>
+    <div class="live-stat reveal">
+      <div class="ls-val" data-count="99">0%</div>
+      <div class="ls-label">Success Rate</div>
+      <div class="ls-sub">Reliable execution</div>
     </div>
   </div>
 </section>
@@ -1031,6 +1089,40 @@
   </div>
 </section>
 
+
+<!-- ===== COMMUNITY ===== -->
+<section class="community-section">
+  <div class="container">
+    <div class="center" style="text-align:center;">
+      <div class="section-eyebrow">Community</div>
+      <div class="section-title">Join 10,000+ Traders</div>
+      <p class="section-sub" style="margin:0 auto;">Connect with us on your favorite platform. Get updates, support, and trading insights.</p>
+    </div>
+    <div class="community-grid">
+      <a href="https://t.me/" target="_blank" class="comm-card reveal">
+        <div class="comm-icon">✈️</div>
+        <h4>Telegram Group</h4>
+        <p>Join live discussions</p>
+      </a>
+      <a href="https://youtube.com/" target="_blank" class="comm-card reveal">
+        <div class="comm-icon">▶️</div>
+        <h4>YouTube Channel</h4>
+        <p>Tutorials & setups</p>
+      </a>
+      <a href="https://instagram.com/" target="_blank" class="comm-card reveal">
+        <div class="comm-icon">📸</div>
+        <h4>Instagram</h4>
+        <p>Trade highlights</p>
+      </a>
+      <a href="https://wa.me/" target="_blank" class="comm-card reveal">
+        <div class="comm-icon">💬</div>
+        <h4>WhatsApp Support</h4>
+        <p>Direct help & queries</p>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ===== FINAL CTA ===== -->
 <section class="final-cta">
   <div class="glow g1"></div>
@@ -1142,7 +1234,57 @@
       if(!wasOpen) item.classList.add('open');
     });
   });
+
+  // Help bubble toggle
+  function toggleHelp(){
+    document.getElementById('helpBubble').classList.toggle('show');
+  }
+  // Close help on outside click
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.help-float')){
+      document.getElementById('helpBubble').classList.remove('show');
+    }
+  });
+
+  // Live stats counter animation
+  var liveCounterDone=false;
+  function animateLiveCounters(){
+    if(liveCounterDone)return;
+    liveCounterDone=true;
+    document.querySelectorAll('.ls-val').forEach(function(el){
+      var target=parseInt(el.getAttribute('data-count'));
+      if(isNaN(target))return;
+      var suffix=el.textContent.replace(/[0-9]/g,'');
+      var startTime=performance.now();
+      function step(now){
+        var p=Math.min((now-startTime)/2000,1);
+        var ease=1-Math.pow(1-p,3);
+        el.textContent=Math.floor(ease*target).toLocaleString()+suffix;
+        if(p<1)requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  var liveObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){animateLiveCounters();liveObs.disconnect();}});
+  },{threshold:0.3});
+  var liveSection=document.querySelector('.live-stats');
+  if(liveSection)liveObs.observe(liveSection);
+
 </script>
+
+
+<!-- Floating Help -->
+<div class="help-float">
+  <div class="help-bubble" id="helpBubble">
+    <p style="font-weight:700;color:var(--text-primary);margin-bottom:0.5rem">Need Help? 🤝</p>
+    <p>Our team is ready to assist you!</p>
+    <a href="https://t.me/" target="_blank"><span>✈️</span> Chat on Telegram</a>
+    <a href="https://wa.me/" target="_blank"><span>💬</span> WhatsApp Us</a>
+    <a href="mailto:support@tradebridge.com"><span>📧</span> Email Support</a>
+  </div>
+  <button class="help-btn" onclick="toggleHelp()" aria-label="Help">💬</button>
+</div>
 
 </body>
 </html>
