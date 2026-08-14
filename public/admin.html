@@ -7,91 +7,210 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171}
+  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--orange:#FB923C;--blue:#60A5FA}
   body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);padding:2rem;min-height:100vh}
-  .container{max-width:1000px;margin:0 auto}
-
+  .container{max-width:1100px;margin:0 auto}
   .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
-  .header-left h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .header-left .sub{font-size:0.85rem;color:var(--muted)}
+  .header h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .header .sub{font-size:0.82rem;color:var(--muted)}
   .refresh-info{display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--muted)}
-  .refresh-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  .rdot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
   @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(74,222,128,0.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(74,222,128,0)}}
-
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
-  .s{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.5rem;transition:transform 0.3s,border-color 0.3s;animation:fadeIn 0.5s ease}
-  .s:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.2)}
-  .s .l{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.4rem}
-  .s .v{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .s .change{font-size:0.72rem;margin-top:0.3rem;color:var(--green)}
   @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+  .s{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.3rem;transition:transform 0.3s}
+  .s:hover{transform:translateY(-2px)}
+  .s .l{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
+  .s .v{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
   .section{background:var(--card);border:1px solid var(--glass-b);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem}
-  .section h2{font-size:1.1rem;font-weight:700;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem}
+  .section h2{font-size:1.1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+  .section h2 .badge{font-size:0.7rem;background:rgba(251,146,60,0.1);color:var(--orange);padding:0.2rem 0.6rem;border-radius:6px;font-weight:700}
+
   table{width:100%;border-collapse:collapse}
-  th{text-align:left;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.7rem 0.5rem;border-bottom:1px solid var(--glass-b)}
-  td{font-size:0.83rem;padding:0.7rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2);transition:background 0.2s}
+  th{text-align:left;font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
+  td{font-size:0.82rem;padding:0.65rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2)}
   tr:hover td{background:rgba(107,29,58,0.04)}
+
+  .btn-approve{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:var(--green);padding:0.35rem 0.8rem;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-right:0.3rem}
+  .btn-approve:hover{background:rgba(74,222,128,0.2)}
+  .btn-reject{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15);color:var(--red);padding:0.35rem 0.8rem;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s}
+  .btn-reject:hover{background:rgba(248,113,113,0.15)}
+
+  .paid-yes{color:var(--green);font-weight:700;font-size:0.8rem}
+  .paid-no{color:var(--red);font-weight:700;font-size:0.8rem}
   .buy{color:var(--green);font-weight:600}.sell{color:#D44A7A;font-weight:600}
+  a.back{display:inline-block;margin-bottom:1.5rem;font-size:0.85rem;color:var(--muted);text-decoration:none}
+  a.back:hover{color:var(--txt)}
 
-  .back-link{display:inline-block;margin-bottom:1.5rem;font-size:0.85rem;color:var(--muted);text-decoration:none;transition:color 0.2s}
-  .back-link:hover{color:var(--txt)}
+  .tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+  .tab{padding:0.5rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;border:1px solid var(--glass-b);background:none;color:var(--muted);font-family:inherit;transition:all 0.3s}
+  .tab.active{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.2);color:var(--gold)}
 
-  @media(max-width:640px){
-    .stats{grid-template-columns:1fr 1fr}
-    .header{flex-direction:column;align-items:flex-start}
-  }
+  .toast{position:fixed;top:20px;right:20px;z-index:9999;padding:0.8rem 1.2rem;border-radius:12px;font-size:0.85rem;font-weight:600;animation:toastIn 0.4s ease,toastOut 0.4s ease 2s forwards}
+  .toast.ok{background:rgba(74,222,128,0.15);color:var(--green);border:1px solid rgba(74,222,128,0.2)}
+  @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
+
+  @media(max-width:640px){.stats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="container">
-  <a href="/" class="back-link">← Back to home</a>
+  <a href="/" class="back">← Back to home</a>
   <div class="header">
-    <div class="header-left">
+    <div>
       <h1>TradeBridge Admin</h1>
-      <p class="sub">Platform overview & monitoring</p>
+      <p class="sub">Platform management & monitoring</p>
     </div>
-    <div class="refresh-info">
-      <span class="refresh-dot"></span>
-      <span>Live — Refreshes every 10s</span>
-      <span id="lastRefresh"></span>
-    </div>
+    <div class="refresh-info"><span class="rdot"></span> Live · <span id="lastR"></span></div>
   </div>
 
   <div class="stats" id="stats"></div>
 
-  <div class="section">
-    <h2>📊 Recent Trades</h2>
-    <div style="overflow-x:auto"><table id="trades"><tr><td style="color:var(--muted);text-align:center;padding:2rem">Loading...</td></tr></table></div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchAdminTab('payments',this)">💳 Payments</button>
+    <button class="tab" onclick="switchAdminTab('masters',this)">👑 Masters</button>
+    <button class="tab" onclick="switchAdminTab('trades',this)">📊 Trades</button>
   </div>
+
+  <div id="tabContent"></div>
 </div>
+
 <script>
-async function load(){
-  try{
-    const r=await fetch('/api/admin/stats');
-    const d=await r.json();
-    document.getElementById('stats').innerHTML=`
-      <div class="s"><div class="l">Total Users</div><div class="v">${d.total_users}</div><div class="change">Platform users</div></div>
-      <div class="s"><div class="l">Masters</div><div class="v">${d.total_masters}</div><div class="change">Broadcasting</div></div>
-      <div class="s"><div class="l">Clients</div><div class="v">${d.total_clients}</div><div class="change">Copying</div></div>
-      <div class="s"><div class="l">Total Trades</div><div class="v">${d.total_trades}</div><div class="change">All time</div></div>
-    `;
-    document.getElementById('trades').innerHTML=d.recent_trades.length?`
-      <tr><th>#</th><th>Master</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>
-      ${d.recent_trades.map(t=>`<tr>
-        <td style="color:var(--muted)">${t.id}</td>
-        <td style="color:var(--gold);font-family:monospace;font-size:0.78rem">${t.master_id}</td>
-        <td style="color:var(--txt);font-weight:600">${t.symbol}</td>
-        <td class="${t.action?.toLowerCase().includes('buy')?'buy':'sell'}">${t.action}</td>
-        <td>${t.volume}</td><td>${t.price}</td>
-        <td>${new Date(t.created_at).toLocaleString()}</td>
-      </tr>`).join('')}
-    `:`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">No trades yet</td></tr>`;
-    document.getElementById('lastRefresh').textContent = '· ' + new Date().toLocaleTimeString();
-  }catch(e){console.error(e)}
+let adminData = null;
+let activeTab = 'payments';
+
+function switchAdminTab(tab, el) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderTab();
 }
+
+function renderTab() {
+  if (!adminData) return;
+  const c = document.getElementById('tabContent');
+  if (activeTab === 'payments') {
+    c.innerHTML = `
+      <div class="section">
+        <h2>💳 Pending Payments ${adminData.pending_payments.length ? '<span class="badge">'+adminData.pending_payments.length+' pending</span>' : ''}</h2>
+        ${adminData.pending_payments.length ? `
+          <div style="overflow-x:auto"><table>
+            <tr><th>Name</th><th>Email</th><th>Master ID</th><th>Method</th><th>Reference</th><th>Date</th><th>Actions</th></tr>
+            ${adminData.pending_payments.map(p => `
+              <tr>
+                <td style="color:var(--txt);font-weight:600">${p.name}</td>
+                <td>${p.email}</td>
+                <td style="color:var(--gold);font-family:monospace">${p.master_id || '—'}</td>
+                <td>${p.method}</td>
+                <td style="font-family:monospace;font-size:0.78rem">${p.reference}</td>
+                <td>${new Date(p.created_at).toLocaleDateString()}</td>
+                <td>
+                  <button class="btn-approve" onclick="approvePayment(${p.user_id})">✓ Approve</button>
+                  <button class="btn-reject" onclick="rejectPayment(${p.user_id})">✕ Reject</button>
+                </td>
+              </tr>
+            `).join('')}
+          </table></div>
+        ` : '<div style="text-align:center;padding:2rem;color:var(--muted)">No pending payments</div>'}
+      </div>`;
+  } else if (activeTab === 'masters') {
+    c.innerHTML = `
+      <div class="section">
+        <h2>👑 All Masters (${adminData.all_masters.length})</h2>
+        ${adminData.all_masters.length ? `
+          <div style="overflow-x:auto"><table>
+            <tr><th>Name</th><th>Email</th><th>Master ID</th><th>Paid</th><th>Clients</th><th>Active</th><th>Joined</th><th>Action</th></tr>
+            ${adminData.all_masters.map(m => `
+              <tr>
+                <td style="color:var(--txt);font-weight:600">${m.name}</td>
+                <td>${m.email}</td>
+                <td style="color:var(--gold);font-family:monospace">${m.master_id}</td>
+                <td>${m.is_paid ? '<span class="paid-yes">✓ PAID</span>' : '<span class="paid-no">✕ UNPAID</span>'}</td>
+                <td>${m.total_clients}</td>
+                <td style="color:var(--green)">${m.active_clients}</td>
+                <td>${new Date(m.created_at).toLocaleDateString()}</td>
+                <td>${!m.is_paid ? '<button class="btn-approve" onclick="approvePayment('+m.id+')">Activate</button>' : '—'}</td>
+              </tr>
+            `).join('')}
+          </table></div>
+        ` : '<div style="text-align:center;padding:2rem;color:var(--muted)">No masters yet</div>'}
+      </div>`;
+  } else {
+    c.innerHTML = `
+      <div class="section">
+        <h2>📊 Recent Trades</h2>
+        ${adminData.recent_trades.length ? `
+          <div style="overflow-x:auto"><table>
+            <tr><th>#</th><th>Master</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>
+            ${adminData.recent_trades.map(t => `
+              <tr>
+                <td style="color:var(--muted)">${t.id}</td>
+                <td style="color:var(--gold);font-family:monospace;font-size:0.78rem">${t.master_id}</td>
+                <td style="color:var(--txt);font-weight:600">${t.symbol}</td>
+                <td class="${t.action?.toLowerCase().includes('buy')?'buy':'sell'}">${t.action}</td>
+                <td>${t.volume}</td><td>${t.price}</td>
+                <td>${new Date(t.created_at).toLocaleString()}</td>
+              </tr>
+            `).join('')}
+          </table></div>
+        ` : '<div style="text-align:center;padding:2rem;color:var(--muted)">No trades yet</div>'}
+      </div>`;
+  }
+}
+
+async function load() {
+  try {
+    const r = await fetch('/api/admin/stats');
+    adminData = await r.json();
+    document.getElementById('stats').innerHTML = `
+      <div class="s"><div class="l">Total Users</div><div class="v">${adminData.total_users}</div></div>
+      <div class="s"><div class="l">Masters</div><div class="v">${adminData.total_masters}</div></div>
+      <div class="s"><div class="l">Paid Masters</div><div class="v">${adminData.paid_masters}</div></div>
+      <div class="s"><div class="l">Active Clients</div><div class="v">${adminData.active_connections}</div></div>
+      <div class="s"><div class="l">Total Trades</div><div class="v">${adminData.total_trades}</div></div>
+    `;
+    document.getElementById('lastR').textContent = new Date().toLocaleTimeString();
+    renderTab();
+  } catch(e) { console.error(e); }
+}
+
+async function approvePayment(userId) {
+  try {
+    const r = await fetch('/api/admin/approve-payment', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: userId })
+    });
+    if (!r.ok) throw new Error('Failed');
+    showToast('Payment approved! Master activated.');
+    load();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+async function rejectPayment(userId) {
+  if (!confirm('Reject this payment?')) return;
+  try {
+    await fetch('/api/admin/reject-payment', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ user_id: userId })
+    });
+    showToast('Payment rejected.');
+    load();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast ok';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
 load();
-setInterval(load,10000);
+setInterval(load, 10000);
 </script>
 </body>
 </html>

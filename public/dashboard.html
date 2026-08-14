@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--wine:#6B1D3A;--wine-mid:#8B2252;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--blue:#60A5FA}
+  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--wine:#6B1D3A;--wine-mid:#8B2252;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--blue:#60A5FA;--orange:#FB923C}
   body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
 
   /* Toast */
@@ -31,93 +31,98 @@
   .btn-logout{background:none;border:1px solid var(--glass-b);color:var(--muted);padding:0.4rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.3s}
   .btn-logout:hover{border-color:var(--red);color:var(--red)}
 
-  /* Layout */
   .main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
   .welcome{margin-bottom:2rem;animation:fadeIn 0.5s ease}
   .welcome h1{font-size:1.6rem;font-weight:800;margin-bottom:0.3rem}
   .welcome p{font-size:0.9rem;color:var(--muted)}
   @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 
-  /* Refresh indicator */
   .refresh-bar{display:flex;align-items:center;gap:0.5rem;font-size:0.72rem;color:var(--muted);margin-bottom:1.5rem}
   .refresh-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
   @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(74,222,128,0.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(74,222,128,0)}}
   .btn-refresh{background:none;border:1px solid var(--glass-b);color:var(--muted);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.72rem;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-left:auto}
   .btn-refresh:hover{border-color:var(--gold);color:var(--gold)}
 
-  /* Stats row */
-  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
-  .stat-card{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.4rem;transition:transform 0.3s,border-color 0.3s;animation:fadeIn 0.5s ease}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+  .stat-card{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.3rem;transition:transform 0.3s,border-color 0.3s}
   .stat-card:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.2)}
-  .stat-card .sc-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
-  .stat-card .sc-val{font-size:1.8rem;font-weight:800}
+  .stat-card .sc-label{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
+  .stat-card .sc-val{font-size:1.6rem;font-weight:800}
   .stat-card .sc-val.gold{background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .stat-card .sc-val.green{color:var(--green)}
+  .stat-card .sc-val.red{color:var(--red)}
 
-  /* Sections */
-  .section{background:var(--card);border:1px solid var(--glass-b);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem;animation:fadeIn 0.6s ease}
+  .section{background:var(--card);border:1px solid var(--glass-b);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem}
   .section h2{font-size:1.1rem;font-weight:700;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem}
-  .section h2 .icon{font-size:1.2rem}
 
-  /* Master ID display */
-  .master-id-box{background:var(--bg2);border:1px solid rgba(201,168,76,0.15);border-radius:12px;padding:1.2rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;transition:border-color 0.3s}
-  .master-id-box:hover{border-color:rgba(201,168,76,0.3)}
+  .master-id-box{background:var(--bg2);border:1px solid rgba(201,168,76,0.15);border-radius:12px;padding:1.2rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
   .mid-label{font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em}
   .mid-val{font-size:1.4rem;font-weight:800;font-family:'Courier New',monospace;color:var(--gold);letter-spacing:0.05em}
   .btn-copy{background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);color:var(--gold);padding:0.4rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.3s}
-  .btn-copy:hover{background:rgba(201,168,76,0.2);transform:scale(1.02)}
+  .btn-copy:hover{background:rgba(201,168,76,0.2)}
 
-  /* Download button */
-  .btn-download{display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);padding:0.8rem 1.5rem;border-radius:12px;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.3s;text-decoration:none}
+  .btn-download{display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);padding:0.8rem 1.5rem;border-radius:12px;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.3s;text-decoration:none;margin-right:0.8rem;margin-bottom:0.5rem}
   .btn-download:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
 
-  /* Table */
   .tbl{width:100%;border-collapse:collapse}
-  .tbl th{text-align:left;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
-  .tbl td{font-size:0.85rem;padding:0.7rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2);transition:background 0.2s}
+  .tbl th{text-align:left;font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
+  .tbl td{font-size:0.83rem;padding:0.65rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2)}
   .tbl tr:hover td{background:rgba(107,29,58,0.04)}
-  .buy{color:var(--green);font-weight:600}
-  .sell{color:var(--wine-mid);font-weight:600}
+  .buy{color:var(--green);font-weight:600}.sell{color:var(--wine-mid);font-weight:600}
 
-  /* Search */
-  .search-box{margin-bottom:1.2rem}
-  .search-box input{width:100%;padding:0.7rem 1rem 0.7rem 2.5rem;background:var(--bg2);border:1px solid var(--glass-b);border-radius:10px;color:var(--txt);font-size:0.88rem;font-family:inherit;outline:none;transition:border-color 0.3s,box-shadow 0.3s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237A6B74' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
-  .search-box input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.08)}
-  .search-box input::placeholder{color:var(--muted)}
+  /* Status indicators */
+  .status-active{display:inline-flex;align-items:center;gap:0.3rem;color:var(--green);font-weight:600;font-size:0.8rem}
+  .status-active::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  .status-inactive{display:inline-flex;align-items:center;gap:0.3rem;color:var(--red);font-weight:600;font-size:0.8rem}
+  .status-inactive::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--red)}
 
-  /* Master card (client view) */
-  .master-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
-  .m-card{background:var(--bg2);border:1px solid var(--glass-b);border-radius:14px;padding:1.5rem;transition:all 0.3s;animation:fadeIn 0.5s ease}
-  .m-card:hover{border-color:rgba(201,168,76,0.25);transform:translateY(-2px)}
-  .m-card .m-name{font-size:1.05rem;font-weight:700;margin-bottom:0.2rem}
-  .m-card .m-id{font-size:0.78rem;color:var(--gold);font-family:'Courier New',monospace;margin-bottom:0.5rem}
-  .m-card .m-bio{font-size:0.82rem;color:var(--muted);line-height:1.5;margin-bottom:1rem}
-  .m-card .m-stats{display:flex;gap:1.5rem;margin-bottom:1rem;font-size:0.78rem;color:var(--txt2)}
-  .m-card .m-stats strong{color:var(--txt)}
-  .btn-sub{width:100%;padding:0.65rem;border-radius:10px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all 0.2s}
-  .btn-sub:active{transform:scale(0.97)}
-  .btn-sub.connect{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg)}
-  .btn-sub.connect:hover{box-shadow:0 4px 20px rgba(201,168,76,0.25)}
-  .btn-sub.connected{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.15);color:var(--green);cursor:default}
-  .btn-sub.unsub{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.12);color:var(--red)}
-  .btn-sub.unsub:hover{background:rgba(248,113,113,0.15)}
+  /* Payment wall */
+  .paywall{background:linear-gradient(135deg,rgba(107,29,58,0.15),rgba(201,168,76,0.08));border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:3rem 2rem;text-align:center;margin-bottom:2rem}
+  .paywall h2{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;margin-bottom:0.5rem}
+  .paywall .price-tag{font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:1rem 0}
+  .paywall p{color:var(--muted);font-size:0.9rem;margin-bottom:1.5rem;max-width:500px;margin-left:auto;margin-right:auto}
+  .paywall .features-list{display:flex;flex-wrap:wrap;gap:0.8rem;justify-content:center;margin-bottom:2rem}
+  .paywall .feat{background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.1);padding:0.4rem 1rem;border-radius:8px;font-size:0.8rem;color:var(--gold)}
+  .pay-form{max-width:400px;margin:0 auto;text-align:left}
+  .pay-form label{display:block;font-size:0.78rem;font-weight:600;color:var(--txt2);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em}
+  .pay-form select,.pay-form input{width:100%;padding:0.8rem 1rem;background:var(--bg2);border:1px solid var(--glass-b);border-radius:10px;color:var(--txt);font-size:0.9rem;font-family:inherit;outline:none;margin-bottom:1rem}
+  .pay-form select:focus,.pay-form input:focus{border-color:var(--gold)}
+  .btn-pay{width:100%;padding:0.9rem;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);font-size:0.95rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:transform 0.2s,box-shadow 0.3s}
+  .btn-pay:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
+  .btn-pay:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+  .pending-badge{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.15);color:var(--orange);padding:0.5rem 1.2rem;border-radius:10px;font-size:0.88rem;font-weight:600}
 
   .empty{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:0.9rem}
   .loading{text-align:center;padding:3rem;color:var(--muted)}
 
-  /* Tabs for client */
+  /* Client tabs */
   .tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem}
   .tab{padding:0.5rem 1.2rem;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;border:1px solid var(--glass-b);background:none;color:var(--muted);font-family:inherit;transition:all 0.3s}
-  .tab:hover{border-color:rgba(201,168,76,0.2);color:var(--txt2)}
   .tab.active{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.2);color:var(--gold)}
+  .master-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+  .m-card{background:var(--bg2);border:1px solid var(--glass-b);border-radius:14px;padding:1.5rem;transition:all 0.3s}
+  .m-card:hover{border-color:rgba(201,168,76,0.25);transform:translateY(-2px)}
+  .m-card .m-name{font-size:1.05rem;font-weight:700;margin-bottom:0.2rem}
+  .m-card .m-id{font-size:0.78rem;color:var(--gold);font-family:monospace;margin-bottom:0.5rem}
+  .m-card .m-stats{display:flex;gap:1.5rem;margin-bottom:1rem;font-size:0.78rem;color:var(--txt2)}
+  .m-card .m-stats strong{color:var(--txt)}
+  .btn-sub{width:100%;padding:0.65rem;border-radius:10px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all 0.2s}
+  .btn-sub.connect{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg)}
+  .btn-sub.connected{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.15);color:var(--green);cursor:default}
+  .btn-sub.unsub{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.12);color:var(--red);margin-top:0.5rem}
+  .search-box{margin-bottom:1.2rem}
+  .search-box input{width:100%;padding:0.7rem 1rem;background:var(--bg2);border:1px solid var(--glass-b);border-radius:10px;color:var(--txt);font-size:0.88rem;font-family:inherit;outline:none}
+  .search-box input:focus{border-color:var(--gold)}
+  .search-box input::placeholder{color:var(--muted)}
 
   @media(max-width:640px){
     .topbar{padding:0 1rem}
     .stats-row{grid-template-columns:1fr 1fr}
     .master-list{grid-template-columns:1fr}
-    .tbl{font-size:0.78rem}
     .master-id-box{flex-direction:column;gap:0.8rem;text-align:center}
-    .topbar-right{gap:0.5rem}
     .user-info{display:none}
+    .paywall{padding:2rem 1.2rem}
+    .btn-download{width:100%;justify-content:center;margin-right:0}
   }
 </style>
 </head>
@@ -133,19 +138,17 @@
   </div>
 </div>
 
-<div class="main" id="main">
-  <div class="loading">Loading dashboard...</div>
-</div>
+<div class="main" id="main"><div class="loading">Loading dashboard...</div></div>
 
 <script>
 let currentUser = null;
 
 function toast(msg, type='info') {
-  const container = document.getElementById('toasts');
+  const c = document.getElementById('toasts');
   const t = document.createElement('div');
-  t.className = `toast ${type}`;
+  t.className = 'toast ' + type;
   t.textContent = msg;
-  container.appendChild(t);
+  c.appendChild(t);
   setTimeout(() => t.remove(), 3000);
 }
 
@@ -157,7 +160,7 @@ async function init() {
     currentUser = data.user;
 
     document.getElementById('userInfo').innerHTML =
-      `<strong>${currentUser.name}</strong> <span class="role-badge ${currentUser.role}">${currentUser.role}</span>`;
+      '<strong>' + currentUser.name + '</strong> <span class="role-badge ' + currentUser.role + '">' + currentUser.role + '</span>';
 
     if (currentUser.role === 'master') renderMasterDashboard();
     else renderClientDashboard();
@@ -171,15 +174,21 @@ async function renderMasterDashboard() {
   const res = await fetch('/api/master/dashboard');
   const data = await res.json();
 
+  if (!data.is_paid) {
+    // Check if payment is pending
+    renderPaywall(data);
+    return;
+  }
+
   document.getElementById('main').innerHTML = `
     <div class="welcome">
       <h1>👑 Master Dashboard</h1>
-      <p>Manage your trade broadcast and monitor clients</p>
+      <p>Manage your trade broadcast and monitor connected clients</p>
     </div>
 
     <div class="refresh-bar">
-      <span class="refresh-dot"></span> Live — Auto-refreshes every 30s
-      <button class="btn-refresh" onclick="renderMasterDashboard();toast('Dashboard refreshed','ok')">↻ Refresh</button>
+      <span class="refresh-dot"></span> Live — Auto-refreshes every 15s
+      <button class="btn-refresh" onclick="renderMasterDashboard();toast('Refreshed','ok')">↻ Refresh</button>
     </div>
 
     <div class="master-id-box">
@@ -187,52 +196,62 @@ async function renderMasterDashboard() {
         <div class="mid-label">Your Master ID</div>
         <div class="mid-val">${data.master_id}</div>
       </div>
-      <button class="btn-copy" onclick="copyId('${data.master_id}')">📋 Copy</button>
+      <button class="btn-copy" onclick="copyId('${data.master_id}')">📋 Copy ID</button>
     </div>
 
     <div class="stats-row">
       <div class="stat-card">
-        <div class="sc-label">Connected Clients</div>
+        <div class="sc-label">Total Clients</div>
         <div class="sc-val gold">${data.client_count}</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Active Now</div>
+        <div class="sc-val green">${data.active_count}</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Inactive</div>
+        <div class="sc-val red">${data.inactive_count}</div>
       </div>
       <div class="stat-card">
         <div class="sc-label">Total Trades</div>
         <div class="sc-val">${data.trade_count}</div>
       </div>
-      <div class="stat-card">
-        <div class="sc-label">Status</div>
-        <div class="sc-val" style="color:var(--green);font-size:1.2rem">● Active</div>
-      </div>
     </div>
 
     <div class="section">
-      <h2><span class="icon">📥</span> Download Master EA</h2>
+      <h2>📥 Download EA Files</h2>
       <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem">
-        Your Master ID <strong style="color:var(--gold)">${data.master_id}</strong> is pre-configured. Drop it on any MT5 chart.
+        Your Master ID: <strong style="color:var(--gold)">${data.master_id}</strong> — Enter this in the EA input settings when attaching to chart.
       </p>
-      <a href="/api/download/master-ea" class="btn-download" onclick="toast('Downloading MasterEA.mq5...','ok')">⬇ Download MasterEA.mq5</a>
+      <a href="/api/download/master-ea" class="btn-download" onclick="toast('Downloading MasterEA.ex5...','ok')">⬇ MasterEA.ex5</a>
+      <a href="/api/download/client-ea" class="btn-download" onclick="toast('Downloading ClientEA.ex5...','ok')">⬇ ClientEA.ex5</a>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem">Give the ClientEA.ex5 file + your Master ID to your clients. They enter the ID in EA settings.</p>
     </div>
 
     <div class="section">
-      <h2><span class="icon">👥</span> Connected Clients (${data.client_count})</h2>
+      <h2>👥 Connected Clients (${data.client_count})</h2>
       ${data.clients.length ? `
         <div style="overflow-x:auto">
         <table class="tbl">
-          <tr><th>Name</th><th>Email</th><th>Connected Since</th></tr>
+          <tr><th>Client ID</th><th>Account</th><th>Broker</th><th>Acc #</th><th>Balance</th><th>Status</th><th>Last Seen</th></tr>
           ${data.clients.map(c => `
             <tr>
-              <td style="color:var(--txt);font-weight:600">${c.name}</td>
-              <td>${c.email}</td>
-              <td>${new Date(c.created_at).toLocaleDateString()}</td>
+              <td style="color:var(--gold);font-family:monospace;font-size:0.78rem">${c.client_uid}</td>
+              <td style="color:var(--txt);font-weight:600">${c.account_name || '—'}</td>
+              <td>${c.broker || '—'}</td>
+              <td>${c.account_number || '—'}</td>
+              <td>${c.balance ? '$' + parseFloat(c.balance).toLocaleString() : '—'}</td>
+              <td>${c.is_active ? '<span class="status-active">Active</span>' : '<span class="status-inactive">Offline</span>'}</td>
+              <td style="font-size:0.78rem">${timeAgo(c.last_heartbeat)}</td>
             </tr>
           `).join('')}
         </table>
         </div>
-      ` : '<div class="empty">No clients connected yet. Share your Master ID to get started.</div>'}
+      ` : '<div class="empty">No clients connected yet. Distribute the ClientEA.ex5 file to your clients to get started.</div>'}
     </div>
 
     <div class="section">
-      <h2><span class="icon">📊</span> Recent Trades</h2>
+      <h2>📊 Recent Trades</h2>
       ${data.recent_trades.length ? `
         <div style="overflow-x:auto">
         <table class="tbl">
@@ -249,9 +268,82 @@ async function renderMasterDashboard() {
           `).join('')}
         </table>
         </div>
-      ` : '<div class="empty">No trades yet. Start trading on your master account.</div>'}
+      ` : '<div class="empty">No trades yet. Attach MasterEA.ex5 to your MT5 chart and start trading.</div>'}
     </div>
   `;
+}
+
+function renderPaywall(data) {
+  document.getElementById('main').innerHTML = `
+    <div class="welcome">
+      <h1>👑 Master Dashboard</h1>
+      <p>Your Master ID: <strong style="color:var(--gold)">${data.master_id}</strong></p>
+    </div>
+
+    <div class="paywall">
+      <h2>Activate Your Master Account</h2>
+      <div class="price-tag">$200</div>
+      <p>One-time payment to unlock your Master Panel, download EA files, and start broadcasting trades to unlimited clients.</p>
+
+      <div class="features-list">
+        <span class="feat">✦ Master EA + Client EA</span>
+        <span class="feat">✦ Unlimited Clients</span>
+        <span class="feat">✦ Live Client Tracking</span>
+        <span class="feat">✦ Active/Inactive Status</span>
+        <span class="feat">✦ Trade History</span>
+        <span class="feat">✦ Real-time Dashboard</span>
+      </div>
+
+      <div class="pay-form" id="payForm">
+        <label>Payment Method</label>
+        <select id="payMethod">
+          <option value="">Select method...</option>
+          <option value="upi">UPI / Bank Transfer</option>
+          <option value="crypto">Crypto (USDT/BTC)</option>
+          <option value="paypal">PayPal</option>
+          <option value="card">Credit/Debit Card</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label>Transaction ID / Reference</label>
+        <input type="text" id="payRef" placeholder="Enter your payment reference...">
+
+        <button class="btn-pay" id="payBtn" onclick="submitPayment()">Submit Payment Proof →</button>
+      </div>
+
+      <div id="payMsg" style="margin-top:1rem"></div>
+    </div>
+  `;
+}
+
+async function submitPayment() {
+  const method = document.getElementById('payMethod').value;
+  const reference = document.getElementById('payRef').value.trim();
+  const btn = document.getElementById('payBtn');
+  const msg = document.getElementById('payMsg');
+
+  if (!method || !reference) { toast('Select method and enter reference', 'err'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try {
+    const res = await fetch('/api/payment/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ method, reference })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    msg.innerHTML = '<div class="pending-badge">⏳ Payment submitted! Your account will be activated within 24 hours.</div>';
+    btn.style.display = 'none';
+    toast('Payment proof submitted!', 'ok');
+  } catch (err) {
+    toast(err.message, 'err');
+    btn.disabled = false;
+    btn.textContent = 'Submit Payment Proof →';
+  }
 }
 
 // ═══════════ CLIENT DASHBOARD ═══════════
@@ -264,28 +356,17 @@ async function renderClientDashboard() {
       <h1>📡 Client Dashboard</h1>
       <p>Browse and connect to master traders</p>
     </div>
-
-    <div class="refresh-bar">
-      <span class="refresh-dot"></span> Live
-      <button class="btn-refresh" onclick="renderClientDashboard();toast('Refreshed','ok')">↻ Refresh</button>
-    </div>
-
     <div class="tabs">
       <button class="tab ${clientTab==='browse'?'active':''}" onclick="switchTab('browse')">Browse Masters</button>
       <button class="tab ${clientTab==='my'?'active':''}" onclick="switchTab('my')">My Connections</button>
     </div>
-
     <div id="tabContent"><div class="loading">Loading...</div></div>
   `;
-
   if (clientTab === 'browse') loadBrowse();
   else loadMyMasters();
 }
 
-function switchTab(t) {
-  clientTab = t;
-  renderClientDashboard();
-}
+function switchTab(t) { clientTab = t; renderClientDashboard(); }
 
 async function loadBrowse() {
   const res = await fetch('/api/masters');
@@ -304,97 +385,64 @@ async function loadBrowse() {
     <div class="search-box">
       <input type="text" placeholder="Search masters by name or ID..." value="${searchQuery}" oninput="searchQuery=this.value;loadBrowse()">
     </div>
-    ${masters.length ? `
-    <div class="master-list">
-      ${masters.map(m => `
-        <div class="m-card">
-          <div class="m-name">👑 ${m.name}</div>
-          <div class="m-id">${m.master_id}</div>
-          <div class="m-bio">${m.bio || 'Professional trader broadcasting live trades.'}</div>
-          <div class="m-stats">
-            <span>Clients: <strong>${m.client_count}</strong></span>
-            <span>Trades: <strong>${m.trade_count}</strong></span>
-          </div>
-          ${myIds.has(m.id) ? `
-            <button class="btn-sub connected" disabled>✓ Connected</button>
-            <a href="/api/download/client-ea?master_id=${m.master_id}" class="btn-download" style="width:100%;justify-content:center;margin-top:0.6rem;font-size:0.82rem;padding:0.6rem" onclick="toast('Downloading ClientEA...','ok')">⬇ Download Client EA</a>
-          ` : `
-            <button class="btn-sub connect" onclick="subscribe(${m.id})">Connect & Copy →</button>
-          `}
-        </div>
-      `).join('')}
-    </div>
-  ` : '<div class="empty">' + (searchQuery ? 'No masters found matching "'+searchQuery+'"' : 'No masters available yet. Check back soon!') + '</div>'}`;
+    ${masters.length ? `<div class="master-list">${masters.map(m => `
+      <div class="m-card">
+        <div class="m-name">👑 ${m.name}</div>
+        <div class="m-id">${m.master_id}</div>
+        <div class="m-stats"><span>Clients: <strong>${m.client_count}</strong></span><span>Trades: <strong>${m.trade_count}</strong></span></div>
+        ${myIds.has(m.id) ? '<button class="btn-sub connected" disabled>✓ Connected</button>' : `<button class="btn-sub connect" onclick="subscribe(${m.id})">Connect →</button>`}
+      </div>
+    `).join('')}</div>` : '<div class="empty">No masters available yet.</div>'}`;
 }
 
 async function loadMyMasters() {
   const res = await fetch('/api/my-masters');
   const data = await res.json();
-
   document.getElementById('tabContent').innerHTML = data.masters.length ? `
-    <div class="master-list">
-      ${data.masters.map(m => `
-        <div class="m-card">
-          <div class="m-name">👑 ${m.name}</div>
-          <div class="m-id">${m.master_id}</div>
-          <div class="m-bio">${m.bio || 'Professional trader.'}</div>
-          <div class="m-stats">
-            <span>Trades: <strong>${m.trade_count}</strong></span>
-          </div>
-          <a href="/api/download/client-ea?master_id=${m.master_id}" class="btn-download" style="width:100%;justify-content:center;font-size:0.82rem;padding:0.6rem" onclick="toast('Downloading ClientEA...','ok')">⬇ Download Client EA for ${m.master_id}</a>
-          <button class="btn-sub unsub" onclick="unsubscribe(${m.id})" style="margin-top:0.5rem">Disconnect</button>
-        </div>
-      `).join('')}
-    </div>
-  ` : '<div class="empty">You haven\'t connected to any masters yet. Browse masters to get started!</div>';
+    <div class="master-list">${data.masters.map(m => `
+      <div class="m-card">
+        <div class="m-name">👑 ${m.name}</div>
+        <div class="m-id">${m.master_id}</div>
+        <div class="m-stats"><span>Trades: <strong>${m.trade_count}</strong></span></div>
+        <button class="btn-sub unsub" onclick="unsubscribe(${m.id})">Disconnect</button>
+      </div>
+    `).join('')}</div>` : '<div class="empty">No connections yet. Browse masters to get started!</div>';
 }
 
-async function subscribe(masterId) {
+async function subscribe(id) {
   try {
-    const res = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ master_user_id: masterId })
-    });
-    if (!res.ok) throw new Error('Failed');
-    toast('Successfully connected! 🎉', 'ok');
+    const r = await fetch('/api/subscribe', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({master_user_id:id}) });
+    if (!r.ok) throw new Error('Failed');
+    toast('Connected! 🎉', 'ok');
     renderClientDashboard();
-  } catch (err) {
-    toast('Failed to connect: ' + err.message, 'err');
-  }
+  } catch (e) { toast('Failed: ' + e.message, 'err'); }
 }
 
-async function unsubscribe(masterId) {
-  if (!confirm('Disconnect from this master?')) return;
+async function unsubscribe(id) {
+  if (!confirm('Disconnect?')) return;
   try {
-    await fetch('/api/unsubscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ master_user_id: masterId })
-    });
+    await fetch('/api/unsubscribe', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({master_user_id:id}) });
     toast('Disconnected', 'info');
     renderClientDashboard();
-  } catch (err) {
-    toast('Failed: ' + err.message, 'err');
-  }
+  } catch (e) { toast('Failed', 'err'); }
 }
 
 // ═══════════ UTILS ═══════════
-function copyId(id) {
-  navigator.clipboard.writeText(id);
-  toast('Master ID copied! 📋', 'ok');
+function copyId(id) { navigator.clipboard.writeText(id); toast('Master ID copied! 📋', 'ok'); }
+function timeAgo(ts) {
+  if (!ts) return '—';
+  const diff = Date.now() - new Date(ts).getTime();
+  if (diff < 60000) return 'Just now';
+  if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+  if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
+  return Math.floor(diff/86400000) + 'd ago';
 }
 
-async function logout() {
-  await fetch('/api/logout', { method: 'POST' });
-  window.location.href = '/';
-}
+async function logout() { await fetch('/api/logout', {method:'POST'}); window.location.href='/'; }
 
-// Auto-refresh every 30s
 setInterval(() => {
   if (currentUser?.role === 'master') renderMasterDashboard();
-  else if (currentUser?.role === 'client') renderClientDashboard();
-}, 30000);
+}, 15000);
 
 init();
 </script>

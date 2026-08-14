@@ -34,6 +34,7 @@ async function initDB() {
       master_id VARCHAR(50) UNIQUE,
       bio TEXT DEFAULT '',
       is_active BOOLEAN DEFAULT true,
+      is_paid BOOLEAN DEFAULT false,
       created_at TIMESTAMP DEFAULT NOW()
     );
     CREATE TABLE IF NOT EXISTS subscriptions (
@@ -56,13 +57,40 @@ async function initDB() {
       comment TEXT DEFAULT '',
       created_at TIMESTAMP DEFAULT NOW()
     );
+    CREATE TABLE IF NOT EXISTS client_connections (
+      id SERIAL PRIMARY KEY,
+      master_id VARCHAR(50) NOT NULL,
+      client_uid VARCHAR(100) NOT NULL,
+      account_name VARCHAR(255) DEFAULT '',
+      broker VARCHAR(255) DEFAULT '',
+      account_number VARCHAR(100) DEFAULT '',
+      balance DOUBLE PRECISION DEFAULT 0,
+      last_heartbeat TIMESTAMP DEFAULT NOW(),
+      first_seen TIMESTAMP DEFAULT NOW(),
+      is_active BOOLEAN DEFAULT true,
+      UNIQUE(master_id, client_uid)
+    );
+    CREATE TABLE IF NOT EXISTS payments (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id),
+      amount DOUBLE PRECISION NOT NULL,
+      status VARCHAR(20) DEFAULT 'pending',
+      method VARCHAR(50) DEFAULT '',
+      reference VARCHAR(255) DEFAULT '',
+      created_at TIMESTAMP DEFAULT NOW()
+    );
   `);
+
+  // Add columns if they don't exist (safe migration)
+  try { await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_paid BOOLEAN DEFAULT false"); } catch(e){}
+  try { await pool.query("ALTER TABLE client_connections ADD COLUMN IF NOT EXISTS balance DOUBLE PRECISION DEFAULT 0"); } catch(e){}
+
   console.log('✅ Database tables ready');
 }
 
 // ── Auth Helpers ──
 function generateToken(user) {
-  return jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, master_id: user.master_id }, JWT_SECRET, { expiresIn: '30d' });
+  return jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, master_id: user.master_id, is_paid: user.is_paid }, JWT_SECRET, { expiresIn: '30d' });
 }
 
 function authMiddleware(req, res, next) {
@@ -81,12 +109,16 @@ function masterOnly(req, res, next) {
   next();
 }
 
-function clientOnly(req, res, next) {
-  if (req.user.role !== 'client') return res.status(403).json({ error: 'Client only' });
-  next();
+function paidMasterOnly(req, res, next) {
+  if (req.user.role !== 'master') return res.status(403).json({ error: 'Master only' });
+  // Check payment from DB
+  pool.query('SELECT is_paid FROM users WHERE id = $1', [req.user.id])
+    .then(r => {
+      if (r.rows[0]?.is_paid) return next();
+      return res.status(403).json({ error: 'Payment required. Activate your account ($200) to access this feature.' });
+    }).catch(() => res.status(500).json({ error: 'Server error' }));
 }
 
-// ── Generate unique Master ID ──
 function genMasterID() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let id = 'TB-';
@@ -112,8 +144,8 @@ app.post('/api/register', async (req, res) => {
     const master_id = role === 'master' ? genMasterID() : null;
 
     const result = await pool.query(
-      'INSERT INTO users (email, password, name, role, master_id) VALUES ($1,$2,$3,$4,$5) RETURNING id, email, name, role, master_id',
-      [email, hash, name, role, master_id]
+      'INSERT INTO users (email, password, name, role, master_id, is_paid) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id, email, name, role, master_id, is_paid',
+      [email, hash, name, role, master_id, false]
     );
 
     const user = result.rows[0];
@@ -140,14 +172,19 @@ app.post('/api/login', async (req, res) => {
 
     const token = generateToken(user);
     res.cookie('token', token, { httpOnly: true, maxAge: 30 * 24 * 3600000 });
-    res.json({ ok: true, user: { id: user.id, email: user.email, name: user.name, role: user.role, master_id: user.master_id }, token });
+    res.json({ ok: true, user: { id: user.id, email: user.email, name: user.name, role: user.role, master_id: user.master_id, is_paid: user.is_paid }, token });
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-app.get('/api/me', authMiddleware, (req, res) => {
+app.get('/api/me', authMiddleware, async (req, res) => {
+  // Fetch fresh is_paid status
+  try {
+    const r = await pool.query('SELECT is_paid FROM users WHERE id = $1', [req.user.id]);
+    req.user.is_paid = r.rows[0]?.is_paid || false;
+  } catch(e) {}
   res.json({ user: req.user });
 });
 
@@ -157,27 +194,43 @@ app.post('/api/logout', (req, res) => {
 });
 
 // ══════════════════════════════════════
-//  MASTER ROUTES
+//  MASTER DASHBOARD
 // ══════════════════════════════════════
 
-// Master dashboard data
 app.get('/api/master/dashboard', authMiddleware, masterOnly, async (req, res) => {
   try {
-    const subs = await pool.query(
-      `SELECT u.name, u.email, s.created_at FROM subscriptions s
-       JOIN users u ON u.id = s.client_user_id
-       WHERE s.master_user_id = $1 ORDER BY s.created_at DESC`, [req.user.id]
+    // Get fresh payment status
+    const userInfo = await pool.query('SELECT is_paid FROM users WHERE id = $1', [req.user.id]);
+    const isPaid = userInfo.rows[0]?.is_paid || false;
+
+    // Client connections with active/inactive status
+    // Mark clients inactive if no heartbeat for 2 minutes
+    await pool.query(
+      "UPDATE client_connections SET is_active = false WHERE master_id = $1 AND last_heartbeat < NOW() - INTERVAL '2 minutes'",
+      [req.user.master_id]
     );
+
+    const clients = await pool.query(
+      `SELECT * FROM client_connections WHERE master_id = $1 ORDER BY is_active DESC, last_heartbeat DESC`,
+      [req.user.master_id]
+    );
+
     const tradeCount = await pool.query(
       'SELECT COUNT(*) as count FROM trades WHERE master_id = $1', [req.user.master_id]
     );
     const recentTrades = await pool.query(
       'SELECT * FROM trades WHERE master_id = $1 ORDER BY created_at DESC LIMIT 20', [req.user.master_id]
     );
+
+    const activeClients = clients.rows.filter(c => c.is_active).length;
+
     res.json({
       master_id: req.user.master_id,
-      clients: subs.rows,
-      client_count: subs.rows.length,
+      is_paid: isPaid,
+      clients: clients.rows,
+      client_count: clients.rows.length,
+      active_count: activeClients,
+      inactive_count: clients.rows.length - activeClients,
       trade_count: parseInt(tradeCount.rows[0].count),
       recent_trades: recentTrades.rows
     });
@@ -187,118 +240,65 @@ app.get('/api/master/dashboard', authMiddleware, masterOnly, async (req, res) =>
   }
 });
 
-// Update master profile/bio
-app.post('/api/master/profile', authMiddleware, masterOnly, async (req, res) => {
-  try {
-    const { bio } = req.body;
-    await pool.query('UPDATE users SET bio = $1 WHERE id = $2', [bio || '', req.user.id]);
-    res.json({ ok: true });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
+// ══════════════════════════════════════
+//  EA FILE DOWNLOADS (.ex5 compiled)
+// ══════════════════════════════════════
+
+// Master downloads BOTH files (only if paid)
+app.get('/api/download/master-ea', authMiddleware, paidMasterOnly, (req, res) => {
+  const filePath = path.join(__dirname, 'ea', 'MasterEA.ex5');
+  if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
+  res.setHeader('Content-Type', 'application/octet-stream');
+  res.setHeader('Content-Disposition', `attachment; filename="TradeBridge_MasterEA.ex5"`);
+  res.sendFile(filePath);
+});
+
+app.get('/api/download/client-ea', authMiddleware, paidMasterOnly, (req, res) => {
+  const filePath = path.join(__dirname, 'ea', 'ClientEA.ex5');
+  if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
+  res.setHeader('Content-Type', 'application/octet-stream');
+  res.setHeader('Content-Disposition', `attachment; filename="TradeBridge_ClientEA.ex5"`);
+  res.sendFile(filePath);
 });
 
 // ══════════════════════════════════════
-//  CLIENT ROUTES
+//  CLIENT EA HEARTBEAT (tracks active/inactive)
 // ══════════════════════════════════════
 
-// List available masters
-app.get('/api/masters', authMiddleware, async (req, res) => {
+app.post('/heartbeat', async (req, res) => {
   try {
-    const result = await pool.query(
-      `SELECT u.id, u.name, u.master_id, u.bio, u.created_at,
-        (SELECT COUNT(*) FROM subscriptions WHERE master_user_id = u.id) as client_count,
-        (SELECT COUNT(*) FROM trades WHERE master_id = u.master_id) as trade_count
-       FROM users u WHERE u.role = 'master' AND u.is_active = true ORDER BY u.created_at DESC`
-    );
-    res.json({ masters: result.rows });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
+    const { master_id, client_uid, account_name, broker, account_number, balance } = req.body;
+    if (!master_id || !client_uid) return res.status(400).json({ error: 'master_id and client_uid required' });
 
-// Subscribe to a master
-app.post('/api/subscribe', authMiddleware, clientOnly, async (req, res) => {
-  try {
-    const { master_user_id } = req.body;
-    if (!master_user_id) return res.status(400).json({ error: 'Master ID required' });
-
-    const master = await pool.query('SELECT id, master_id FROM users WHERE id = $1 AND role = $2', [master_user_id, 'master']);
+    // Verify master exists
+    const master = await pool.query("SELECT id FROM users WHERE master_id = $1 AND role = 'master'", [master_id]);
     if (!master.rows.length) return res.status(404).json({ error: 'Master not found' });
 
+    // Upsert client connection
     await pool.query(
-      'INSERT INTO subscriptions (client_user_id, master_user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
-      [req.user.id, master_user_id]
+      `INSERT INTO client_connections (master_id, client_uid, account_name, broker, account_number, balance, last_heartbeat, is_active)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW(), true)
+       ON CONFLICT (master_id, client_uid) DO UPDATE SET
+         last_heartbeat = NOW(),
+         is_active = true,
+         account_name = COALESCE(NULLIF($3,''), client_connections.account_name),
+         broker = COALESCE(NULLIF($4,''), client_connections.broker),
+         account_number = COALESCE(NULLIF($5,''), client_connections.account_number),
+         balance = COALESCE($6, client_connections.balance)`,
+      [master_id, client_uid, account_name || '', broker || '', account_number || '', parseFloat(balance) || 0]
     );
-    res.json({ ok: true, master_id: master.rows[0].master_id });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
 
-// Unsubscribe from a master
-app.post('/api/unsubscribe', authMiddleware, clientOnly, async (req, res) => {
-  try {
-    const { master_user_id } = req.body;
-    await pool.query('DELETE FROM subscriptions WHERE client_user_id = $1 AND master_user_id = $2', [req.user.id, master_user_id]);
     res.json({ ok: true });
   } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// Client's subscribed masters
-app.get('/api/my-masters', authMiddleware, clientOnly, async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT u.id, u.name, u.master_id, u.bio,
-        (SELECT COUNT(*) FROM trades WHERE master_id = u.master_id) as trade_count
-       FROM subscriptions s JOIN users u ON u.id = s.master_user_id
-       WHERE s.client_user_id = $1`, [req.user.id]
-    );
-    res.json({ masters: result.rows });
-  } catch (err) {
+    console.error('Heartbeat error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
 
 // ══════════════════════════════════════
-//  EA FILE DOWNLOADS
+//  TRADE COPIER ROUTES
 // ══════════════════════════════════════
 
-app.get('/api/download/master-ea', authMiddleware, masterOnly, (req, res) => {
-  const filePath = path.join(__dirname, 'ea', 'MasterEA.mq5');
-  if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
-
-  // Read file and inject master_id
-  let content = fs.readFileSync(filePath, 'utf8');
-  content = content.replace('__MASTER_ID__', req.user.master_id);
-  
-  res.setHeader('Content-Type', 'application/octet-stream');
-  res.setHeader('Content-Disposition', `attachment; filename="TradeBridge_Master_${req.user.master_id}.mq5"`);
-  res.send(content);
-});
-
-app.get('/api/download/client-ea', authMiddleware, clientOnly, (req, res) => {
-  const masterId = req.query.master_id;
-  if (!masterId) return res.status(400).json({ error: 'master_id required' });
-
-  const filePath = path.join(__dirname, 'ea', 'ClientEA.mq5');
-  if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
-
-  let content = fs.readFileSync(filePath, 'utf8');
-  content = content.replace('__MASTER_ID__', masterId);
-  
-  res.setHeader('Content-Type', 'application/octet-stream');
-  res.setHeader('Content-Disposition', `attachment; filename="TradeBridge_Client_${masterId}.mq5"`);
-  res.send(content);
-});
-
-// ══════════════════════════════════════
-//  TRADE COPIER ROUTES (existing logic)
-// ══════════════════════════════════════
-
-// Master EA posts trade
 app.post('/trade', async (req, res) => {
   try {
     const { master_id, symbol, action, volume, price, sl, tp, ticket, comment } = req.body;
@@ -316,7 +316,6 @@ app.post('/trade', async (req, res) => {
   }
 });
 
-// Client EA polls for trades
 app.get('/poll', async (req, res) => {
   try {
     const { master_id, since } = req.query;
@@ -335,23 +334,147 @@ app.get('/poll', async (req, res) => {
 });
 
 // ══════════════════════════════════════
-//  ADMIN (open access)
+//  PAYMENT ROUTES
+// ══════════════════════════════════════
+
+// Submit payment proof
+app.post('/api/payment/submit', authMiddleware, masterOnly, async (req, res) => {
+  try {
+    const { method, reference } = req.body;
+    if (!method || !reference) return res.status(400).json({ error: 'Payment method and reference required' });
+
+    await pool.query(
+      'INSERT INTO payments (user_id, amount, status, method, reference) VALUES ($1, 200, $2, $3, $4)',
+      [req.user.id, 'pending', method, reference]
+    );
+    res.json({ ok: true, message: 'Payment submitted for review. Your account will be activated within 24 hours.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Admin: approve payment
+app.post('/api/admin/approve-payment', async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    if (!user_id) return res.status(400).json({ error: 'user_id required' });
+
+    await pool.query('UPDATE users SET is_paid = true WHERE id = $1', [user_id]);
+    await pool.query("UPDATE payments SET status = 'approved' WHERE user_id = $1 AND status = 'pending'", [user_id]);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Admin: reject payment
+app.post('/api/admin/reject-payment', async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    await pool.query("UPDATE payments SET status = 'rejected' WHERE user_id = $1 AND status = 'pending'", [user_id]);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ══════════════════════════════════════
+//  ADMIN
 // ══════════════════════════════════════
 
 app.get('/api/admin/stats', async (req, res) => {
   try {
     const users = await pool.query('SELECT COUNT(*) as count FROM users');
     const masters = await pool.query("SELECT COUNT(*) as count FROM users WHERE role='master'");
+    const paidMasters = await pool.query("SELECT COUNT(*) as count FROM users WHERE role='master' AND is_paid=true");
     const clients = await pool.query("SELECT COUNT(*) as count FROM users WHERE role='client'");
     const trades = await pool.query('SELECT COUNT(*) as count FROM trades');
+    const activeConns = await pool.query("SELECT COUNT(*) as count FROM client_connections WHERE is_active = true");
     const recent = await pool.query('SELECT * FROM trades ORDER BY created_at DESC LIMIT 15');
+    const pendingPayments = await pool.query(
+      `SELECT p.*, u.name, u.email, u.master_id FROM payments p JOIN users u ON u.id = p.user_id WHERE p.status = 'pending' ORDER BY p.created_at DESC`
+    );
+    const allMasters = await pool.query(
+      `SELECT u.id, u.name, u.email, u.master_id, u.is_paid, u.created_at,
+        (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id) as total_clients,
+        (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id AND is_active = true) as active_clients
+       FROM users u WHERE u.role = 'master' ORDER BY u.created_at DESC`
+    );
+
     res.json({
       total_users: parseInt(users.rows[0].count),
       total_masters: parseInt(masters.rows[0].count),
+      paid_masters: parseInt(paidMasters.rows[0].count),
       total_clients: parseInt(clients.rows[0].count),
       total_trades: parseInt(trades.rows[0].count),
-      recent_trades: recent.rows
+      active_connections: parseInt(activeConns.rows[0].count),
+      recent_trades: recent.rows,
+      pending_payments: pendingPayments.rows,
+      all_masters: allMasters.rows
     });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ── Client routes (kept for backward compat) ──
+app.get('/api/masters', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT u.id, u.name, u.master_id, u.bio, u.created_at,
+        (SELECT COUNT(*) FROM subscriptions WHERE master_user_id = u.id) as client_count,
+        (SELECT COUNT(*) FROM trades WHERE master_id = u.master_id) as trade_count
+       FROM users u WHERE u.role = 'master' AND u.is_active = true AND u.is_paid = true ORDER BY u.created_at DESC`
+    );
+    res.json({ masters: result.rows });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/api/subscribe', authMiddleware, async (req, res) => {
+  try {
+    const { master_user_id } = req.body;
+    if (!master_user_id) return res.status(400).json({ error: 'Master ID required' });
+    await pool.query(
+      'INSERT INTO subscriptions (client_user_id, master_user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [req.user.id, master_user_id]
+    );
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/api/unsubscribe', authMiddleware, async (req, res) => {
+  try {
+    const { master_user_id } = req.body;
+    await pool.query('DELETE FROM subscriptions WHERE client_user_id = $1 AND master_user_id = $2', [req.user.id, master_user_id]);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.get('/api/my-masters', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT u.id, u.name, u.master_id, u.bio,
+        (SELECT COUNT(*) FROM trades WHERE master_id = u.master_id) as trade_count
+       FROM subscriptions s JOIN users u ON u.id = s.master_user_id
+       WHERE s.client_user_id = $1`, [req.user.id]
+    );
+    res.json({ masters: result.rows });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/api/master/profile', authMiddleware, masterOnly, async (req, res) => {
+  try {
+    const { bio } = req.body;
+    await pool.query('UPDATE users SET bio = $1 WHERE id = $2', [bio || '', req.user.id]);
+    res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }
@@ -368,6 +491,5 @@ initDB().then(() => {
   app.listen(PORT, () => console.log(`🚀 TradeBridge running on port ${PORT}`));
 }).catch(err => {
   console.error('DB init failed:', err);
-  // Start anyway for non-DB routes
   app.listen(PORT, () => console.log(`🚀 TradeBridge running (no DB) on port ${PORT}`));
 });
