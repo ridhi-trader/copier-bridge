@@ -1,7 +1,7 @@
 {
-  "name": "copier-bridge",
-  "version": "1.0.0",
-  "description": "MT5 to MT5 trade copier bridge server",
+  "name": "tradebridge",
+  "version": "2.0.0",
+  "description": "TradeBridge — MT5 to MT5 Trade Copier Platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -10,6 +10,10 @@
     "node": ">=18"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "cookie-parser": "^1.4.6"
   }
 }

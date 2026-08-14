@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — TradeBridge</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);padding:2rem}
+  .container{max-width:900px;margin:0 auto}
+  h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;margin-bottom:0.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{font-size:0.85rem;color:var(--muted);margin-bottom:2rem}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+  .s{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.4rem}
+  .s .l{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
+  .s .v{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .section{background:var(--card);border:1px solid var(--glass-b);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+  .section h2{font-size:1rem;font-weight:700;margin-bottom:1rem}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
+  td{font-size:0.82rem;padding:0.65rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2)}
+  .buy{color:var(--green);font-weight:600}.sell{color:#D44A7A;font-weight:600}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>TradeBridge Admin</h1>
+  <p class="sub">Platform overview — auto-refreshes every 10 seconds</p>
+  <div class="stats" id="stats"></div>
+  <div class="section">
+    <h2>Recent Trades</h2>
+    <div style="overflow-x:auto"><table id="trades"><tr><td style="color:var(--muted);text-align:center;padding:2rem">Loading...</td></tr></table></div>
+  </div>
+</div>
+<script>
+async function load(){
+  try{
+    const r=await fetch('/api/admin/stats');
+    const d=await r.json();
+    document.getElementById('stats').innerHTML=`
+      <div class="s"><div class="l">Total Users</div><div class="v">${d.total_users}</div></div>
+      <div class="s"><div class="l">Masters</div><div class="v">${d.total_masters}</div></div>
+      <div class="s"><div class="l">Clients</div><div class="v">${d.total_clients}</div></div>
+      <div class="s"><div class="l">Total Trades</div><div class="v">${d.total_trades}</div></div>
+    `;
+    document.getElementById('trades').innerHTML=d.recent_trades.length?`
+      <tr><th>#</th><th>Master</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>
+      ${d.recent_trades.map(t=>`<tr>
+        <td style="color:var(--muted)">${t.id}</td>
+        <td style="color:var(--gold);font-family:monospace;font-size:0.78rem">${t.master_id}</td>
+        <td style="color:var(--txt);font-weight:600">${t.symbol}</td>
+        <td class="${t.action?.toLowerCase().includes('buy')?'buy':'sell'}">${t.action}</td>
+        <td>${t.volume}</td><td>${t.price}</td>
+        <td>${new Date(t.created_at).toLocaleString()}</td>
+      </tr>`).join('')}
+    `:`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">No trades yet</td></tr>`;
+  }catch(e){console.error(e)}
+}
+load();
+setInterval(load,10000);
+</script>
+</body>
+</html>

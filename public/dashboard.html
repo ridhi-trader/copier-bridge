@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — TradeBridge</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--wine:#6B1D3A;--wine-mid:#8B2252;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--blue:#60A5FA}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+
+  /* Nav */
+  .topbar{height:60px;background:rgba(13,6,16,0.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.06);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:sticky;top:0;z-index:100}
+  .topbar .logo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .topbar-right{display:flex;align-items:center;gap:1rem}
+  .user-info{font-size:0.82rem;color:var(--txt2)}
+  .user-info strong{color:var(--txt)}
+  .role-badge{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.25rem 0.6rem;border-radius:6px;margin-left:0.5rem}
+  .role-badge.master{background:rgba(201,168,76,0.12);color:var(--gold)}
+  .role-badge.client{background:rgba(96,165,250,0.12);color:var(--blue)}
+  .btn-logout{background:none;border:1px solid var(--glass-b);color:var(--muted);padding:0.4rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:border-color 0.3s}
+  .btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+  /* Layout */
+  .main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+  .welcome{margin-bottom:2rem}
+  .welcome h1{font-size:1.6rem;font-weight:800;margin-bottom:0.3rem}
+  .welcome p{font-size:0.9rem;color:var(--muted)}
+
+  /* Stats row */
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+  .stat-card{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.4rem}
+  .stat-card .sc-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
+  .stat-card .sc-val{font-size:1.8rem;font-weight:800}
+  .stat-card .sc-val.gold{background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+  /* Sections */
+  .section{background:var(--card);border:1px solid var(--glass-b);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem}
+  .section h2{font-size:1.1rem;font-weight:700;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem}
+  .section h2 .icon{font-size:1.2rem}
+
+  /* Master ID display */
+  .master-id-box{background:var(--bg2);border:1px solid rgba(201,168,76,0.15);border-radius:12px;padding:1.2rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+  .mid-label{font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em}
+  .mid-val{font-size:1.4rem;font-weight:800;font-family:'Courier New',monospace;color:var(--gold);letter-spacing:0.05em}
+  .btn-copy{background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);color:var(--gold);padding:0.4rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.3s}
+  .btn-copy:hover{background:rgba(201,168,76,0.2)}
+
+  /* Download button */
+  .btn-download{display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);padding:0.8rem 1.5rem;border-radius:12px;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.3s;text-decoration:none}
+  .btn-download:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
+
+  /* Table */
+  .tbl{width:100%;border-collapse:collapse}
+  .tbl th{text-align:left;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
+  .tbl td{font-size:0.85rem;padding:0.7rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2)}
+  .tbl tr:hover td{background:rgba(107,29,58,0.04)}
+  .buy{color:var(--green);font-weight:600}
+  .sell{color:var(--wine-mid);font-weight:600}
+
+  /* Master card (client view) */
+  .master-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+  .m-card{background:var(--bg2);border:1px solid var(--glass-b);border-radius:14px;padding:1.5rem;transition:border-color 0.3s}
+  .m-card:hover{border-color:rgba(201,168,76,0.25)}
+  .m-card .m-name{font-size:1.05rem;font-weight:700;margin-bottom:0.2rem}
+  .m-card .m-id{font-size:0.78rem;color:var(--gold);font-family:'Courier New',monospace;margin-bottom:0.5rem}
+  .m-card .m-bio{font-size:0.82rem;color:var(--muted);line-height:1.5;margin-bottom:1rem}
+  .m-card .m-stats{display:flex;gap:1.5rem;margin-bottom:1rem;font-size:0.78rem;color:var(--txt2)}
+  .m-card .m-stats strong{color:var(--txt)}
+  .btn-sub{width:100%;padding:0.65rem;border-radius:10px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:transform 0.2s}
+  .btn-sub.connect{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg)}
+  .btn-sub.connected{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.15);color:var(--green)}
+  .btn-sub.unsub{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.12);color:var(--red)}
+
+  /* Empty state */
+  .empty{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:0.9rem}
+
+  /* Loading */
+  .loading{text-align:center;padding:3rem;color:var(--muted)}
+
+  /* Tabs for client */
+  .tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+  .tab{padding:0.5rem 1.2rem;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;border:1px solid var(--glass-b);background:none;color:var(--muted);font-family:inherit;transition:all 0.3s}
+  .tab.active{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.2);color:var(--gold)}
+
+  @media(max-width:640px){
+    .topbar{padding:0 1rem}
+    .stats-row{grid-template-columns:1fr 1fr}
+    .master-list{grid-template-columns:1fr}
+    .tbl{font-size:0.78rem}
+    .master-id-box{flex-direction:column;gap:0.8rem;text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/" class="logo" style="text-decoration:none">TradeBridge</a>
+  <div class="topbar-right">
+    <div class="user-info" id="userInfo"></div>
+    <button class="btn-logout" onclick="logout()">Log out</button>
+  </div>
+</div>
+
+<div class="main" id="main">
+  <div class="loading">Loading dashboard...</div>
+</div>
+
+<script>
+let currentUser = null;
+
+async function init() {
+  try {
+    const res = await fetch('/api/me');
+    if (!res.ok) { window.location.href = '/login'; return; }
+    const data = await res.json();
+    currentUser = data.user;
+
+    document.getElementById('userInfo').innerHTML =
+      `<strong>${currentUser.name}</strong> <span class="role-badge ${currentUser.role}">${currentUser.role}</span>`;
+
+    if (currentUser.role === 'master') renderMasterDashboard();
+    else renderClientDashboard();
+  } catch {
+    window.location.href = '/login';
+  }
+}
+
+// ═══════════ MASTER DASHBOARD ═══════════
+async function renderMasterDashboard() {
+  const res = await fetch('/api/master/dashboard');
+  const data = await res.json();
+
+  document.getElementById('main').innerHTML = `
+    <div class="welcome">
+      <h1>👑 Master Dashboard</h1>
+      <p>Manage your trade broadcast and monitor clients</p>
+    </div>
+
+    <div class="master-id-box">
+      <div>
+        <div class="mid-label">Your Master ID</div>
+        <div class="mid-val">${data.master_id}</div>
+      </div>
+      <button class="btn-copy" onclick="copyId('${data.master_id}')">📋 Copy</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="sc-label">Connected Clients</div>
+        <div class="sc-val gold">${data.client_count}</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Total Trades</div>
+        <div class="sc-val">${data.trade_count}</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Status</div>
+        <div class="sc-val" style="color:var(--green);font-size:1.2rem">● Active</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><span class="icon">📥</span> Download Master EA</h2>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem">
+        Your Master ID <strong style="color:var(--gold)">${data.master_id}</strong> is pre-configured in the file. Drop it on any MT5 chart.
+      </p>
+      <a href="/api/download/master-ea" class="btn-download">⬇ Download MasterEA.mq5</a>
+    </div>
+
+    <div class="section">
+      <h2><span class="icon">👥</span> Connected Clients (${data.client_count})</h2>
+      ${data.clients.length ? `
+        <table class="tbl">
+          <tr><th>Name</th><th>Email</th><th>Connected Since</th></tr>
+          ${data.clients.map(c => `
+            <tr>
+              <td style="color:var(--txt);font-weight:600">${c.name}</td>
+              <td>${c.email}</td>
+              <td>${new Date(c.created_at).toLocaleDateString()}</td>
+            </tr>
+          `).join('')}
+        </table>
+      ` : '<div class="empty">No clients connected yet. Share your Master ID to get started.</div>'}
+    </div>
+
+    <div class="section">
+      <h2><span class="icon">📊</span> Recent Trades</h2>
+      ${data.recent_trades.length ? `
+        <div style="overflow-x:auto">
+        <table class="tbl">
+          <tr><th>#</th><th>Symbol</th><th>Action</th><th>Volume</th><th>Price</th><th>Time</th></tr>
+          ${data.recent_trades.map(t => `
+            <tr>
+              <td style="color:var(--muted)">${t.id}</td>
+              <td style="color:var(--txt);font-weight:600">${t.symbol}</td>
+              <td class="${t.action?.toLowerCase().includes('buy') ? 'buy' : 'sell'}">${t.action}</td>
+              <td>${t.volume}</td>
+              <td>${t.price}</td>
+              <td>${new Date(t.created_at).toLocaleString()}</td>
+            </tr>
+          `).join('')}
+        </table>
+        </div>
+      ` : '<div class="empty">No trades yet. Start trading on your master account.</div>'}
+    </div>
+  `;
+}
+
+// ═══════════ CLIENT DASHBOARD ═══════════
+let clientTab = 'browse';
+
+async function renderClientDashboard() {
+  document.getElementById('main').innerHTML = `
+    <div class="welcome">
+      <h1>📡 Client Dashboard</h1>
+      <p>Browse and connect to master traders</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab ${clientTab==='browse'?'active':''}" onclick="switchTab('browse')">Browse Masters</button>
+      <button class="tab ${clientTab==='my'?'active':''}" onclick="switchTab('my')">My Connections</button>
+    </div>
+
+    <div id="tabContent"><div class="loading">Loading...</div></div>
+  `;
+
+  if (clientTab === 'browse') loadBrowse();
+  else loadMyMasters();
+}
+
+function switchTab(t) {
+  clientTab = t;
+  renderClientDashboard();
+}
+
+async function loadBrowse() {
+  const res = await fetch('/api/masters');
+  const data = await res.json();
+  const myRes = await fetch('/api/my-masters');
+  const myData = await myRes.json();
+  const myIds = new Set(myData.masters.map(m => m.id));
+
+  document.getElementById('tabContent').innerHTML = data.masters.length ? `
+    <div class="master-list">
+      ${data.masters.map(m => `
+        <div class="m-card">
+          <div class="m-name">👑 ${m.name}</div>
+          <div class="m-id">${m.master_id}</div>
+          <div class="m-bio">${m.bio || 'Professional trader broadcasting live trades.'}</div>
+          <div class="m-stats">
+            <span>Clients: <strong>${m.client_count}</strong></span>
+            <span>Trades: <strong>${m.trade_count}</strong></span>
+          </div>
+          ${myIds.has(m.id) ? `
+            <button class="btn-sub connected" disabled>✓ Connected</button>
+            <a href="/api/download/client-ea?master_id=${m.master_id}" class="btn-download" style="width:100%;justify-content:center;margin-top:0.6rem;font-size:0.82rem;padding:0.6rem">⬇ Download Client EA</a>
+          ` : `
+            <button class="btn-sub connect" onclick="subscribe(${m.id})">Connect & Copy →</button>
+          `}
+        </div>
+      `).join('')}
+    </div>
+  ` : '<div class="empty">No masters available yet. Check back soon!</div>';
+}
+
+async function loadMyMasters() {
+  const res = await fetch('/api/my-masters');
+  const data = await res.json();
+
+  document.getElementById('tabContent').innerHTML = data.masters.length ? `
+    <div class="master-list">
+      ${data.masters.map(m => `
+        <div class="m-card">
+          <div class="m-name">👑 ${m.name}</div>
+          <div class="m-id">${m.master_id}</div>
+          <div class="m-bio">${m.bio || 'Professional trader.'}</div>
+          <div class="m-stats">
+            <span>Trades: <strong>${m.trade_count}</strong></span>
+          </div>
+          <a href="/api/download/client-ea?master_id=${m.master_id}" class="btn-download" style="width:100%;justify-content:center;font-size:0.82rem;padding:0.6rem">⬇ Download Client EA for ${m.master_id}</a>
+          <button class="btn-sub unsub" onclick="unsubscribe(${m.id})" style="margin-top:0.5rem">Disconnect</button>
+        </div>
+      `).join('')}
+    </div>
+  ` : '<div class="empty">You haven\'t connected to any masters yet. Browse masters to get started!</div>';
+}
+
+async function subscribe(masterId) {
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ master_user_id: masterId })
+    });
+    if (!res.ok) throw new Error('Failed');
+    renderClientDashboard();
+  } catch (err) {
+    alert('Failed to connect: ' + err.message);
+  }
+}
+
+async function unsubscribe(masterId) {
+  if (!confirm('Disconnect from this master?')) return;
+  try {
+    await fetch('/api/unsubscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ master_user_id: masterId })
+    });
+    renderClientDashboard();
+  } catch (err) {
+    alert('Failed: ' + err.message);
+  }
+}
+
+// ═══════════ UTILS ═══════════
+function copyId(id) {
+  navigator.clipboard.writeText(id);
+  const btn = event.target;
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => btn.textContent = '📋 Copy', 1500);
+}
+
+async function logout() {
+  await fetch('/api/logout', { method: 'POST' });
+  window.location.href = '/';
+}
+
+init();
+</script>
+</body>
+</html>
