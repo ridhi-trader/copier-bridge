@@ -7,30 +7,61 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);padding:2rem}
-  .container{max-width:900px;margin:0 auto}
-  h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;margin-bottom:0.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .sub{font-size:0.85rem;color:var(--muted);margin-bottom:2rem}
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
-  .s{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.4rem}
-  .s .l{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
-  .s .v{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .section{background:var(--card);border:1px solid var(--glass-b);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
-  .section h2{font-size:1rem;font-weight:700;margin-bottom:1rem}
+  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);padding:2rem;min-height:100vh}
+  .container{max-width:1000px;margin:0 auto}
+
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+  .header-left h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .header-left .sub{font-size:0.85rem;color:var(--muted)}
+  .refresh-info{display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--muted)}
+  .refresh-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(74,222,128,0.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(74,222,128,0)}}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+  .s{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.5rem;transition:transform 0.3s,border-color 0.3s;animation:fadeIn 0.5s ease}
+  .s:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.2)}
+  .s .l{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.4rem}
+  .s .v{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .s .change{font-size:0.72rem;margin-top:0.3rem;color:var(--green)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+  .section{background:var(--card);border:1px solid var(--glass-b);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem}
+  .section h2{font-size:1.1rem;font-weight:700;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem}
   table{width:100%;border-collapse:collapse}
-  th{text-align:left;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
-  td{font-size:0.82rem;padding:0.65rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2)}
+  th{text-align:left;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.7rem 0.5rem;border-bottom:1px solid var(--glass-b)}
+  td{font-size:0.83rem;padding:0.7rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2);transition:background 0.2s}
+  tr:hover td{background:rgba(107,29,58,0.04)}
   .buy{color:var(--green);font-weight:600}.sell{color:#D44A7A;font-weight:600}
+
+  .back-link{display:inline-block;margin-bottom:1.5rem;font-size:0.85rem;color:var(--muted);text-decoration:none;transition:color 0.2s}
+  .back-link:hover{color:var(--txt)}
+
+  @media(max-width:640px){
+    .stats{grid-template-columns:1fr 1fr}
+    .header{flex-direction:column;align-items:flex-start}
+  }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>TradeBridge Admin</h1>
-  <p class="sub">Platform overview — auto-refreshes every 10 seconds</p>
+  <a href="/" class="back-link">← Back to home</a>
+  <div class="header">
+    <div class="header-left">
+      <h1>TradeBridge Admin</h1>
+      <p class="sub">Platform overview & monitoring</p>
+    </div>
+    <div class="refresh-info">
+      <span class="refresh-dot"></span>
+      <span>Live — Refreshes every 10s</span>
+      <span id="lastRefresh"></span>
+    </div>
+  </div>
+
   <div class="stats" id="stats"></div>
+
   <div class="section">
-    <h2>Recent Trades</h2>
+    <h2>📊 Recent Trades</h2>
     <div style="overflow-x:auto"><table id="trades"><tr><td style="color:var(--muted);text-align:center;padding:2rem">Loading...</td></tr></table></div>
   </div>
 </div>
@@ -40,10 +71,10 @@ async function load(){
     const r=await fetch('/api/admin/stats');
     const d=await r.json();
     document.getElementById('stats').innerHTML=`
-      <div class="s"><div class="l">Total Users</div><div class="v">${d.total_users}</div></div>
-      <div class="s"><div class="l">Masters</div><div class="v">${d.total_masters}</div></div>
-      <div class="s"><div class="l">Clients</div><div class="v">${d.total_clients}</div></div>
-      <div class="s"><div class="l">Total Trades</div><div class="v">${d.total_trades}</div></div>
+      <div class="s"><div class="l">Total Users</div><div class="v">${d.total_users}</div><div class="change">Platform users</div></div>
+      <div class="s"><div class="l">Masters</div><div class="v">${d.total_masters}</div><div class="change">Broadcasting</div></div>
+      <div class="s"><div class="l">Clients</div><div class="v">${d.total_clients}</div><div class="change">Copying</div></div>
+      <div class="s"><div class="l">Total Trades</div><div class="v">${d.total_trades}</div><div class="change">All time</div></div>
     `;
     document.getElementById('trades').innerHTML=d.recent_trades.length?`
       <tr><th>#</th><th>Master</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>
@@ -56,6 +87,7 @@ async function load(){
         <td>${new Date(t.created_at).toLocaleString()}</td>
       </tr>`).join('')}
     `:`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">No trades yet</td></tr>`;
+    document.getElementById('lastRefresh').textContent = '· ' + new Date().toLocaleTimeString();
   }catch(e){console.error(e)}
 }
 load();

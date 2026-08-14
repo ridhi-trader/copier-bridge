@@ -8,38 +8,72 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--wine:#6B1D3A;--wine-mid:#8B2252;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;position:relative;overflow:hidden}
+
+  /* Floating particles */
+  .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+  .particle{position:absolute;border-radius:50%;opacity:0;animation:floatUp linear infinite}
+  @keyframes floatUp{0%{opacity:0;transform:translateY(100vh) scale(0)}10%{opacity:1}90%{opacity:1}100%{opacity:0;transform:translateY(-10vh) scale(1)}}
+
+  /* Ambient glow */
+  .glow{position:fixed;border-radius:50%;filter:blur(140px);pointer-events:none;z-index:0}
+  .glow1{width:500px;height:500px;background:radial-gradient(circle,rgba(107,29,58,0.2),transparent 70%);top:-10%;right:-5%}
+  .glow2{width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,0.06),transparent 70%);bottom:0;left:-5%}
+
+  .content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
   .logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.3rem;text-align:center}
   .logo-sub{font-size:0.65rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:2.5rem}
-  .reg-box{background:var(--card);border:1px solid var(--glass-b);border-radius:20px;padding:2.5rem;width:100%;max-width:440px}
+  .reg-box{background:var(--card);border:1px solid var(--glass-b);border-radius:20px;padding:2.5rem;width:100%;max-width:440px;backdrop-filter:blur(20px);animation:slideUp 0.6s ease}
+  @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
   h2{font-size:1.3rem;font-weight:700;margin-bottom:0.4rem}
   .sub{font-size:0.88rem;color:var(--muted);margin-bottom:2rem}
   .role-pick{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.8rem}
-  .role-btn{background:var(--bg2);border:2px solid var(--glass-b);border-radius:14px;padding:1.4rem 1rem;text-align:center;cursor:pointer;transition:border-color 0.3s,background 0.3s}
-  .role-btn:hover{border-color:rgba(201,168,76,0.25)}
-  .role-btn.active{border-color:var(--gold);background:rgba(201,168,76,0.06)}
-  .role-btn .r-icon{font-size:2rem;margin-bottom:0.5rem}
+  .role-btn{background:var(--bg2);border:2px solid var(--glass-b);border-radius:14px;padding:1.4rem 1rem;text-align:center;cursor:pointer;transition:all 0.3s}
+  .role-btn:hover{border-color:rgba(201,168,76,0.25);transform:translateY(-2px)}
+  .role-btn.active{border-color:var(--gold);background:rgba(201,168,76,0.06);box-shadow:0 0 30px rgba(201,168,76,0.08)}
+  .role-btn .r-icon{font-size:2rem;margin-bottom:0.5rem;transition:transform 0.3s}
+  .role-btn.active .r-icon{transform:scale(1.15)}
   .role-btn .r-title{font-size:0.95rem;font-weight:700}
   .role-btn .r-desc{font-size:0.75rem;color:var(--muted);margin-top:0.3rem}
   .field{margin-bottom:1.2rem}
   .field label{display:block;font-size:0.78rem;font-weight:600;color:var(--txt2);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em}
-  .field input{width:100%;padding:0.8rem 1rem;background:var(--bg2);border:1px solid var(--glass-b);border-radius:10px;color:var(--txt);font-size:0.92rem;font-family:inherit;outline:none;transition:border-color 0.3s}
-  .field input:focus{border-color:var(--gold)}
+  .input-wrap{position:relative}
+  .field input{width:100%;padding:0.8rem 1rem;background:var(--bg2);border:1px solid var(--glass-b);border-radius:10px;color:var(--txt);font-size:0.92rem;font-family:inherit;outline:none;transition:border-color 0.3s,box-shadow 0.3s}
+  .field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.08)}
   .field input::placeholder{color:var(--muted)}
+  .toggle-pw{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px;transition:color 0.2s}
+  .toggle-pw:hover{color:var(--txt)}
+
+  /* Password strength */
+  .pw-strength{margin-top:0.5rem;display:flex;gap:4px;height:3px}
+  .pw-bar{flex:1;border-radius:3px;background:rgba(255,255,255,0.06);transition:background 0.3s}
+  .pw-bar.weak{background:var(--red)}
+  .pw-bar.medium{background:#F59E0B}
+  .pw-bar.strong{background:var(--green)}
+  .pw-label{font-size:0.7rem;margin-top:0.3rem;transition:color 0.3s}
+
   .btn-submit{width:100%;padding:0.9rem;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);font-size:0.95rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-top:0.5rem;transition:transform 0.2s,box-shadow 0.3s}
-  .btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
+  .btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
   .btn-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
-  .msg{text-align:center;margin-top:1rem;font-size:0.85rem;padding:0.6rem;border-radius:8px;display:none}
+  .btn-submit:active:not(:disabled){transform:scale(0.98)}
+  .msg{text-align:center;margin-top:1rem;font-size:0.85rem;padding:0.6rem;border-radius:8px;display:none;animation:slideUp 0.3s ease}
   .msg.err{display:block;background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.15)}
   .msg.ok{display:block;background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.15)}
   .bottom{text-align:center;margin-top:1.5rem;font-size:0.85rem;color:var(--muted)}
-  .bottom a{color:var(--gold);font-weight:600}
-  a.back{display:inline-block;margin-bottom:1.5rem;font-size:0.85rem;color:var(--muted);text-decoration:none}
+  .bottom a{color:var(--gold);font-weight:600;transition:color 0.2s}
+  .bottom a:hover{color:var(--gold-l)}
+  a.back{display:inline-block;margin-bottom:1.5rem;font-size:0.85rem;color:var(--muted);text-decoration:none;transition:color 0.2s}
   a.back:hover{color:var(--txt)}
 </style>
 </head>
 <body>
 
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+<div class="particles" id="particles"></div>
+
+<div class="content">
 <a href="/" class="back">← Back to home</a>
 <div class="logo">TradeBridge</div>
 <div class="logo-sub">MT5 to MT5 Trade Copier</div>
@@ -72,7 +106,12 @@
     </div>
     <div class="field">
       <label>Password</label>
-      <input type="password" id="password" placeholder="Min 6 characters" minlength="6" required>
+      <div class="input-wrap">
+        <input type="password" id="password" placeholder="Min 6 characters" minlength="6" required oninput="checkStrength(this.value)">
+        <button type="button" class="toggle-pw" onclick="togglePw()">👁</button>
+      </div>
+      <div class="pw-strength"><div class="pw-bar" id="b1"></div><div class="pw-bar" id="b2"></div><div class="pw-bar" id="b3"></div><div class="pw-bar" id="b4"></div></div>
+      <div class="pw-label" id="pwLabel" style="color:var(--muted)"></div>
     </div>
     <button type="submit" class="btn-submit" id="submitBtn">Create Account →</button>
   </form>
@@ -80,14 +119,52 @@
   <div class="msg" id="msg"></div>
   <div class="bottom">Already have an account? <a href="/login">Log in</a></div>
 </div>
+</div>
 
 <script>
   let role = 'master';
+
+  // Particles
+  (function(){
+    const c=document.getElementById('particles');
+    for(let i=0;i<20;i++){
+      const p=document.createElement('div');
+      p.className='particle';
+      const s=Math.random()*3+1;
+      p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${Math.random()>0.5?'rgba(201,168,76,0.4)':'rgba(107,29,58,0.5)'};animation-duration:${Math.random()*8+6}s;animation-delay:${Math.random()*5}s`;
+      c.appendChild(p);
+    }
+  })();
 
   function pickRole(r) {
     role = r;
     document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`[data-role="${r}"]`).classList.add('active');
+  }
+
+  function togglePw() {
+    const inp = document.getElementById('password');
+    const btn = event.currentTarget;
+    if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+    else { inp.type = 'password'; btn.textContent = '👁'; }
+  }
+
+  function checkStrength(pw) {
+    let score = 0;
+    if (pw.length >= 6) score++;
+    if (pw.length >= 10) score++;
+    if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw) && /[^A-Za-z0-9]/.test(pw)) score++;
+
+    const bars = [document.getElementById('b1'),document.getElementById('b2'),document.getElementById('b3'),document.getElementById('b4')];
+    const label = document.getElementById('pwLabel');
+    const levels = ['','weak','medium','medium','strong'];
+    const labels = ['','Weak','Fair','Good','Strong'];
+    const colors = ['var(--muted)','var(--red)','#F59E0B','#F59E0B','var(--green)'];
+
+    bars.forEach((b,i) => { b.className = 'pw-bar'; if(i < score) b.classList.add(levels[score]); });
+    label.textContent = labels[score] || '';
+    label.style.color = colors[score] || 'var(--muted)';
   }
 
   async function register(e) {
