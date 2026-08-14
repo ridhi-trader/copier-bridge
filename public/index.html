@@ -679,6 +679,76 @@
 
   @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
+
+  /* ===== Scroll Progress Bar ===== */
+  .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--wine),var(--gold),var(--wine-glow));z-index:9999;width:0%;transition:width 0.1s linear;box-shadow:0 0 10px rgba(201,168,76,0.5)}
+
+  /* ===== Mouse Glow Follower ===== */
+  .mouse-glow{position:fixed;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.06),transparent 70%);pointer-events:none;z-index:1;transform:translate(-50%,-50%);transition:left 0.3s ease,top 0.3s ease;display:none}
+  @media(min-width:768px){.mouse-glow{display:block}}
+
+  /* ===== Card Tilt 3D ===== */
+  .tilt-card{transition:transform 0.4s ease,box-shadow 0.4s ease;transform-style:preserve-3d;perspective:1000px}
+
+  /* ===== Animated Gradient Border ===== */
+  .glow-border{position:relative;overflow:hidden}
+  .glow-border::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:conic-gradient(from 0deg,transparent,var(--gold),transparent,var(--wine-glow),transparent);border-radius:inherit;z-index:-1;opacity:0;transition:opacity 0.5s;animation:rotateBorder 4s linear infinite}
+  .glow-border:hover::before{opacity:1}
+  @keyframes rotateBorder{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+  /* ===== Button Ripple ===== */
+  .ripple{position:relative;overflow:hidden}
+  .ripple::after{content:'';position:absolute;width:0;height:0;border-radius:50%;background:rgba(255,255,255,0.25);transform:translate(-50%,-50%);transition:width 0.6s ease,height 0.6s ease,opacity 0.6s;opacity:0;pointer-events:none}
+  .ripple:active::after{width:300px;height:300px;opacity:1;transition:0s}
+
+  /* ===== Floating Shapes Background ===== */
+  .shapes-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+  .shape{position:absolute;opacity:0.03;border:1px solid var(--gold)}
+  .shape.circle{border-radius:50%}
+  .shape.diamond{transform:rotate(45deg)}
+
+  /* ===== Hero Typing Cursor ===== */
+  .typing-cursor{display:inline-block;width:3px;height:1em;background:var(--gold);margin-left:4px;animation:cursorBlink 1s infinite;vertical-align:text-bottom}
+  @keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
+
+  /* ===== Staggered fade for feature cards ===== */
+  .feat-card:nth-child(1){animation-delay:0s}
+  .feat-card:nth-child(2){animation-delay:0.1s}
+  .feat-card:nth-child(3){animation-delay:0.2s}
+  .feat-card:nth-child(4){animation-delay:0.3s}
+  .feat-card:nth-child(5){animation-delay:0.4s}
+  .feat-card:nth-child(6){animation-delay:0.5s}
+
+  /* ===== Shine sweep on gold buttons ===== */
+  .btn-gold,.btn-lg,.pc-btn.solid,.btn-download{position:relative;overflow:hidden}
+  .btn-gold::before,.btn-lg::before,.pc-btn.solid::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);transform:skewX(-20deg);transition:left 0.6s}
+  .btn-gold:hover::before,.btn-lg:hover::before,.pc-btn.solid:hover::before{left:120%}
+
+  /* ===== Glow text on hover ===== */
+  .glow-text:hover{text-shadow:0 0 20px rgba(201,168,76,0.4),0 0 40px rgba(201,168,76,0.2)}
+
+  /* ===== Pricing card shine ===== */
+  .price-card.pop{animation:popGlow 3s ease infinite alternate}
+  @keyframes popGlow{0%{box-shadow:0 0 40px rgba(201,168,76,0.05)}100%{box-shadow:0 0 80px rgba(201,168,76,0.12)}}
+
+  /* ===== Section divider glow ===== */
+  .section-glow{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),transparent);margin:0}
+
+  /* ===== Smooth entry from sides ===== */
+  .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.7s ease,transform 0.7s ease}
+  .reveal-left.vis{opacity:1;transform:translateX(0)}
+  .reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.7s ease,transform 0.7s ease}
+  .reveal-right.vis{opacity:1;transform:translateX(0)}
+
+  /* ===== Step rings pulse on view ===== */
+  .step-ring{transition:box-shadow 0.5s}
+  .step-item.vis .step-ring{box-shadow:0 0 50px rgba(107,29,58,0.35),0 0 100px rgba(201,168,76,0.08)}
+
+  /* ===== Nav link underline effect ===== */
+  .nav-mid a{position:relative}
+  .nav-mid a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--gold);transition:width 0.3s}
+  .nav-mid a:hover::after{width:100%}
+
 </style>
 </head>
 <body>
@@ -698,6 +768,11 @@
     <a href="/register" class="btn-gold">Get Started →</a>
   </div>
 </nav>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="mouse-glow" id="mouseGlow"></div>
+<div class="shapes-bg" id="shapesBg"></div>
+
 
 <div class="mobile-overlay" id="mobileNav">
   <a href="#features" onclick="closeMenu()">Features</a>
@@ -719,7 +794,7 @@
     <h1>One Trade.<br><em>Every Account.</em></h1>
     <p class="hero-p">Place a trade on your master MT5 and watch it mirror across every connected client account — in milliseconds, not minutes.</p>
     <div class="hero-btns">
-      <a href="/register" class="btn-gold btn-lg">Start Copying Trades →</a>
+      <a href="/register" class="btn-gold btn-lg ripple">Start Copying Trades →</a>
       <a href="#how" class="btn-wine">See How It Works</a>
     </div>
     <div class="stats-strip">
@@ -804,9 +879,9 @@
 <section class="problem-section">
   <div class="container">
     <div class="problem-grid">
-      <div class="problem-cards">
+      <div class="problem-cards reveal-left">
         <div class="section-eyebrow">Still Doing This?</div>
-        <h2 class="section-title" style="margin-bottom:1.8rem;">Copying trades by hand is a losing game</h2>
+        <h2 class="section-title glow-text" style="margin-bottom:1.8rem;">Copying trades by hand is a losing game</h2>
         <div class="prob-card reveal">
           <div class="pc-icon">⏱️</div>
           <h4>Markets don't wait</h4>
@@ -823,51 +898,52 @@
           <p>Managing 3 accounts manually is stressful. Managing 30 is impossible. You need automation.</p>
         </div>
       </div>
-      <div class="solution-side reveal">
+      <div class="solution-side reveal-right">
         <div class="section-eyebrow">The Fix</div>
         <h2>Automate everything.<br>Trade once, copy everywhere.</h2>
         <p>TradeBridge mirrors every trade — opens, closes, modifies — from your master to all clients in under 30ms. Zero manual work. Zero missed fills.</p>
-        <a href="/register" class="btn-gold btn-lg">Start Free →</a>
+        <a href="/register" class="btn-gold btn-lg ripple">Start Free →</a>
       </div>
     </div>
   </div>
 </section>
 
+<div class="section-glow"></div>
 <!-- ===== FEATURES ===== -->
 <section id="features" class="features-section">
   <div class="container">
     <div class="center" style="text-align:center;">
       <div class="section-eyebrow">Capabilities</div>
-      <div class="section-title">Everything You Need. Nothing You Don't.</div>
+      <div class="section-title glow-text">Everything You Need. Nothing You Don't.</div>
       <p class="section-sub" style="margin:0 auto;">Professional-grade tools built for traders who want reliability, speed, and control.</p>
     </div>
     <div class="feat-grid">
-      <div class="feat-card reveal">
+      <div class="feat-card reveal tilt-card glow-border">
         <div class="feat-icon">⚡</div>
         <h3>Sub-30ms Execution</h3>
         <p>Trades copy before the candle closes. Zero polling — instant push to every connected client.</p>
       </div>
-      <div class="feat-card reveal">
+      <div class="feat-card reveal tilt-card glow-border">
         <div class="feat-icon">🔐</div>
         <h3>Encrypted & Secure</h3>
         <p>Secret-key authentication, HTTPS encryption. No credentials stored. Your accounts stay yours.</p>
       </div>
-      <div class="feat-card reveal">
+      <div class="feat-card reveal tilt-card glow-border">
         <div class="feat-icon">📊</div>
         <h3>Live Dashboard</h3>
         <p>Real-time admin panel. See connected clients, active trades, and server health — all in one view.</p>
       </div>
-      <div class="feat-card reveal">
+      <div class="feat-card reveal tilt-card glow-border">
         <div class="feat-icon">⚙️</div>
         <h3>Custom Risk Control</h3>
         <p>Clients set their own lot sizing — fixed, multiplier, or percentage. Full control over risk per trade.</p>
       </div>
-      <div class="feat-card reveal">
+      <div class="feat-card reveal tilt-card glow-border">
         <div class="feat-icon">🌐</div>
         <h3>Cross-Broker</h3>
         <p>Master on Exness, clients on IC Markets. Symbol mapping handles suffix differences automatically.</p>
       </div>
-      <div class="feat-card reveal">
+      <div class="feat-card reveal tilt-card glow-border">
         <div class="feat-icon">📈</div>
         <h3>Scale to Thousands</h3>
         <p>Architecture built for high concurrency. 10 clients or 10,000 — same speed, same reliability.</p>
@@ -881,7 +957,7 @@
   <div class="container">
     <div class="center" style="text-align:center;">
       <div class="section-eyebrow">Admin Panel</div>
-      <div class="section-title">Your Entire Operation at a Glance</div>
+      <div class="section-title glow-text">Your Entire Operation at a Glance</div>
       <p class="section-sub" style="margin:0 auto;">Live trade feed, connected clients, server stats — all in one real-time dashboard.</p>
     </div>
     <div class="dash-mockup reveal">
@@ -934,12 +1010,13 @@
   </div>
 </section>
 
+<div class="section-glow"></div>
 <!-- ===== HOW IT WORKS ===== -->
 <section id="how" class="how-section">
   <div class="container">
     <div class="center" style="text-align:center;">
       <div class="section-eyebrow">Setup</div>
-      <div class="section-title">Live in Under 5 Minutes</div>
+      <div class="section-title glow-text">Live in Under 5 Minutes</div>
       <p class="section-sub" style="margin:0 auto;">No VPS to configure. No complicated setup. Three steps and you're copying.</p>
     </div>
     <div class="steps-row">
@@ -967,30 +1044,30 @@
   <div class="container">
     <div class="center" style="text-align:center;">
       <div class="section-eyebrow">Built For You</div>
-      <div class="section-title">Whatever You Trade, We Copy It</div>
+      <div class="section-title glow-text">Whatever You Trade, We Copy It</div>
     </div>
     <div class="built-grid">
-      <div class="built-card reveal">
+      <div class="built-card reveal tilt-card">
         <h3><span class="bi">🛡️</span> Equity Protection</h3>
         <p>Set maximum drawdown per client account. When limits hit, copying stops automatically — protecting capital before damage spreads.</p>
       </div>
-      <div class="built-card reveal">
+      <div class="built-card reveal tilt-card">
         <h3><span class="bi">🏆</span> Prop Firm Ready</h3>
         <p>Built to keep prop accounts safe. Dedicated environments, risk limits, and compliance-friendly settings for funded accounts.</p>
       </div>
-      <div class="built-card reveal">
+      <div class="built-card reveal tilt-card">
         <h3><span class="bi">🔄</span> Auto Symbol Mapping</h3>
         <p>Master trades XAUUSD, client broker uses GOLD? Auto-mapping handles suffix differences without manual config.</p>
       </div>
-      <div class="built-card reveal">
+      <div class="built-card reveal tilt-card">
         <h3><span class="bi">📋</span> Full Trade Logs</h3>
         <p>Every copied trade logged with execution time, status, and any errors. Complete audit trail for every account.</p>
       </div>
-      <div class="built-card reveal">
+      <div class="built-card reveal tilt-card">
         <h3><span class="bi">🔔</span> Instant Notifications</h3>
         <p>Get alerts on Telegram the moment a trade is copied, an error occurs, or a client disconnects.</p>
       </div>
-      <div class="built-card reveal">
+      <div class="built-card reveal tilt-card">
         <h3><span class="bi">🖥️</span> Dedicated Environment</h3>
         <p>Your own isolated server instance. No shared resources, no noisy neighbors. Pure, dedicated performance.</p>
       </div>
@@ -998,12 +1075,13 @@
   </div>
 </section>
 
+<div class="section-glow"></div>
 <!-- ===== PRICING ===== -->
 <section id="pricing" class="pricing-section">
   <div class="container">
     <div class="center" style="text-align:center;">
       <div class="section-eyebrow">Pricing</div>
-      <div class="section-title">Simple. Transparent. No Surprises.</div>
+      <div class="section-title glow-text">Simple. Transparent. No Surprises.</div>
       <p class="section-sub" style="margin:0 auto;">Start free. Upgrade when you're ready to scale. Cancel anytime.</p>
     </div>
     <div class="price-grid">
@@ -1058,7 +1136,7 @@
   <div class="container">
     <div class="center" style="text-align:center;">
       <div class="section-eyebrow">Questions</div>
-      <div class="section-title">Frequently Asked</div>
+      <div class="section-title glow-text">Frequently Asked</div>
     </div>
     <div class="faq-list">
       <div class="faq-item">
@@ -1095,7 +1173,7 @@
   <div class="container">
     <div class="center" style="text-align:center;">
       <div class="section-eyebrow">Community</div>
-      <div class="section-title">Join 10,000+ Traders</div>
+      <div class="section-title glow-text">Join 10,000+ Traders</div>
       <p class="section-sub" style="margin:0 auto;">Connect with us on your favorite platform. Get updates, support, and trading insights.</p>
     </div>
     <div class="community-grid">
@@ -1128,10 +1206,10 @@
   <div class="glow g1"></div>
   <div class="inner">
     <div class="section-eyebrow">Ready to Scale?</div>
-    <div class="section-title">Start Copying Trades<br>in Under 5 Minutes</div>
+    <div class="section-title glow-text">Start Copying Trades<br>in Under 5 Minutes</div>
     <p class="section-sub" style="margin:0 auto 2.5rem;">Join traders already using TradeBridge to automate their operations.</p>
     <div style="display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;">
-      <a href="/register" class="btn-gold btn-lg">Get Started Free →</a>
+      <a href="/register" class="btn-gold btn-lg ripple">Get Started Free →</a>
       <a href="https://t.me/" class="btn-wine" target="_blank">Talk to Us on Telegram</a>
     </div>
   </div>
@@ -1270,6 +1348,64 @@
   },{threshold:0.3});
   var liveSection=document.querySelector('.live-stats');
   if(liveSection)liveObs.observe(liveSection);
+
+
+  // Scroll progress bar
+  window.addEventListener('scroll',function(){
+    var scrollTop=window.scrollY;
+    var docHeight=document.documentElement.scrollHeight-window.innerHeight;
+    var progress=(scrollTop/docHeight)*100;
+    document.getElementById('scrollProgress').style.width=progress+'%';
+  });
+
+  // Mouse glow follower
+  (function(){
+    var glow=document.getElementById('mouseGlow');
+    if(!glow)return;
+    document.addEventListener('mousemove',function(e){
+      glow.style.left=e.clientX+'px';
+      glow.style.top=e.clientY+'px';
+    });
+  })();
+
+  // Floating geometric shapes
+  (function(){
+    var bg=document.getElementById('shapesBg');
+    if(!bg)return;
+    for(var i=0;i<12;i++){
+      var s=document.createElement('div');
+      var size=Math.random()*80+30;
+      var isCircle=Math.random()>0.5;
+      s.className='shape '+(isCircle?'circle':'diamond');
+      s.style.cssText='width:'+size+'px;height:'+size+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;animation:floatShape '+(Math.random()*20+15)+'s ease-in-out infinite;animation-delay:'+(Math.random()*10)+'s';
+      bg.appendChild(s);
+    }
+    // Add float animation
+    var styleEl=document.createElement('style');
+    styleEl.textContent='@keyframes floatShape{0%,100%{transform:translateY(0) rotate(0deg)}25%{transform:translateY(-30px) rotate(5deg)}50%{transform:translateY(0) rotate(0deg)}75%{transform:translateY(20px) rotate(-3deg)}}'
+    document.head.appendChild(styleEl);
+  })();
+
+  // 3D Tilt effect on cards
+  document.querySelectorAll('.tilt-card').forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var rect=card.getBoundingClientRect();
+      var x=(e.clientX-rect.left)/rect.width;
+      var y=(e.clientY-rect.top)/rect.height;
+      var rotateX=(y-0.5)*-8;
+      var rotateY=(x-0.5)*8;
+      card.style.transform='perspective(800px) rotateX('+rotateX+'deg) rotateY('+rotateY+'deg) translateY(-3px)';
+    });
+    card.addEventListener('mouseleave',function(){
+      card.style.transform='perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+
+  // Reveal from left/right
+  var sideObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal-left,.reveal-right').forEach(function(el){sideObs.observe(el);});
 
 </script>
 
