@@ -749,6 +749,25 @@
   .nav-mid a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--gold);transition:width 0.3s}
   .nav-mid a:hover::after{width:100%}
 
+
+  /* ===== Click Glow Effect ===== */
+  .click-glow{position:absolute;width:0;height:0;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.4),transparent 70%);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);animation:clickPulse 0.8s ease forwards}
+  @keyframes clickPulse{0%{width:0;height:0;opacity:1}100%{width:300px;height:300px;opacity:0}}
+
+  /* ===== Hero Wave Text ===== */
+  .hero h1 .wave-word{display:inline-block;opacity:0.3;filter:blur(2px);transform:translateY(20px);animation:none}
+  .hero h1 .wave-word.lit{opacity:1;filter:blur(0);transform:translateY(0);transition:all 0.6s cubic-bezier(0.16,1,0.3,1)}
+  .hero h1 .wave-word.lit-glow{text-shadow:0 0 40px rgba(201,168,76,0.5),0 0 80px rgba(201,168,76,0.2)}
+  .hero h1 em .wave-word.lit{-webkit-text-fill-color:transparent;background:linear-gradient(135deg,var(--gold),var(--wine-glow),var(--gold-light));-webkit-background-clip:text;background-size:200% 200%;animation:grad 5s ease infinite}
+
+  /* ===== Interactive Element Glow on Click ===== */
+  .card-clicked{animation:cardGlow 0.6s ease}
+  @keyframes cardGlow{0%{box-shadow:0 0 0 rgba(201,168,76,0)}30%{box-shadow:0 0 30px rgba(201,168,76,0.3),0 0 60px rgba(201,168,76,0.1)}100%{box-shadow:0 0 0 rgba(201,168,76,0)}}
+
+  /* ===== Hover Glow for clickable elements ===== */
+  .glow-on-hover{transition:box-shadow 0.3s,transform 0.3s}
+  .glow-on-hover:hover{box-shadow:0 0 25px rgba(201,168,76,0.15),0 0 50px rgba(107,29,58,0.1)}
+
 </style>
 </head>
 <body>
@@ -791,7 +810,7 @@
   <div class="glow g2"></div>
   <div class="hero-inner">
     <div class="hero-chip"><span class="pulse"></span> System Operational — 99.9% Uptime</div>
-    <h1>One Trade.<br><em>Every Account.</em></h1>
+    <h1><span class="wave-word" data-delay="0">One</span> <span class="wave-word" data-delay="1">Trade.</span><br><em><span class="wave-word" data-delay="2">Every</span> <span class="wave-word" data-delay="3">Account.</span></em></h1>
     <p class="hero-p">Place a trade on your master MT5 and watch it mirror across every connected client account — in milliseconds, not minutes.</p>
     <div class="hero-btns">
       <a href="/register" class="btn-gold btn-lg ripple">Start Copying Trades →</a>
@@ -882,17 +901,17 @@
       <div class="problem-cards reveal-left">
         <div class="section-eyebrow">Still Doing This?</div>
         <h2 class="section-title glow-text" style="margin-bottom:1.8rem;">Copying trades by hand is a losing game</h2>
-        <div class="prob-card reveal">
+        <div class="prob-card reveal glow-on-hover">
           <div class="pc-icon">⏱️</div>
           <h4>Markets don't wait</h4>
           <p>By the time you re-enter a trade on the second account, price has moved. Slippage eats your edge.</p>
         </div>
-        <div class="prob-card reveal">
+        <div class="prob-card reveal glow-on-hover">
           <div class="pc-icon">❌</div>
           <h4>Manual errors compound</h4>
           <p>Wrong lot size, wrong direction, forgotten stop-loss — one fat-finger can blow an entire account.</p>
         </div>
-        <div class="prob-card reveal">
+        <div class="prob-card reveal glow-on-hover">
           <div class="pc-icon">😓</div>
           <h4>It doesn't scale</h4>
           <p>Managing 3 accounts manually is stressful. Managing 30 is impossible. You need automation.</p>
@@ -918,32 +937,32 @@
       <p class="section-sub" style="margin:0 auto;">Professional-grade tools built for traders who want reliability, speed, and control.</p>
     </div>
     <div class="feat-grid">
-      <div class="feat-card reveal tilt-card glow-border">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
         <div class="feat-icon">⚡</div>
         <h3>Sub-30ms Execution</h3>
         <p>Trades copy before the candle closes. Zero polling — instant push to every connected client.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
         <div class="feat-icon">🔐</div>
         <h3>Encrypted & Secure</h3>
         <p>Secret-key authentication, HTTPS encryption. No credentials stored. Your accounts stay yours.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
         <div class="feat-icon">📊</div>
         <h3>Live Dashboard</h3>
         <p>Real-time admin panel. See connected clients, active trades, and server health — all in one view.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
         <div class="feat-icon">⚙️</div>
         <h3>Custom Risk Control</h3>
         <p>Clients set their own lot sizing — fixed, multiplier, or percentage. Full control over risk per trade.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
         <div class="feat-icon">🌐</div>
         <h3>Cross-Broker</h3>
         <p>Master on Exness, clients on IC Markets. Symbol mapping handles suffix differences automatically.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
         <div class="feat-icon">📈</div>
         <h3>Scale to Thousands</h3>
         <p>Architecture built for high concurrency. 10 clients or 10,000 — same speed, same reliability.</p>
@@ -1085,7 +1104,7 @@
       <p class="section-sub" style="margin:0 auto;">Start free. Upgrade when you're ready to scale. Cancel anytime.</p>
     </div>
     <div class="price-grid">
-      <div class="price-card reveal">
+      <div class="price-card reveal glow-on-hover">
         <div class="pc-tier">Starter</div>
         <div class="pc-price">Free</div>
         <div class="pc-desc">Perfect for getting started</div>
@@ -1098,7 +1117,7 @@
         </ul>
         <a href="/register" class="pc-btn ghost">Get Started Free</a>
       </div>
-      <div class="price-card pop reveal">
+      <div class="price-card pop reveal glow-on-hover">
         <div class="pc-tier">Professional</div>
         <div class="pc-price">$49<sub> /mo</sub></div>
         <div class="pc-desc">For serious traders scaling up</div>
@@ -1113,7 +1132,7 @@
         </ul>
         <a href="/register" class="pc-btn solid">Start 7-Day Free Trial →</a>
       </div>
-      <div class="price-card reveal">
+      <div class="price-card reveal glow-on-hover">
         <div class="pc-tier">Enterprise</div>
         <div class="pc-price">Custom</div>
         <div class="pc-desc">White-label & dedicated infra</div>
@@ -1177,22 +1196,22 @@
       <p class="section-sub" style="margin:0 auto;">Connect with us on your favorite platform. Get updates, support, and trading insights.</p>
     </div>
     <div class="community-grid">
-      <a href="https://t.me/" target="_blank" class="comm-card reveal">
+      <a href="https://t.me/" target="_blank" class="comm-card reveal glow-on-hover">
         <div class="comm-icon">✈️</div>
         <h4>Telegram Group</h4>
         <p>Join live discussions</p>
       </a>
-      <a href="https://youtube.com/" target="_blank" class="comm-card reveal">
+      <a href="https://youtube.com/" target="_blank" class="comm-card reveal glow-on-hover">
         <div class="comm-icon">▶️</div>
         <h4>YouTube Channel</h4>
         <p>Tutorials & setups</p>
       </a>
-      <a href="https://instagram.com/" target="_blank" class="comm-card reveal">
+      <a href="https://instagram.com/" target="_blank" class="comm-card reveal glow-on-hover">
         <div class="comm-icon">📸</div>
         <h4>Instagram</h4>
         <p>Trade highlights</p>
       </a>
-      <a href="https://wa.me/" target="_blank" class="comm-card reveal">
+      <a href="https://wa.me/" target="_blank" class="comm-card reveal glow-on-hover">
         <div class="comm-icon">💬</div>
         <h4>WhatsApp Support</h4>
         <p>Direct help & queries</p>
@@ -1406,6 +1425,50 @@
     entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});
   },{threshold:0.12});
   document.querySelectorAll('.reveal-left,.reveal-right').forEach(function(el){sideObs.observe(el);});
+
+
+  // ═══ Hero Wave Text Animation ═══
+  (function(){
+    var words=document.querySelectorAll('.wave-word');
+    if(!words.length)return;
+    // Initial wave on load
+    function triggerWave(){
+      words.forEach(function(w,i){
+        var delay=parseInt(w.getAttribute('data-delay'))||i;
+        setTimeout(function(){
+          w.classList.add('lit');
+          // Add glow briefly
+          w.classList.add('lit-glow');
+          setTimeout(function(){w.classList.remove('lit-glow');},1200);
+        },delay*400+500);
+      });
+    }
+    triggerWave();
+    // Repeat wave every 6 seconds
+    setInterval(function(){
+      words.forEach(function(w){w.classList.remove('lit');w.classList.remove('lit-glow');});
+      setTimeout(triggerWave,300);
+    },7000);
+  })();
+
+  // ═══ Click Glow Effect (anywhere on page) ═══
+  document.addEventListener('click',function(e){
+    var glow=document.createElement('div');
+    glow.className='click-glow';
+    glow.style.left=e.pageX+'px';
+    glow.style.top=e.pageY+'px';
+    document.body.appendChild(glow);
+    setTimeout(function(){glow.remove();},800);
+
+    // Card click glow
+    var card=e.target.closest('.glow-on-hover');
+    if(card){
+      card.classList.remove('card-clicked');
+      void card.offsetWidth; // reflow
+      card.classList.add('card-clicked');
+      setTimeout(function(){card.classList.remove('card-clicked');},600);
+    }
+  });
 
 </script>
 
