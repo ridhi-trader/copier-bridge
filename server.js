@@ -57,6 +57,7 @@ async function initDB() {
       sl DOUBLE PRECISION DEFAULT 0,
       tp DOUBLE PRECISION DEFAULT 0,
       ticket BIGINT,
+      profit DOUBLE PRECISION DEFAULT 0,
       comment TEXT DEFAULT '',
       created_at TIMESTAMP DEFAULT NOW()
     );
@@ -90,6 +91,7 @@ async function initDB() {
   try { await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS mt5_broker VARCHAR(255) DEFAULT ''"); } catch(e){}
   try { await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS max_clients INTEGER DEFAULT 20"); } catch(e){}
   try { await pool.query("ALTER TABLE client_connections ADD COLUMN IF NOT EXISTS balance DOUBLE PRECISION DEFAULT 0"); } catch(e){}
+  try { await pool.query("ALTER TABLE trades ADD COLUMN IF NOT EXISTS profit DOUBLE PRECISION DEFAULT 0"); } catch(e){}
 
   console.log('✅ Database tables ready');
 }
@@ -309,13 +311,13 @@ app.post('/heartbeat', async (req, res) => {
 
 app.post('/trade', async (req, res) => {
   try {
-    const { master_id, symbol, action, volume, price, sl, tp, ticket, comment } = req.body;
+    const { master_id, symbol, action, volume, price, sl, tp, ticket, profit, comment } = req.body;
     if (!master_id || !symbol || !action) return res.status(400).json({ error: 'Missing fields' });
 
     await pool.query(
-      `INSERT INTO trades (master_id, symbol, action, volume, price, sl, tp, ticket, comment)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-      [master_id, symbol, action, parseFloat(volume)||0, parseFloat(price)||0, parseFloat(sl)||0, parseFloat(tp)||0, parseInt(ticket)||0, comment||'']
+      `INSERT INTO trades (master_id, symbol, action, volume, price, sl, tp, ticket, profit, comment)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+      [master_id, symbol, action, parseFloat(volume)||0, parseFloat(price)||0, parseFloat(sl)||0, parseFloat(tp)||0, parseInt(ticket)||0, parseFloat(profit)||0, comment||'']
     );
     res.json({ ok: true });
   } catch (err) {
@@ -605,6 +607,57 @@ app.get('/api/admin/settings', async (req, res) => {
       version: '3.8'
     });
   } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+// Admin: Weekly profit per master
+app.get('/api/admin/weekly-profit', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        u.name,
+        t.master_id,
+        DATE_TRUNC('week', t.created_at) as week_start,
+        SUM(t.profit) as total_profit,
+        COUNT(*) as trade_count,
+        SUM(CASE WHEN t.profit > 0 THEN 1 ELSE 0 END) as winning_trades,
+        SUM(CASE WHEN t.profit < 0 THEN 1 ELSE 0 END) as losing_trades
+      FROM trades t
+      LEFT JOIN users u ON u.master_id = t.master_id
+      GROUP BY u.name, t.master_id, DATE_TRUNC('week', t.created_at)
+      ORDER BY t.master_id, week_start DESC
+    `);
+
+    // Group by master
+    const masters = {};
+    result.rows.forEach(r => {
+      if (!masters[r.master_id]) {
+        masters[r.master_id] = { name: r.name || r.master_id, master_id: r.master_id, weeks: [] };
+      }
+      masters[r.master_id].weeks.push({
+        week_start: r.week_start,
+        total_profit: parseFloat(r.total_profit) || 0,
+        trade_count: parseInt(r.trade_count),
+        winning_trades: parseInt(r.winning_trades),
+        losing_trades: parseInt(r.losing_trades)
+      });
+    });
+
+    // Also get masters with no trades
+    const allMasters = await pool.query(
+      "SELECT name, master_id FROM users WHERE role = 'master' ORDER BY created_at DESC"
+    );
+    allMasters.rows.forEach(m => {
+      if (!masters[m.master_id]) {
+        masters[m.master_id] = { name: m.name, master_id: m.master_id, weeks: [] };
+      }
+    });
+
+    res.json({ masters: Object.values(masters) });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
