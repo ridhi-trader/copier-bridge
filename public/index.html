@@ -768,6 +768,170 @@
   .glow-on-hover{transition:box-shadow 0.3s,transform 0.3s}
   .glow-on-hover:hover{box-shadow:0 0 25px rgba(201,168,76,0.15),0 0 50px rgba(107,29,58,0.1)}
 
+
+  /* ===== Live Trade Animation ===== */
+  .trade-demo{background:var(--bg-secondary);padding:5rem 0}
+  .demo-box{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;max-width:800px;margin:3rem auto 0;overflow:hidden}
+  .demo-flow{display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem}
+  .demo-node{background:var(--bg-primary);border:1px solid var(--glass-border);border-radius:14px;padding:1rem 1.2rem;text-align:center;min-width:130px;transition:all 0.4s}
+  .demo-node.active{border-color:var(--gold);box-shadow:0 0 30px rgba(201,168,76,0.15)}
+  .demo-node .dn-icon{font-size:1.6rem;margin-bottom:0.3rem}
+  .demo-node .dn-title{font-size:0.78rem;font-weight:700;color:var(--text-primary)}
+  .demo-node .dn-sub{font-size:0.65rem;color:var(--text-muted)}
+  .demo-arrow{color:var(--gold);font-size:1.2rem;font-weight:800;animation:arrowPulse 1.5s infinite}
+  @keyframes arrowPulse{0%,100%{opacity:0.3;transform:translateX(0)}50%{opacity:1;transform:translateX(4px)}}
+  .demo-feed{font-family:'Courier New',monospace;font-size:0.78rem;background:var(--bg-primary);border:1px solid var(--glass-border);border-radius:10px;padding:1rem;max-height:180px;overflow:hidden}
+  .demo-feed .feed-line{padding:0.25rem 0;opacity:0;animation:feedIn 0.5s ease forwards;border-bottom:1px solid rgba(201,168,76,0.03)}
+  @keyframes feedIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .feed-time{color:var(--text-muted)}
+  .feed-buy{color:#4ADE80}
+  .feed-sell{color:#D44A7A}
+  .feed-copy{color:var(--gold)}
+  .feed-ok{color:#4ADE80}
+
+  /* ===== Testimonials ===== */
+  .testimonials{background:var(--bg-primary);padding:5rem 0}
+  .test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-top:3rem}
+  .test-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:1.8rem;transition:transform 0.3s,border-color 0.3s}
+  .test-card:hover{transform:translateY(-3px);border-color:rgba(201,168,76,0.2)}
+  .test-stars{color:var(--gold);font-size:0.9rem;margin-bottom:0.8rem;letter-spacing:2px}
+  .test-quote{font-size:0.9rem;color:var(--text-secondary);line-height:1.7;margin-bottom:1.2rem;font-style:italic}
+  .test-author{display:flex;align-items:center;gap:0.8rem}
+  .test-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--wine),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;color:white}
+  .test-name{font-size:0.85rem;font-weight:700;color:var(--text-primary)}
+  .test-role{font-size:0.72rem;color:var(--text-muted)}
+
+  /* ===== Dashboard Preview ===== */
+  .dash-preview{background:var(--bg-secondary);padding:5rem 0}
+  .dash-mockup{max-width:900px;margin:3rem auto 0;background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.3)}
+  .dash-titlebar{background:var(--bg-primary);padding:0.6rem 1rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid var(--glass-border)}
+  .dash-dot{width:10px;height:10px;border-radius:50%}
+  .dash-dot.r{background:#F87171}.dash-dot.y{background:#FB923C}.dash-dot.g{background:#4ADE80}
+  .dash-titlebar span{font-size:0.72rem;color:var(--text-muted);margin-left:0.5rem}
+  .dash-body{padding:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .dash-stat{background:var(--bg-primary);border:1px solid var(--glass-border);border-radius:10px;padding:1rem}
+  .dash-stat .ds-l{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}
+  .dash-stat .ds-v{font-size:1.4rem;font-weight:800;margin-top:0.2rem}
+  .dash-stat .ds-v.gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .dash-stat .ds-v.green{color:#4ADE80}
+  .dash-client-row{grid-column:1/-1;background:var(--bg-primary);border:1px solid var(--glass-border);border-radius:10px;padding:1rem}
+  .dash-client-row .dcr-title{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem}
+  .dcr-table{width:100%;font-size:0.75rem}
+  .dcr-table th{text-align:left;color:var(--text-muted);font-size:0.65rem;text-transform:uppercase;padding:0.3rem 0.4rem}
+  .dcr-table td{padding:0.35rem 0.4rem;color:var(--text-secondary);border-top:1px solid rgba(201,168,76,0.03)}
+  .dcr-active{color:#4ADE80;font-weight:600}
+  .dcr-inactive{color:#F87171;font-weight:600}
+
+  /* ===== Comparison Table ===== */
+  .compare-section{background:var(--bg-primary);padding:5rem 0}
+  .compare-table{max-width:800px;margin:3rem auto 0;border:1px solid var(--glass-border);border-radius:16px;overflow:hidden}
+  .ct-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:1px solid rgba(201,168,76,0.04)}
+  .ct-row:last-child{border-bottom:none}
+  .ct-header{background:var(--bg-card)}
+  .ct-header .ct-cell{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);padding:1rem 0.8rem}
+  .ct-header .ct-cell:nth-child(2){color:var(--gold)}
+  .ct-cell{padding:0.75rem 0.8rem;font-size:0.82rem;color:var(--text-secondary);display:flex;align-items:center}
+  .ct-cell:first-child{font-weight:600;color:var(--text-primary)}
+  .ct-cell .yes{color:#4ADE80;font-weight:700}.ct-cell .no{color:#F87171;font-weight:700}.ct-cell .partial{color:#FB923C;font-weight:700}
+
+  /* ===== Newsletter Footer ===== */
+  .newsletter{background:linear-gradient(135deg,rgba(107,29,58,0.15),rgba(201,168,76,0.06));border-top:1px solid rgba(201,168,76,0.08);padding:3rem 0}
+  .nl-box{max-width:500px;margin:0 auto;text-align:center}
+  .nl-box h3{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;margin-bottom:0.3rem}
+  .nl-box p{font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem}
+  .nl-form{display:flex;gap:0.5rem}
+  .nl-form input{flex:1;padding:0.75rem 1rem;background:var(--bg-card);border:1px solid var(--glass-border);border-radius:10px;color:var(--text-primary);font-size:0.88rem;font-family:inherit;outline:none}
+  .nl-form input:focus{border-color:var(--gold)}
+  .nl-form input::placeholder{color:var(--text-muted)}
+  .nl-form button{padding:0.75rem 1.5rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--bg-primary);font-weight:700;font-size:0.85rem;border:none;border-radius:10px;cursor:pointer;white-space:nowrap;transition:transform 0.2s}
+  .nl-form button:hover{transform:translateY(-2px)}
+
+  /* ===== Risk Disclaimer ===== */
+  .risk-disclaimer{background:var(--bg-primary);border-top:1px solid rgba(201,168,76,0.04);padding:1.5rem 0}
+  .risk-disclaimer p{font-size:0.68rem;color:var(--text-muted);line-height:1.7;max-width:900px;margin:0 auto;text-align:center;opacity:0.7}
+
+  @media(max-width:640px){
+    .demo-flow{flex-direction:column}
+    .demo-arrow{transform:rotate(90deg)}
+    .dash-body{grid-template-columns:1fr}
+    .ct-row{grid-template-columns:2fr 1fr 1fr 1fr;font-size:0.72rem}
+    .ct-cell{padding:0.5rem}
+    .nl-form{flex-direction:column}
+    .test-grid{grid-template-columns:1fr}
+  }
+
+
+  /* ===== Live Terminal ===== */
+  .terminal-section{padding:5rem 0;background:var(--bg-primary)}
+  .terminal-wrap{max-width:700px;margin:2.5rem auto 0;border-radius:14px;overflow:hidden;border:1px solid rgba(201,168,76,0.12);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+  .terminal-bar{background:#1a1a2e;padding:0.6rem 1rem;display:flex;align-items:center;gap:0.5rem}
+  .terminal-dot{width:10px;height:10px;border-radius:50%}
+  .terminal-dot.r{background:#ff5f57}.terminal-dot.y{background:#ffbd2e}.terminal-dot.g{background:#28c840}
+  .terminal-title{flex:1;text-align:center;font-size:0.7rem;color:#666;font-family:monospace}
+  .terminal-body{background:#0a0a1a;padding:1.2rem;font-family:'Courier New',monospace;font-size:0.78rem;min-height:220px;line-height:1.8}
+  .t-line{opacity:0;animation:typeLine 0.5s ease forwards}
+  .t-line .t-time{color:#555}
+  .t-line .t-master{color:var(--gold)}
+  .t-line .t-buy{color:#4ADE80}
+  .t-line .t-sell{color:#F87171}
+  .t-line .t-symbol{color:#60A5FA}
+  .t-line .t-info{color:#888}
+  .t-line .t-success{color:#4ADE80}
+  .t-line .t-arrow{color:var(--gold)}
+  @keyframes typeLine{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+
+  /* ===== Testimonials ===== */
+  .testimonials-section{padding:5rem 0;background:linear-gradient(135deg,rgba(107,29,58,0.06),rgba(201,168,76,0.03))}
+  .test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-top:3rem}
+  .test-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:1.8rem;transition:transform 0.3s,border-color 0.3s}
+  .test-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,0.2)}
+  .test-stars{color:var(--gold);font-size:0.9rem;margin-bottom:0.8rem;letter-spacing:2px}
+  .test-quote{font-size:0.9rem;color:var(--text-secondary);line-height:1.7;margin-bottom:1.2rem;font-style:italic}
+  .test-author{display:flex;align-items:center;gap:0.8rem}
+  .test-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--wine),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;color:white}
+  .test-name{font-size:0.85rem;font-weight:700;color:var(--text-primary)}
+  .test-role{font-size:0.72rem;color:var(--text-muted)}
+
+  /* ===== Comparison Table ===== */
+  .compare-section{padding:5rem 0;background:var(--bg-primary)}
+  .compare-table{width:100%;max-width:800px;margin:2.5rem auto 0;border-collapse:collapse;border-radius:14px;overflow:hidden;border:1px solid var(--glass-border)}
+  .compare-table th{background:rgba(201,168,76,0.08);padding:1rem;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);text-align:center;border-bottom:1px solid var(--glass-border)}
+  .compare-table th:first-child{text-align:left}
+  .compare-table th.ours{color:var(--gold);font-weight:800}
+  .compare-table td{padding:0.8rem 1rem;font-size:0.85rem;text-align:center;border-bottom:1px solid rgba(201,168,76,0.04);color:var(--text-secondary)}
+  .compare-table td:first-child{text-align:left;font-weight:600;color:var(--text-primary)}
+  .compare-table tr:hover td{background:rgba(107,29,58,0.04)}
+  .c-yes{color:#4ADE80;font-weight:700}
+  .c-no{color:#F87171;font-weight:700}
+  .c-gold{color:var(--gold);font-weight:800}
+  .compare-table td.ours-col{background:rgba(201,168,76,0.03)}
+
+  /* ===== Speed Pulse ===== */
+  .speed-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15);padding:0.4rem 1rem;border-radius:20px;font-size:0.8rem;font-weight:700;color:#4ADE80;margin-top:1rem}
+  .speed-badge::before{content:'';width:8px;height:8px;border-radius:50%;background:#4ADE80;animation:pulse 1.5s infinite}
+
+  /* ===== Enhanced Footer ===== */
+  .footer-main{background:var(--bg-secondary);border-top:1px solid var(--glass-border);padding:4rem 0 1.5rem}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;margin-bottom:3rem}
+  .footer-brand .f-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem}
+  .footer-brand .f-tag{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);margin-bottom:1rem}
+  .footer-brand .f-desc{font-size:0.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:1.5rem}
+  .f-socials{display:flex;gap:0.6rem}
+  .f-socials a{width:36px;height:36px;border-radius:8px;border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;transition:all 0.3s}
+  .f-socials a:hover{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+  .footer-col h4{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
+  .footer-col a{display:block;font-size:0.82rem;color:var(--text-muted);padding:0.3rem 0;transition:color 0.2s;text-decoration:none}
+  .footer-col a:hover{color:var(--text-primary)}
+  .footer-newsletter{margin-top:1rem}
+  .footer-newsletter input{width:100%;padding:0.6rem 0.8rem;background:var(--bg-primary);border:1px solid var(--glass-border);border-radius:8px;color:var(--text-primary);font-size:0.82rem;font-family:inherit;outline:none;margin-bottom:0.5rem}
+  .footer-newsletter input:focus{border-color:var(--gold)}
+  .footer-newsletter button{width:100%;padding:0.55rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--bg-primary);font-size:0.8rem;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:inherit}
+  .footer-bottom{border-top:1px solid var(--glass-border);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;font-size:0.72rem;color:var(--text-muted)}
+  .footer-bottom a{color:var(--text-muted);text-decoration:none}
+  .footer-bottom a:hover{color:var(--gold)}
+  .risk-warning{font-size:0.68rem;color:var(--text-muted);line-height:1.6;margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,0.04);max-width:800px;text-align:center;margin-left:auto;margin-right:auto;opacity:0.6}
+  @media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr}.test-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -890,6 +1054,28 @@
       <div class="ls-val" data-count="99">0%</div>
       <div class="ls-label">Success Rate</div>
       <div class="ls-sub">Reliable execution</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== LIVE TRADE DEMO ===== -->
+<section class="trade-demo">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-eyebrow">See It In Action</div>
+      <div class="section-title glow-text">Lightning-Fast Trade Replication</div>
+      <p class="section-sub" style="margin:0 auto">Watch how a single trade flows from your master account to every connected client — in under 50ms.</p>
+    </div>
+    <div class="demo-box reveal">
+      <div class="demo-flow">
+        <div class="demo-node" id="demoMaster"><div class="dn-icon">👑</div><div class="dn-title">Master MT5</div><div class="dn-sub">Your account</div></div>
+        <div class="demo-arrow">→</div>
+        <div class="demo-node" id="demoServer"><div class="dn-icon">☁️</div><div class="dn-title">TradeBridge</div><div class="dn-sub">Cloud server</div></div>
+        <div class="demo-arrow">→</div>
+        <div class="demo-node" id="demoClient"><div class="dn-icon">📡</div><div class="dn-title">Client Accounts</div><div class="dn-sub">Unlimited</div></div>
+      </div>
+      <div class="demo-feed" id="demoFeed"></div>
     </div>
   </div>
 </section>
@@ -1030,6 +1216,26 @@
 </section>
 
 <div class="section-glow"></div>
+
+<!-- ===== LIVE TERMINAL ===== -->
+<section class="terminal-section">
+  <div class="container">
+    <div class="center" style="text-align:center">
+      <div class="section-eyebrow">Live Preview</div>
+      <div class="section-title glow-text">Watch It Work In Real Time</div>
+      <p class="section-sub" style="margin:0 auto">See how TradeBridge copies trades from master to clients in milliseconds</p>
+      <div class="speed-badge">⚡ Average Copy Speed: &lt;50ms</div>
+    </div>
+    <div class="terminal-wrap reveal">
+      <div class="terminal-bar">
+        <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+        <span class="terminal-title">TradeBridge — Live Trade Feed</span>
+      </div>
+      <div class="terminal-body" id="terminalBody"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== HOW IT WORKS ===== -->
 <section id="how" class="how-section">
   <div class="container">
@@ -1095,6 +1301,42 @@
 </section>
 
 <div class="section-glow"></div>
+
+<!-- ===== DASHBOARD PREVIEW ===== -->
+<section class="dash-preview">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-eyebrow">Master Panel</div>
+      <div class="section-title glow-text">Your Command Center</div>
+      <p class="section-sub" style="margin:0 auto">Monitor every client, track every trade, control everything from one beautiful dashboard.</p>
+    </div>
+    <div class="dash-mockup reveal">
+      <div class="dash-titlebar">
+        <div class="dash-dot r"></div><div class="dash-dot y"></div><div class="dash-dot g"></div>
+        <span>TradeBridge — Master Dashboard</span>
+      </div>
+      <div class="dash-body">
+        <div class="dash-stat"><div class="ds-l">Master ID</div><div class="ds-v gold">TB-AX7K92</div></div>
+        <div class="dash-stat"><div class="ds-l">Total Clients</div><div class="ds-v">47</div></div>
+        <div class="dash-stat"><div class="ds-l">Active Now</div><div class="ds-v green">38</div></div>
+        <div class="dash-stat"><div class="ds-l">Trades Copied</div><div class="ds-v">12,847</div></div>
+        <div class="dash-client-row">
+          <div class="dcr-title">Connected Clients</div>
+          <table class="dcr-table">
+            <tr><th>Client ID</th><th>Broker</th><th>Balance</th><th>Status</th></tr>
+            <tr><td style="color:var(--gold);font-family:monospace">CLT-001</td><td>Exness</td><td>$25,400</td><td class="dcr-active">● Active</td></tr>
+            <tr><td style="color:var(--gold);font-family:monospace">CLT-002</td><td>IC Markets</td><td>$18,200</td><td class="dcr-active">● Active</td></tr>
+            <tr><td style="color:var(--gold);font-family:monospace">CLT-003</td><td>FBS</td><td>$9,850</td><td class="dcr-inactive">● Offline</td></tr>
+            <tr><td style="color:var(--gold);font-family:monospace">CLT-004</td><td>XM Global</td><td>$42,100</td><td class="dcr-active">● Active</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-glow"></div>
+
 <!-- ===== PRICING ===== -->
 <section id="pricing" class="pricing-section">
   <div class="container">
@@ -1150,6 +1392,36 @@
   </div>
 </section>
 
+
+<!-- ===== COMPARISON ===== -->
+<section class="compare-section">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-eyebrow">Compare</div>
+      <div class="section-title glow-text">Why TradeBridge Wins</div>
+      <p class="section-sub" style="margin:0 auto">See how we stack up against the competition.</p>
+    </div>
+    <div class="compare-table reveal">
+      <div class="ct-row ct-header">
+        <div class="ct-cell">Feature</div>
+        <div class="ct-cell">TradeBridge</div>
+        <div class="ct-cell">Others</div>
+        <div class="ct-cell">Manual</div>
+      </div>
+      <div class="ct-row"><div class="ct-cell">Cloud-based 24/7</div><div class="ct-cell"><span class="yes">✓</span></div><div class="ct-cell"><span class="partial">~</span></div><div class="ct-cell"><span class="no">✕</span></div></div>
+      <div class="ct-row"><div class="ct-cell">No VPS Required</div><div class="ct-cell"><span class="yes">✓</span></div><div class="ct-cell"><span class="no">✕</span></div><div class="ct-cell"><span class="no">✕</span></div></div>
+      <div class="ct-row"><div class="ct-cell">Client Tracking</div><div class="ct-cell"><span class="yes">✓</span></div><div class="ct-cell"><span class="no">✕</span></div><div class="ct-cell"><span class="no">✕</span></div></div>
+      <div class="ct-row"><div class="ct-cell">Active/Inactive Monitor</div><div class="ct-cell"><span class="yes">✓</span></div><div class="ct-cell"><span class="no">✕</span></div><div class="ct-cell"><span class="no">✕</span></div></div>
+      <div class="ct-row"><div class="ct-cell">One-click Setup</div><div class="ct-cell"><span class="yes">✓</span></div><div class="ct-cell"><span class="partial">~</span></div><div class="ct-cell"><span class="no">✕</span></div></div>
+      <div class="ct-row"><div class="ct-cell">Unlimited Clients</div><div class="ct-cell"><span class="yes">✓</span></div><div class="ct-cell"><span class="partial">Paid</span></div><div class="ct-cell"><span class="no">✕</span></div></div>
+      <div class="ct-row"><div class="ct-cell">Master Dashboard</div><div class="ct-cell"><span class="yes">✓</span></div><div class="ct-cell"><span class="partial">Basic</span></div><div class="ct-cell"><span class="no">✕</span></div></div>
+      <div class="ct-row"><div class="ct-cell">Copy Speed</div><div class="ct-cell"><span class="yes">&lt;50ms</span></div><div class="ct-cell"><span class="partial">200ms+</span></div><div class="ct-cell"><span class="no">Manual</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-glow"></div>
+
 <!-- ===== FAQ ===== -->
 <section id="faq" class="faq-section">
   <div class="container">
@@ -1186,6 +1458,112 @@
   </div>
 </section>
 
+
+
+
+<!-- ===== COMPARISON ===== -->
+<section class="compare-section">
+  <div class="container">
+    <div class="center" style="text-align:center">
+      <div class="section-eyebrow">Comparison</div>
+      <div class="section-title glow-text">Why TradeBridge Wins</div>
+      <p class="section-sub" style="margin:0 auto">See how we stack up against the competition</p>
+    </div>
+    <table class="compare-table reveal">
+      <tr><th>Feature</th><th class="ours">TradeBridge</th><th>Competitor A</th><th>Competitor B</th></tr>
+      <tr><td>Copy Speed</td><td class="ours-col c-gold">&lt;50ms</td><td>200-500ms</td><td>1-3 sec</td></tr>
+      <tr><td>MT5 Support</td><td class="ours-col c-yes">✓</td><td class="c-yes">✓</td><td class="c-no">✕</td></tr>
+      <tr><td>Cloud Based (No VPS)</td><td class="ours-col c-yes">✓</td><td class="c-yes">✓</td><td class="c-no">✕</td></tr>
+      <tr><td>Unlimited Clients</td><td class="ours-col c-yes">✓</td><td class="c-no">✕</td><td class="c-no">✕</td></tr>
+      <tr><td>Real-time Client Tracking</td><td class="ours-col c-yes">✓</td><td class="c-no">✕</td><td class="c-no">✕</td></tr>
+      <tr><td>Active/Inactive Monitoring</td><td class="ours-col c-yes">✓</td><td class="c-no">✕</td><td class="c-no">✕</td></tr>
+      <tr><td>Master Dashboard</td><td class="ours-col c-yes">✓</td><td class="c-yes">✓</td><td class="c-no">✕</td></tr>
+      <tr><td>One-time Payment</td><td class="ours-col c-gold">$200</td><td>$50/mo</td><td>$99/mo</td></tr>
+      <tr><td>Setup Time</td><td class="ours-col c-gold">2 min</td><td>30 min</td><td>1 hour</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-eyebrow">Testimonials</div>
+      <div class="section-title glow-text">Trusted by Traders Worldwide</div>
+      <p class="section-sub" style="margin:0 auto">Join thousands of professionals already using TradeBridge to scale their trading business.</p>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal glow-on-hover">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"TradeBridge completely transformed my trade management. I went from manually copying across 5 accounts to fully automated — haven't missed a single trade since."</div>
+        <div class="test-author"><div class="test-avatar">AK</div><div><div class="test-name">Arjun K.</div><div class="test-role">Fund Manager · India</div></div></div>
+      </div>
+      <div class="test-card reveal glow-on-hover">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"The active/inactive client tracking is a game-changer. I can see exactly which followers have their EAs running and who needs attention. No other copier does this."</div>
+        <div class="test-author"><div class="test-avatar">MR</div><div><div class="test-name">Michael R.</div><div class="test-role">Signal Provider · UK</div></div></div>
+      </div>
+      <div class="test-card reveal glow-on-hover">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"Setup took 2 minutes. Downloaded the EA, entered my Master ID, and trades started copying instantly. The speed is unreal — faster than any other platform I've tried."</div>
+        <div class="test-author"><div class="test-avatar">SH</div><div><div class="test-name">Sarah H.</div><div class="test-role">Prop Trader · Dubai</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ===== COMPARISON ===== -->
+<section class="compare-section">
+  <div class="container">
+    <div class="center" style="text-align:center">
+      <div class="section-eyebrow">Comparison</div>
+      <div class="section-title glow-text">Why TradeBridge Wins</div>
+      <p class="section-sub" style="margin:0 auto">See how we stack up against the competition</p>
+    </div>
+    <table class="compare-table reveal">
+      <tr><th>Feature</th><th class="ours">TradeBridge</th><th>Competitor A</th><th>Competitor B</th></tr>
+      <tr><td>Copy Speed</td><td class="ours-col c-gold">&lt;50ms</td><td>200-500ms</td><td>1-3 sec</td></tr>
+      <tr><td>MT5 Support</td><td class="ours-col c-yes">✓</td><td class="c-yes">✓</td><td class="c-no">✕</td></tr>
+      <tr><td>Cloud Based (No VPS)</td><td class="ours-col c-yes">✓</td><td class="c-yes">✓</td><td class="c-no">✕</td></tr>
+      <tr><td>Unlimited Clients</td><td class="ours-col c-yes">✓</td><td class="c-no">✕</td><td class="c-no">✕</td></tr>
+      <tr><td>Real-time Client Tracking</td><td class="ours-col c-yes">✓</td><td class="c-no">✕</td><td class="c-no">✕</td></tr>
+      <tr><td>Active/Inactive Monitoring</td><td class="ours-col c-yes">✓</td><td class="c-no">✕</td><td class="c-no">✕</td></tr>
+      <tr><td>Master Dashboard</td><td class="ours-col c-yes">✓</td><td class="c-yes">✓</td><td class="c-no">✕</td></tr>
+      <tr><td>One-time Payment</td><td class="ours-col c-gold">$200</td><td>$50/mo</td><td>$99/mo</td></tr>
+      <tr><td>Setup Time</td><td class="ours-col c-gold">2 min</td><td>30 min</td><td>1 hour</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="center" style="text-align:center">
+      <div class="section-eyebrow">Reviews</div>
+      <div class="section-title glow-text">Trusted by Traders Worldwide</div>
+      <p class="section-sub" style="margin:0 auto">Hear from our community of professional traders and fund managers</p>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal glow-on-hover">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"TradeBridge changed how I manage my fund. Copying trades to 50+ client accounts in under a second — no VPS, no lag, no headaches."</div>
+        <div class="test-author"><div class="test-avatar">RK</div><div><div class="test-name">Rahul K.</div><div class="test-role">Fund Manager · Mumbai</div></div></div>
+      </div>
+      <div class="test-card reveal glow-on-hover">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"The easiest copier I've ever used. Set it up in 5 minutes, and it's been running flawlessly for 3 months now. Zero missed trades."</div>
+        <div class="test-author"><div class="test-avatar">AS</div><div><div class="test-name">Ahmed S.</div><div class="test-role">Prop Trader · Dubai</div></div></div>
+      </div>
+      <div class="test-card reveal glow-on-hover">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"My clients love the real-time dashboard. I can see exactly who's active, track their accounts, and manage everything from one panel."</div>
+        <div class="test-author"><div class="test-avatar">JP</div><div><div class="test-name">James P.</div><div class="test-role">Signal Provider · London</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ===== COMMUNITY ===== -->
 <section class="community-section">
@@ -1235,18 +1613,50 @@
 </section>
 
 <!-- ===== FOOTER ===== -->
-<footer>
+<footer class="footer-main">
   <div class="container">
-    <div class="footer-inner">
-      <div class="footer-logo">TradeBridge</div>
-      <div class="footer-links">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="f-logo">TradeBridge</div>
+        <div class="f-tag">MT5 to MT5 Trade Copier</div>
+        <div class="f-desc">The fastest cloud-based MT5 trade copier. Broadcast your trades to unlimited client accounts in under 50ms — no VPS required.</div>
+        <div class="f-socials">
+          <a href="https://t.me/" target="_blank">✈️</a>
+          <a href="https://youtube.com/" target="_blank">▶️</a>
+          <a href="https://instagram.com/" target="_blank">📸</a>
+          <a href="https://wa.me/" target="_blank">💬</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="/register">Get Started</a>
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
-        <a href="#">Terms</a>
-        <a href="#">Privacy</a>
+        <a href="#how">How It Works</a>
+        <a href="/login">Login</a>
       </div>
-      <div class="footer-copy">© 2026 TradeBridge. All rights reserved.</div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#faq">FAQ</a>
+        <a href="https://t.me/" target="_blank">Telegram</a>
+        <a href="https://wa.me/" target="_blank">WhatsApp</a>
+        <a href="mailto:support@tradebridge.com">Email Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Newsletter</h4>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">Get trading tips & platform updates</p>
+        <div class="footer-newsletter">
+          <input type="email" placeholder="your@email.com">
+          <button>Subscribe →</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 TradeBridge. All rights reserved.</span>
+      <span><a href="#">Terms</a> · <a href="#">Privacy</a> · <a href="#">Cookies</a></span>
+    </div>
+    <div class="risk-warning">
+      ⚠️ Risk Warning: Trading foreign exchange carries a high level of risk and may not be suitable for all investors. Past performance is not indicative of future results. You should carefully consider your investment objectives, level of experience, and risk appetite before trading.
     </div>
   </div>
 </footer>
@@ -1470,6 +1880,110 @@
     }
   });
 
+
+  // ═══ Live Trade Demo Animation ═══
+  (function(){
+    var feed=document.getElementById('demoFeed');
+    if(!feed)return;
+    var symbols=['EURUSD','GBPUSD','XAUUSD','USDJPY','GBPJPY','BTCUSD','NAS100'];
+    var actions=['BUY','SELL'];
+    var clients=['CLT-001','CLT-002','CLT-003','CLT-004','CLT-005'];
+    var lineCount=0;
+
+    function addLine(){
+      var sym=symbols[Math.floor(Math.random()*symbols.length)];
+      var act=actions[Math.floor(Math.random()*2)];
+      var lot=(Math.random()*2+0.1).toFixed(2);
+      var price=(Math.random()*1000+1).toFixed(act==='BUY'?5:2);
+      var time=new Date().toLocaleTimeString();
+      var ms=Math.floor(Math.random()*40+8);
+
+      var lines=[
+        '<div class="feed-line" style="animation-delay:0s"><span class="feed-time">'+time+'</span> ▸ Master opened <span class="feed-'+(act==='BUY'?'buy':'sell')+'">'+act+' '+lot+' '+sym+'</span> @ '+price+'</div>',
+        '<div class="feed-line" style="animation-delay:0.3s"><span class="feed-time">'+time+'</span> ▸ <span class="feed-copy">☁ TradeBridge</span> broadcasting to '+Math.floor(Math.random()*30+10)+' clients...</div>',
+        '<div class="feed-line" style="animation-delay:0.6s"><span class="feed-time">'+time+'</span> ▸ <span class="feed-ok">✓ Copied to all clients</span> in <strong style="color:var(--gold)">'+ms+'ms</strong></div>'
+      ];
+
+      lines.forEach(function(html){feed.insertAdjacentHTML('beforeend',html);});
+      lineCount+=3;
+
+      // Highlight nodes
+      var nodes=['demoMaster','demoServer','demoClient'];
+      nodes.forEach(function(id,i){
+        setTimeout(function(){
+          document.getElementById(id).classList.add('active');
+          setTimeout(function(){document.getElementById(id).classList.remove('active');},800);
+        },i*400);
+      });
+
+      // Keep feed manageable
+      if(lineCount>15){
+        var children=feed.children;
+        for(var i=0;i<3&&children.length>12;i++){
+          feed.removeChild(children[0]);
+        }
+        lineCount-=3;
+      }
+    }
+
+    // Start when visible
+    var demoObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          addLine();
+          setInterval(addLine,4000);
+          demoObs.disconnect();
+        }
+      });
+    },{threshold:0.3});
+    var demoSection=document.querySelector('.trade-demo');
+    if(demoSection)demoObs.observe(demoSection);
+  })();
+
+
+  // ═══ Live Terminal Animation ═══
+  (function(){
+    var body=document.getElementById('terminalBody');
+    if(!body)return;
+    var trades=[
+      {time:'09:31:02',master:'TB-X8K4N2',type:'buy',sym:'EURUSD',vol:'0.50',price:'1.08542',clients:12},
+      {time:'09:31:02',master:'TB-X8K4N2',type:'copy',sym:'EURUSD',info:'Copied to 12 clients',ms:'23ms'},
+      {time:'09:33:15',master:'TB-R7M3P1',type:'sell',sym:'XAUUSD',vol:'0.20',price:'2341.50',clients:8},
+      {time:'09:33:15',master:'TB-R7M3P1',type:'copy',sym:'XAUUSD',info:'Copied to 8 clients',ms:'18ms'},
+      {time:'09:35:41',master:'TB-X8K4N2',type:'buy',sym:'GBPJPY',vol:'0.30',price:'198.440',clients:12},
+      {time:'09:35:41',master:'TB-X8K4N2',type:'copy',sym:'GBPJPY',info:'Copied to 12 clients',ms:'31ms'},
+      {time:'09:38:08',master:'TB-K2N9L5',type:'sell',sym:'USDJPY',vol:'1.00',price:'156.820',clients:22},
+      {time:'09:38:08',master:'TB-K2N9L5',type:'copy',sym:'USDJPY',info:'Copied to 22 clients',ms:'14ms'},
+    ];
+    var idx=0;
+    function addLine(){
+      if(idx>=trades.length){
+        setTimeout(function(){body.innerHTML='';idx=0;addLine();},2000);
+        return;
+      }
+      var t=trades[idx];
+      var line=document.createElement('div');
+      line.className='t-line';
+      if(t.type==='copy'){
+        line.innerHTML='<span class="t-time">'+t.time+'</span> <span class="t-arrow">  ↳</span> <span class="t-success">✓ '+t.info+'</span> <span class="t-info">('+t.ms+')</span>';
+      } else {
+        var cls=t.type==='buy'?'t-buy':'t-sell';
+        line.innerHTML='<span class="t-time">'+t.time+'</span> <span class="t-master">['+t.master+']</span> <span class="'+cls+'">'+t.type.toUpperCase()+'</span> <span class="t-symbol">'+t.sym+'</span> <span class="t-info">'+t.vol+' @ '+t.price+'</span>';
+      }
+      line.style.animationDelay=(idx*0)+'s';
+      body.appendChild(line);
+      idx++;
+      var delay=t.type==='copy'?400:800;
+      setTimeout(addLine,delay);
+    }
+    // Start when visible
+    var termObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting){addLine();termObs.disconnect();}});
+    },{threshold:0.3});
+    var termSection=document.querySelector('.terminal-section');
+    if(termSection)termObs.observe(termSection);
+  })();
+
 </script>
 
 
@@ -1484,6 +1998,26 @@
   </div>
   <button class="help-btn" onclick="toggleHelp()" aria-label="Help">💬</button>
 </div>
+
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <div class="nl-box">
+    <h3>Stay in the Loop</h3>
+    <p>Get trading tips, platform updates, and exclusive offers delivered to your inbox.</p>
+    <div class="nl-form">
+      <input type="email" placeholder="Your email address..." id="nlEmail">
+      <button onclick="document.getElementById('nlEmail').value='';alert('Subscribed! 🎉')">Subscribe →</button>
+    </div>
+  </div>
+</section>
+
+<!-- Risk Disclaimer -->
+<section class="risk-disclaimer">
+  <div class="container">
+    <p><strong>Risk Warning:</strong> Trading foreign exchange and CFDs on margin carries a high level of risk and may not be suitable for all investors. The high degree of leverage can work against you as well as for you. Before deciding to trade, you should carefully consider your investment objectives, level of experience, and risk appetite. The possibility exists that you could sustain a loss of some or all of your initial investment. TradeBridge is a trade copying platform and does not provide financial advice. Past performance is not indicative of future results.</p>
+  </div>
+</section>
 
 </body>
 </html>
