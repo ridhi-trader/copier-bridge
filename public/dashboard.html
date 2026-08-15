@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--wine:#6B1D3A;--wine-mid:#8B2252;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--blue:#60A5FA;--orange:#FB923C}
+  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--wine:#6B1D3A;--wine-mid:#8B2252;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#D4C8CE;--muted:#A89BA3;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--blue:#60A5FA;--orange:#FB923C}
   body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
 
   /* Toast */
@@ -34,10 +34,10 @@
   .main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
   .welcome{margin-bottom:2rem;animation:fadeIn 0.5s ease}
   .welcome h1{font-size:1.6rem;font-weight:800;margin-bottom:0.3rem}
-  .welcome p{font-size:0.9rem;color:var(--muted)}
+  .welcome p{font-size:0.9rem;color:var(--txt2)}
   @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 
-  .refresh-bar{display:flex;align-items:center;gap:0.5rem;font-size:0.72rem;color:var(--muted);margin-bottom:1.5rem}
+  .refresh-bar{display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--txt2);margin-bottom:1.5rem}
   .refresh-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
   @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(74,222,128,0.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(74,222,128,0)}}
   .btn-refresh{background:none;border:1px solid var(--glass-b);color:var(--muted);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.72rem;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-left:auto}
@@ -46,7 +46,7 @@
   .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
   .stat-card{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.3rem;transition:transform 0.3s,border-color 0.3s}
   .stat-card:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.2)}
-  .stat-card .sc-label{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
+  .stat-card .sc-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--txt2);margin-bottom:0.3rem}
   .stat-card .sc-val{font-size:1.6rem;font-weight:800}
   .stat-card .sc-val.gold{background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .stat-card .sc-val.green{color:var(--green)}
@@ -56,7 +56,7 @@
   .section h2{font-size:1.1rem;font-weight:700;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem}
 
   .master-id-box{background:var(--bg2);border:1px solid rgba(201,168,76,0.15);border-radius:12px;padding:1.2rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
-  .mid-label{font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em}
+  .mid-label{font-size:0.78rem;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
   .mid-val{font-size:1.4rem;font-weight:800;font-family:'Courier New',monospace;color:var(--gold);letter-spacing:0.05em}
   .btn-copy{background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);color:var(--gold);padding:0.4rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.3s}
   .btn-copy:hover{background:rgba(201,168,76,0.2)}
@@ -65,8 +65,8 @@
   .btn-download:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
 
   .tbl{width:100%;border-collapse:collapse}
-  .tbl th{text-align:left;font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
-  .tbl td{font-size:0.83rem;padding:0.65rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2)}
+  .tbl th{text-align:left;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--txt2);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
+  .tbl td{font-size:0.85rem;padding:0.65rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.04);color:var(--txt)}
   .tbl tr:hover td{background:rgba(107,29,58,0.04)}
   .buy{color:var(--green);font-weight:600}.sell{color:var(--wine-mid);font-weight:600}
 
@@ -92,7 +92,7 @@
   .btn-pay:disabled{opacity:0.5;cursor:not-allowed;transform:none}
   .pending-badge{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.15);color:var(--orange);padding:0.5rem 1.2rem;border-radius:10px;font-size:0.88rem;font-weight:600}
 
-  .empty{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:0.9rem}
+  .empty{text-align:center;padding:2.5rem 1rem;color:var(--txt2);font-size:0.9rem}
   .loading{text-align:center;padding:3rem;color:var(--muted)}
 
   /* Client tabs */
@@ -133,6 +133,7 @@
 <div class="topbar">
   <a href="/" class="logo">TradeBridge</a>
   <div class="topbar-right">
+    <a href="/" style="font-size:0.78rem;color:var(--txt2);text-decoration:none;transition:color 0.2s;font-weight:600" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--txt2)'">← Website</a>
     <div class="user-info" id="userInfo"></div>
     <button class="btn-logout" onclick="logout()">Log out</button>
   </div>
@@ -220,12 +221,12 @@ async function renderMasterDashboard() {
 
     <div class="section">
       <h2>📥 Download EA Files</h2>
-      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem">
+      <p style="font-size:0.88rem;color:var(--txt2);margin-bottom:1rem">
         Your Master ID: <strong style="color:var(--gold)">${data.master_id}</strong> — Enter this in the EA input settings when attaching to chart.
       </p>
       <a href="/api/download/master-ea" class="btn-download" onclick="toast('Downloading MasterEA.ex5...','ok')">⬇ MasterEA.ex5</a>
       <a href="/api/download/client-ea" class="btn-download" onclick="toast('Downloading ClientEA.ex5...','ok')">⬇ ClientEA.ex5</a>
-      <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem">Give the ClientEA.ex5 file + your Master ID to your clients. They enter the ID in EA settings.</p>
+      <p style="font-size:0.8rem;color:var(--txt2);margin-top:0.5rem">Give the ClientEA.ex5 file + your Master ID to your clients. They enter the ID in EA settings.</p>
     </div>
 
     <div class="section">

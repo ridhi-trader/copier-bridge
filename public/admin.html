@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--card2:#1f1228;--wine:#6B1D3A;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--gb:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--orange:#FB923C;--blue:#60A5FA}
+:root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--card2:#1f1228;--wine:#6B1D3A;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#D4C8CE;--muted:#A89BA3;--gb:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--orange:#FB923C;--blue:#60A5FA}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex}
 
 /* Sidebar */
@@ -21,7 +21,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .sb-item.active{color:var(--gold);background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.1)}
 .sb-item .icon{font-size:1.1rem;width:20px;text-align:center}
 .sb-item .badge{margin-left:auto;background:rgba(248,113,113,0.15);color:var(--red);font-size:0.65rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:10px}
-.sb-footer{padding:1rem;border-top:1px solid var(--gb);font-size:0.7rem;color:var(--muted)}
+.sb-footer{padding:1rem;border-top:1px solid var(--gb);font-size:0.72rem;color:var(--txt2)}
 
 /* Main */
 .main{margin-left:240px;flex:1;padding:2rem;min-height:100vh}
@@ -37,7 +37,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2rem}
 .stat{background:var(--card);border:1px solid var(--gb);border-radius:14px;padding:1.2rem;animation:fadeIn 0.4s ease;transition:transform 0.2s,border-color 0.2s}
 .stat:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.2)}
-.stat .sl{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
+.stat .sl{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--txt2);margin-bottom:0.3rem}
 .stat .sv{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .stat .sc{font-size:0.68rem;margin-top:0.2rem}
 
@@ -51,7 +51,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .search-input::placeholder{color:var(--muted)}
 
 table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.55rem 0.5rem;border-bottom:1px solid var(--gb)}
+th{text-align:left;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--txt2);padding:0.55rem 0.5rem;border-bottom:1px solid var(--gb)}
 td{font-size:0.8rem;padding:0.6rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2);transition:background 0.15s}
 tr:hover td{background:rgba(107,29,58,0.04)}
 
@@ -133,6 +133,7 @@ tr:hover td{background:rgba(107,29,58,0.04)}
     <span>Admin Panel</span>
   </div>
   <div class="sb-nav">
+    <a href="/" class="sb-item" style="text-decoration:none;color:var(--txt2)"><span class="icon">🌐</span> Back to Website</a>
     <button class="sb-item active" onclick="switchPage('dashboard',this)"><span class="icon">📊</span> Dashboard</button>
     <button class="sb-item" onclick="switchPage('masters',this)"><span class="icon">👑</span> Masters</button>
     <button class="sb-item" onclick="switchPage('clients',this)"><span class="icon">📡</span> All Clients</button>
