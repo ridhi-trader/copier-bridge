@@ -958,12 +958,46 @@
   .modal-close:hover{background:rgba(248,113,113,0.1);color:#F87171}
 
   .modal-cta{display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--bg-primary);padding:0.75rem 1.5rem;border-radius:12px;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;transition:transform 0.2s,box-shadow 0.3s}
-  .modal-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
+  .modal-chart{display:flex;align-items:flex-end;gap:6px;height:60px;margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,0.06)}
+  .modal-bar{flex:1;border-radius:4px 4px 0 0;animation:barGrow 0.8s ease forwards;transform-origin:bottom}
+  .modal-bar:nth-child(odd){background:linear-gradient(to top,var(--wine),rgba(201,168,76,0.4))}
+  .modal-bar:nth-child(even){background:linear-gradient(to top,rgba(201,168,76,0.3),var(--gold))}
+  @keyframes barGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 
   @media(max-width:640px){
     .modal-card{padding:2rem 1.5rem;margin:1rem;border-radius:18px}
     .modal-card h3{font-size:1.3rem}
   }
+
+
+  /* ===== Hero Dashboard Mockup ===== */
+  .hero-visual{max-width:900px;margin:3rem auto 0;border-radius:16px;overflow:hidden;border:1px solid rgba(201,168,76,0.12);box-shadow:0 30px 80px rgba(0,0,0,0.5),0 0 60px rgba(201,168,76,0.05);animation:floatDash 4s ease-in-out infinite;position:relative}
+  @keyframes floatDash{0%,100%{transform:perspective(1200px) rotateX(2deg) translateY(0)}50%{transform:perspective(1200px) rotateX(1deg) translateY(-8px)}}
+  .hero-visual::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent);animation:dashShine 4s ease infinite}
+  @keyframes dashShine{0%{left:-100%}100%{left:200%}}
+  .mock-topbar{background:#1a0e20;padding:0.6rem 1rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid rgba(201,168,76,0.08)}
+  .mock-dot{width:8px;height:8px;border-radius:50%}
+  .mock-dot.r{background:#ff5f57}.mock-dot.y{background:#ffbd2e}.mock-dot.g{background:#28c840}
+  .mock-title{flex:1;text-align:center;font-size:0.65rem;color:#555;font-family:monospace}
+  .mock-body{background:#0d0610;padding:1.5rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem}
+  .mock-stat{background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.08);border-radius:10px;padding:1rem;text-align:center}
+  .mock-stat .ms-val{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .mock-stat .ms-label{font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem}
+  .mock-chart{grid-column:1/-1;background:rgba(201,168,76,0.03);border:1px solid rgba(201,168,76,0.06);border-radius:10px;padding:1rem;height:120px;position:relative;overflow:hidden}
+  .mock-chart-line{position:absolute;bottom:10px;left:10px;right:10px;height:80px}
+  .mock-chart svg{width:100%;height:100%}
+  .chart-path{fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;animation:drawLine 2s ease forwards;stroke-dasharray:1000;stroke-dashoffset:1000}
+  .chart-fill{fill:url(#goldGrad);opacity:0;animation:fadeArea 1s ease 1.5s forwards}
+  @keyframes drawLine{to{stroke-dashoffset:0}}
+  @keyframes fadeArea{to{opacity:0.15}}
+  .mock-clients{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem}
+  .mock-client{background:rgba(107,29,58,0.08);border:1px solid rgba(201,168,76,0.05);border-radius:8px;padding:0.5rem;text-align:center}
+  .mock-client .mc-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px}
+  .mc-dot.on{background:#4ADE80;box-shadow:0 0 6px rgba(74,222,128,0.5)}
+  .mc-dot.off{background:#F87171}
+  .mock-client .mc-name{font-size:0.6rem;color:#888}
+  .mock-client .mc-bal{font-size:0.7rem;font-weight:700;color:var(--text-secondary)}
+  @media(max-width:640px){.mock-body{grid-template-columns:1fr 1fr}.mock-clients{grid-template-columns:1fr 1fr}}
 
 </style>
 </head>
@@ -1030,7 +1064,34 @@
         <div class="stat-val">∞</div>
         <div class="stat-label">Client Accounts</div>
       </div>
+        <!-- Hero Dashboard Mockup -->
+    <div class="hero-visual reveal">
+      <div class="mock-topbar">
+        <span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span>
+        <span class="mock-title">TradeBridge — Master Dashboard</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-stat"><div class="ms-val">247</div><div class="ms-label">Active Clients</div></div>
+        <div class="mock-stat"><div class="ms-val">18ms</div><div class="ms-label">Avg Latency</div></div>
+        <div class="mock-stat"><div class="ms-val">$2.4M</div><div class="ms-label">Total Volume</div></div>
+        <div class="mock-chart">
+          <div class="mock-chart-line">
+            <svg viewBox="0 0 400 80" preserveAspectRatio="none">
+              <defs><linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--gold)"/><stop offset="100%" stop-color="transparent"/></linearGradient></defs>
+              <path class="chart-fill" d="M0,60 L30,50 L70,55 L110,35 L150,40 L190,20 L230,25 L270,15 L310,18 L350,8 L400,12 L400,80 L0,80 Z"/>
+              <path class="chart-path" d="M0,60 L30,50 L70,55 L110,35 L150,40 L190,20 L230,25 L270,15 L310,18 L350,8 L400,12"/>
+            </svg>
+          </div>
+        </div>
+        <div class="mock-clients">
+          <div class="mock-client"><span class="mc-dot on"></span><div class="mc-name">Client #A1</div><div class="mc-bal">$12,450</div></div>
+          <div class="mock-client"><span class="mc-dot on"></span><div class="mc-name">Client #B3</div><div class="mc-bal">$8,200</div></div>
+          <div class="mock-client"><span class="mc-dot on"></span><div class="mc-name">Client #C7</div><div class="mc-bal">$45,800</div></div>
+          <div class="mock-client"><span class="mc-dot off"></span><div class="mc-name">Client #D2</div><div class="mc-bal">$3,100</div></div>
+        </div>
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -2033,6 +2094,17 @@
         fl.appendChild(li);
       });
     }
+    // Generate random chart bars
+    var chart=document.getElementById('modalChart');
+    chart.innerHTML='';
+    for(var i=0;i<12;i++){
+      var bar=document.createElement('div');
+      bar.className='modal-bar';
+      var h=Math.random()*70+30;
+      bar.style.height=h+'%';
+      bar.style.animationDelay=(i*0.06)+'s';
+      chart.appendChild(bar);
+    }
     modal.classList.add('show');
     document.body.style.overflow='hidden';
   }
@@ -2089,7 +2161,8 @@
     <h3 id="modalTitle"></h3>
     <div class="modal-desc" id="modalDesc"></div>
     <ul class="modal-features" id="modalFeatures"></ul>
-    <a href="/register" class="modal-cta">Get Started →</a>
+    <div class="modal-chart" id="modalChart"></div>
+    
   </div>
 </div>
 
