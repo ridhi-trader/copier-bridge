@@ -207,33 +207,14 @@ function render() {
 }
 
 function renderDashboard(m) {
-  const revenue = D.paid_masters * 200;
   m.innerHTML = `
     <div class="page-header">
       <div><h2>Dashboard</h2><div class="subtitle">Platform overview</div></div>
       <div class="refresh-info"><span class="rdot"></span> Live · ${new Date().toLocaleTimeString()}</div>
     </div>
-    <div class="stats">
-      <div class="stat"><div class="sl">Total Users</div><div class="sv">${D.total_users}</div></div>
-      <div class="stat"><div class="sl">Total Masters</div><div class="sv">${D.total_masters}</div></div>
-      <div class="stat"><div class="sl">Paid Masters</div><div class="sv" style="background:linear-gradient(135deg,var(--green),#86efac);-webkit-background-clip:text">${D.paid_masters}</div></div>
-      <div class="stat"><div class="sl">Active Clients</div><div class="sv">${D.active_connections}</div></div>
-      <div class="stat"><div class="sl">Total Trades</div><div class="sv">${D.total_trades}</div></div>
-      <div class="stat"><div class="sl">Revenue</div><div class="sv">$${revenue.toLocaleString()}</div><div class="sc" style="color:var(--green)">$200 × ${D.paid_masters} masters</div></div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><h3>📈 Recent Trades</h3></div>
-      ${D.recent_trades.length ? `<div style="overflow-x:auto"><table>
-        <tr><th>#</th><th>Master</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>
-        ${D.recent_trades.slice(0,8).map(t => `<tr>
-          <td style="color:var(--muted)">${t.id}</td>
-          <td style="color:var(--gold);font-family:monospace;font-size:0.75rem">${t.master_id}</td>
-          <td style="color:var(--txt);font-weight:600">${t.symbol}</td>
-          <td class="${t.action?.toLowerCase().includes('buy')?'buy':'sell'}">${t.action}</td>
-          <td>${t.volume}</td><td>${t.price}</td>
-          <td style="font-size:0.75rem">${new Date(t.created_at).toLocaleString()}</td>
-        </tr>`).join('')}
-      </table></div>` : '<div class="empty">No trades yet</div>'}
+    <div class="stats" style="grid-template-columns:1fr 1fr">
+      <div class="stat" style="padding:2rem;text-align:center"><div class="sl" style="font-size:0.8rem">Total Masters</div><div class="sv" style="font-size:3rem">${D.total_masters}</div></div>
+      <div class="stat" style="padding:2rem;text-align:center"><div class="sl" style="font-size:0.8rem">Total Clients</div><div class="sv" style="font-size:3rem">${D.active_connections}</div></div>
     </div>`;
 }
 
