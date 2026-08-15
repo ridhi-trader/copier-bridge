@@ -3,214 +3,518 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — TradeBridge</title>
+<title>Admin Panel — TradeBridge</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--glass-b:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--orange:#FB923C;--blue:#60A5FA}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);padding:2rem;min-height:100vh}
-  .container{max-width:1100px;margin:0 auto}
-  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
-  .header h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .header .sub{font-size:0.82rem;color:var(--muted)}
-  .refresh-info{display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--muted)}
-  .rdot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(74,222,128,0.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(74,222,128,0)}}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0D0610;--bg2:#150A1A;--card:#1A0E20;--card2:#1f1228;--wine:#6B1D3A;--gold:#C9A84C;--gold-l:#E2C97E;--txt:#F5EEF2;--txt2:#B8A5B0;--muted:#7A6B74;--gb:rgba(201,168,76,0.1);--green:#4ADE80;--red:#F87171;--orange:#FB923C;--blue:#60A5FA}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex}
 
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
-  .s{background:var(--card);border:1px solid var(--glass-b);border-radius:14px;padding:1.3rem;transition:transform 0.3s}
-  .s:hover{transform:translateY(-2px)}
-  .s .l{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
-  .s .v{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* Sidebar */
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--gb);position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;z-index:100}
+.sb-logo{padding:1.5rem;border-bottom:1px solid var(--gb)}
+.sb-logo h1{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sb-logo span{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);display:block;margin-top:0.15rem}
+.sb-nav{flex:1;padding:1rem 0.8rem;display:flex;flex-direction:column;gap:0.3rem}
+.sb-item{display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;border-radius:10px;font-size:0.85rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.2s;border:none;background:none;font-family:inherit;width:100%;text-align:left}
+.sb-item:hover{color:var(--txt2);background:rgba(201,168,76,0.04)}
+.sb-item.active{color:var(--gold);background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.1)}
+.sb-item .icon{font-size:1.1rem;width:20px;text-align:center}
+.sb-item .badge{margin-left:auto;background:rgba(248,113,113,0.15);color:var(--red);font-size:0.65rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:10px}
+.sb-footer{padding:1rem;border-top:1px solid var(--gb);font-size:0.7rem;color:var(--muted)}
 
-  .section{background:var(--card);border:1px solid var(--glass-b);border-radius:16px;padding:1.8rem;margin-bottom:1.5rem}
-  .section h2{font-size:1.1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
-  .section h2 .badge{font-size:0.7rem;background:rgba(251,146,60,0.1);color:var(--orange);padding:0.2rem 0.6rem;border-radius:6px;font-weight:700}
+/* Main */
+.main{margin-left:240px;flex:1;padding:2rem;min-height:100vh}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.page-header h2{font-size:1.4rem;font-weight:800}
+.page-header .subtitle{font-size:0.82rem;color:var(--muted);margin-top:0.15rem}
+.refresh-info{display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--muted)}
+.rdot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.4)}50%{box-shadow:0 0 0 6px rgba(74,222,128,0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-  table{width:100%;border-collapse:collapse}
-  th{text-align:left;font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.6rem 0.5rem;border-bottom:1px solid var(--glass-b)}
-  td{font-size:0.82rem;padding:0.65rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2)}
-  tr:hover td{background:rgba(107,29,58,0.04)}
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2rem}
+.stat{background:var(--card);border:1px solid var(--gb);border-radius:14px;padding:1.2rem;animation:fadeIn 0.4s ease;transition:transform 0.2s,border-color 0.2s}
+.stat:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.2)}
+.stat .sl{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem}
+.stat .sv{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat .sc{font-size:0.68rem;margin-top:0.2rem}
 
-  .btn-approve{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:var(--green);padding:0.35rem 0.8rem;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-right:0.3rem}
-  .btn-approve:hover{background:rgba(74,222,128,0.2)}
-  .btn-reject{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15);color:var(--red);padding:0.35rem 0.8rem;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s}
-  .btn-reject:hover{background:rgba(248,113,113,0.15)}
+/* Tables */
+.panel{background:var(--card);border:1px solid var(--gb);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;animation:fadeIn 0.4s ease}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.panel-header h3{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem}
+.panel-header .badge{font-size:0.65rem;background:rgba(251,146,60,0.1);color:var(--orange);padding:0.2rem 0.6rem;border-radius:6px;font-weight:700}
+.search-input{padding:0.5rem 0.8rem;background:var(--bg2);border:1px solid var(--gb);border-radius:8px;color:var(--txt);font-size:0.8rem;font-family:inherit;outline:none;width:220px}
+.search-input:focus{border-color:var(--gold)}
+.search-input::placeholder{color:var(--muted)}
 
-  .paid-yes{color:var(--green);font-weight:700;font-size:0.8rem}
-  .paid-no{color:var(--red);font-weight:700;font-size:0.8rem}
-  .buy{color:var(--green);font-weight:600}.sell{color:#D44A7A;font-weight:600}
-  a.back{display:inline-block;margin-bottom:1.5rem;font-size:0.85rem;color:var(--muted);text-decoration:none}
-  a.back:hover{color:var(--txt)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.55rem 0.5rem;border-bottom:1px solid var(--gb)}
+td{font-size:0.8rem;padding:0.6rem 0.5rem;border-bottom:1px solid rgba(201,168,76,0.03);color:var(--txt2);transition:background 0.15s}
+tr:hover td{background:rgba(107,29,58,0.04)}
 
-  .tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem}
-  .tab{padding:0.5rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;border:1px solid var(--glass-b);background:none;color:var(--muted);font-family:inherit;transition:all 0.3s}
-  .tab.active{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.2);color:var(--gold)}
+/* Badges */
+.b-paid{color:var(--green);font-weight:700;font-size:0.75rem}
+.b-unpaid{color:var(--red);font-weight:700;font-size:0.75rem}
+.b-active{display:inline-flex;align-items:center;gap:3px;color:var(--green);font-weight:600;font-size:0.75rem}
+.b-active::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green)}
+.b-inactive{display:inline-flex;align-items:center;gap:3px;color:var(--red);font-weight:600;font-size:0.75rem}
+.b-inactive::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--red)}
+.b-expired{display:inline-flex;align-items:center;gap:3px;color:var(--muted);font-weight:600;font-size:0.75rem;text-decoration:line-through}
+.buy{color:var(--green);font-weight:600}.sell{color:#D44A7A;font-weight:600}
 
-  .toast{position:fixed;top:20px;right:20px;z-index:9999;padding:0.8rem 1.2rem;border-radius:12px;font-size:0.85rem;font-weight:600;animation:toastIn 0.4s ease,toastOut 0.4s ease 2s forwards}
-  .toast.ok{background:rgba(74,222,128,0.15);color:var(--green);border:1px solid rgba(74,222,128,0.2)}
-  @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
+/* Buttons */
+.btn-sm{padding:0.3rem 0.7rem;border-radius:7px;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid;transition:all 0.2s}
+.btn-approve{background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.15);color:var(--green)}
+.btn-approve:hover{background:rgba(74,222,128,0.15)}
+.btn-reject{background:rgba(248,113,113,0.06);border-color:rgba(248,113,113,0.12);color:var(--red)}
+.btn-reject:hover{background:rgba(248,113,113,0.12)}
+.btn-view{background:rgba(96,165,250,0.08);border-color:rgba(96,165,250,0.15);color:var(--blue)}
+.btn-view:hover{background:rgba(96,165,250,0.15)}
+.btn-expire{background:rgba(251,146,60,0.08);border-color:rgba(251,146,60,0.12);color:var(--orange)}
+.btn-expire:hover{background:rgba(251,146,60,0.15)}
+.btn-delete{background:rgba(248,113,113,0.05);border-color:rgba(248,113,113,0.1);color:var(--red)}
+.btn-delete:hover{background:rgba(248,113,113,0.12)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);border:none;padding:0.35rem 0.9rem;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;font-family:inherit}
 
-  @media(max-width:640px){.stats{grid-template-columns:1fr 1fr}}
+.actions{display:flex;gap:0.3rem;flex-wrap:wrap}
+
+/* Master detail modal */
+.detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,2,8,0.85);backdrop-filter:blur(10px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto}
+.detail-overlay.show{display:flex}
+.detail-panel{background:var(--card);border:1px solid rgba(201,168,76,0.15);border-radius:20px;max-width:900px;width:100%;padding:2rem;margin-top:2rem;animation:fadeIn 0.3s ease;position:relative}
+.detail-close{position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.detail-close:hover{background:rgba(248,113,113,0.1);color:var(--red)}
+.detail-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.detail-avatar{width:60px;height:60px;border-radius:14px;background:linear-gradient(135deg,var(--wine),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:white}
+.detail-info h3{font-size:1.2rem;font-weight:800}
+.detail-info .dm-id{font-family:monospace;color:var(--gold);font-size:0.85rem;margin-top:0.2rem}
+.detail-info .dm-meta{font-size:0.75rem;color:var(--muted);margin-top:0.15rem}
+.detail-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0.8rem;margin-bottom:1.5rem}
+.ds{background:var(--bg2);border:1px solid var(--gb);border-radius:10px;padding:0.8rem;text-align:center}
+.ds .ds-val{font-size:1.2rem;font-weight:800}
+.ds .ds-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-top:0.15rem}
+.detail-tabs{display:flex;gap:0.4rem;margin-bottom:1.2rem}
+.dt{padding:0.4rem 1rem;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;border:1px solid var(--gb);background:none;color:var(--muted);font-family:inherit;transition:all 0.2s}
+.dt.active{background:rgba(201,168,76,0.08);border-color:rgba(201,168,76,0.15);color:var(--gold)}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:0.85rem}
+
+/* Toast */
+.toast{position:fixed;top:20px;right:20px;z-index:9999;padding:0.7rem 1.2rem;border-radius:10px;font-size:0.82rem;font-weight:600;animation:toastIn 0.3s ease,toastOut 0.3s ease 2s forwards;backdrop-filter:blur(10px)}
+.toast.ok{background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.15)}
+.toast.err{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.15)}
+@keyframes toastIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(30px)}}
+
+/* Mobile */
+.hamburger{display:none;position:fixed;top:1rem;left:1rem;z-index:101;background:var(--card);border:1px solid var(--gb);border-radius:8px;padding:0.5rem;cursor:pointer}
+.hamburger span{display:block;width:18px;height:2px;background:var(--txt2);margin:3px 0}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform 0.3s}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:block}
+  .main{margin-left:0;padding:1rem;padding-top:3.5rem}
+  .stats{grid-template-columns:1fr 1fr}
+  .detail-panel{padding:1.2rem}
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <a href="/" class="back">← Back to home</a>
-  <div class="header">
-    <div>
-      <h1>TradeBridge Admin</h1>
-      <p class="sub">Platform management & monitoring</p>
-    </div>
-    <div class="refresh-info"><span class="rdot"></span> Live · <span id="lastR"></span></div>
+
+<button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+  <span></span><span></span><span></span>
+</button>
+
+<nav class="sidebar">
+  <div class="sb-logo">
+    <h1>TradeBridge</h1>
+    <span>Admin Panel</span>
   </div>
-
-  <div class="stats" id="stats"></div>
-
-  <div class="tabs">
-    <button class="tab active" onclick="switchAdminTab('payments',this)">💳 Payments</button>
-    <button class="tab" onclick="switchAdminTab('masters',this)">👑 Masters</button>
-    <button class="tab" onclick="switchAdminTab('trades',this)">📊 Trades</button>
+  <div class="sb-nav">
+    <button class="sb-item active" onclick="switchPage('dashboard',this)"><span class="icon">📊</span> Dashboard</button>
+    <button class="sb-item" onclick="switchPage('masters',this)"><span class="icon">👑</span> Masters</button>
+    <button class="sb-item" onclick="switchPage('clients',this)"><span class="icon">📡</span> All Clients</button>
+    <button class="sb-item" onclick="switchPage('payments',this)"><span class="icon">💳</span> Payments <span class="badge" id="pendingBadge" style="display:none">0</span></button>
+    <button class="sb-item" onclick="switchPage('trades',this)"><span class="icon">📈</span> Trades</button>
+    <button class="sb-item" onclick="switchPage('settings',this)"><span class="icon">⚙️</span> Settings</button>
   </div>
+  <div class="sb-footer">
+    <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.3rem"><span class="rdot"></span> System Online</div>
+    TradeBridge v3.8
+  </div>
+</nav>
 
-  <div id="tabContent"></div>
+<div class="main" id="mainContent"></div>
+
+<!-- Master Detail Overlay -->
+<div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
+  <div class="detail-panel">
+    <button class="detail-close" onclick="closeDetail()">✕</button>
+    <div id="detailContent"><div class="empty">Loading...</div></div>
+  </div>
 </div>
 
 <script>
-let adminData = null;
-let activeTab = 'payments';
+let D = null; // admin data
+let currentPage = 'dashboard';
+let masterSearch = '';
 
-function switchAdminTab(tab, el) {
-  activeTab = tab;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderTab();
-}
-
-function renderTab() {
-  if (!adminData) return;
-  const c = document.getElementById('tabContent');
-  if (activeTab === 'payments') {
-    c.innerHTML = `
-      <div class="section">
-        <h2>💳 Pending Payments ${adminData.pending_payments.length ? '<span class="badge">'+adminData.pending_payments.length+' pending</span>' : ''}</h2>
-        ${adminData.pending_payments.length ? `
-          <div style="overflow-x:auto"><table>
-            <tr><th>Name</th><th>Email</th><th>Master ID</th><th>Method</th><th>Reference</th><th>Date</th><th>Actions</th></tr>
-            ${adminData.pending_payments.map(p => `
-              <tr>
-                <td style="color:var(--txt);font-weight:600">${p.name}</td>
-                <td>${p.email}</td>
-                <td style="color:var(--gold);font-family:monospace">${p.master_id || '—'}</td>
-                <td>${p.method}</td>
-                <td style="font-family:monospace;font-size:0.78rem">${p.reference}</td>
-                <td>${new Date(p.created_at).toLocaleDateString()}</td>
-                <td>
-                  <button class="btn-approve" onclick="approvePayment(${p.user_id})">✓ Approve</button>
-                  <button class="btn-reject" onclick="rejectPayment(${p.user_id})">✕ Reject</button>
-                </td>
-              </tr>
-            `).join('')}
-          </table></div>
-        ` : '<div style="text-align:center;padding:2rem;color:var(--muted)">No pending payments</div>'}
-      </div>`;
-  } else if (activeTab === 'masters') {
-    c.innerHTML = `
-      <div class="section">
-        <h2>👑 All Masters (${adminData.all_masters.length})</h2>
-        ${adminData.all_masters.length ? `
-          <div style="overflow-x:auto"><table>
-            <tr><th>Name</th><th>Email</th><th>Master ID</th><th>Paid</th><th>Clients</th><th>Active</th><th>Joined</th><th>Action</th></tr>
-            ${adminData.all_masters.map(m => `
-              <tr>
-                <td style="color:var(--txt);font-weight:600">${m.name}</td>
-                <td>${m.email}</td>
-                <td style="color:var(--gold);font-family:monospace">${m.master_id}</td>
-                <td>${m.is_paid ? '<span class="paid-yes">✓ PAID</span>' : '<span class="paid-no">✕ UNPAID</span>'}</td>
-                <td>${m.total_clients}</td>
-                <td style="color:var(--green)">${m.active_clients}</td>
-                <td>${new Date(m.created_at).toLocaleDateString()}</td>
-                <td>${!m.is_paid ? '<button class="btn-approve" onclick="approvePayment('+m.id+')">Activate</button>' : '—'}</td>
-              </tr>
-            `).join('')}
-          </table></div>
-        ` : '<div style="text-align:center;padding:2rem;color:var(--muted)">No masters yet</div>'}
-      </div>`;
-  } else {
-    c.innerHTML = `
-      <div class="section">
-        <h2>📊 Recent Trades</h2>
-        ${adminData.recent_trades.length ? `
-          <div style="overflow-x:auto"><table>
-            <tr><th>#</th><th>Master</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>
-            ${adminData.recent_trades.map(t => `
-              <tr>
-                <td style="color:var(--muted)">${t.id}</td>
-                <td style="color:var(--gold);font-family:monospace;font-size:0.78rem">${t.master_id}</td>
-                <td style="color:var(--txt);font-weight:600">${t.symbol}</td>
-                <td class="${t.action?.toLowerCase().includes('buy')?'buy':'sell'}">${t.action}</td>
-                <td>${t.volume}</td><td>${t.price}</td>
-                <td>${new Date(t.created_at).toLocaleString()}</td>
-              </tr>
-            `).join('')}
-          </table></div>
-        ` : '<div style="text-align:center;padding:2rem;color:var(--muted)">No trades yet</div>'}
-      </div>`;
-  }
-}
-
-async function load() {
-  try {
-    const r = await fetch('/api/admin/stats');
-    adminData = await r.json();
-    document.getElementById('stats').innerHTML = `
-      <div class="s"><div class="l">Total Users</div><div class="v">${adminData.total_users}</div></div>
-      <div class="s"><div class="l">Masters</div><div class="v">${adminData.total_masters}</div></div>
-      <div class="s"><div class="l">Paid Masters</div><div class="v">${adminData.paid_masters}</div></div>
-      <div class="s"><div class="l">Active Clients</div><div class="v">${adminData.active_connections}</div></div>
-      <div class="s"><div class="l">Total Trades</div><div class="v">${adminData.total_trades}</div></div>
-    `;
-    document.getElementById('lastR').textContent = new Date().toLocaleTimeString();
-    renderTab();
-  } catch(e) { console.error(e); }
-}
-
-async function approvePayment(userId) {
-  try {
-    const r = await fetch('/api/admin/approve-payment', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ user_id: userId })
-    });
-    if (!r.ok) throw new Error('Failed');
-    showToast('Payment approved! Master activated.');
-    load();
-  } catch(e) { alert('Error: ' + e.message); }
-}
-
-async function rejectPayment(userId) {
-  if (!confirm('Reject this payment?')) return;
-  try {
-    await fetch('/api/admin/reject-payment', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ user_id: userId })
-    });
-    showToast('Payment rejected.');
-    load();
-  } catch(e) { alert('Error: ' + e.message); }
-}
-
-function showToast(msg) {
+function toast(msg, type='ok') {
   const t = document.createElement('div');
-  t.className = 'toast ok';
+  t.className = 'toast ' + type;
   t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 2500);
 }
 
-load();
-setInterval(load, 10000);
+function switchPage(page, el) {
+  currentPage = page;
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.querySelector('.sidebar').classList.remove('open');
+  render();
+}
+
+async function loadData() {
+  try {
+    const r = await fetch('/api/admin/stats');
+    D = await r.json();
+    // Update pending badge
+    const pb = document.getElementById('pendingBadge');
+    if (D.pending_payments.length > 0) {
+      pb.style.display = 'inline';
+      pb.textContent = D.pending_payments.length;
+    } else {
+      pb.style.display = 'none';
+    }
+    render();
+  } catch(e) { console.error(e); }
+}
+
+function render() {
+  if (!D) return;
+  const m = document.getElementById('mainContent');
+  switch(currentPage) {
+    case 'dashboard': renderDashboard(m); break;
+    case 'masters': renderMasters(m); break;
+    case 'clients': renderClients(m); break;
+    case 'payments': renderPayments(m); break;
+    case 'trades': renderTrades(m); break;
+    case 'settings': renderSettings(m); break;
+  }
+}
+
+function renderDashboard(m) {
+  const revenue = D.paid_masters * 200;
+  m.innerHTML = `
+    <div class="page-header">
+      <div><h2>Dashboard</h2><div class="subtitle">Platform overview</div></div>
+      <div class="refresh-info"><span class="rdot"></span> Live · ${new Date().toLocaleTimeString()}</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="sl">Total Users</div><div class="sv">${D.total_users}</div></div>
+      <div class="stat"><div class="sl">Total Masters</div><div class="sv">${D.total_masters}</div></div>
+      <div class="stat"><div class="sl">Paid Masters</div><div class="sv" style="background:linear-gradient(135deg,var(--green),#86efac);-webkit-background-clip:text">${D.paid_masters}</div></div>
+      <div class="stat"><div class="sl">Active Clients</div><div class="sv">${D.active_connections}</div></div>
+      <div class="stat"><div class="sl">Total Trades</div><div class="sv">${D.total_trades}</div></div>
+      <div class="stat"><div class="sl">Revenue</div><div class="sv">$${revenue.toLocaleString()}</div><div class="sc" style="color:var(--green)">$200 × ${D.paid_masters} masters</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h3>📈 Recent Trades</h3></div>
+      ${D.recent_trades.length ? `<div style="overflow-x:auto"><table>
+        <tr><th>#</th><th>Master</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>
+        ${D.recent_trades.slice(0,8).map(t => `<tr>
+          <td style="color:var(--muted)">${t.id}</td>
+          <td style="color:var(--gold);font-family:monospace;font-size:0.75rem">${t.master_id}</td>
+          <td style="color:var(--txt);font-weight:600">${t.symbol}</td>
+          <td class="${t.action?.toLowerCase().includes('buy')?'buy':'sell'}">${t.action}</td>
+          <td>${t.volume}</td><td>${t.price}</td>
+          <td style="font-size:0.75rem">${new Date(t.created_at).toLocaleString()}</td>
+        </tr>`).join('')}
+      </table></div>` : '<div class="empty">No trades yet</div>'}
+    </div>`;
+}
+
+function renderMasters(m) {
+  let masters = D.all_masters || [];
+  if (masterSearch) {
+    const q = masterSearch.toLowerCase();
+    masters = masters.filter(x => x.name.toLowerCase().includes(q) || x.master_id.toLowerCase().includes(q) || x.email.toLowerCase().includes(q));
+  }
+  m.innerHTML = `
+    <div class="page-header">
+      <div><h2>👑 Master Accounts (${D.total_masters})</h2><div class="subtitle">Manage all master traders</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        <h3>All Masters</h3>
+        <input class="search-input" placeholder="Search name, ID, email..." value="${masterSearch}" oninput="masterSearch=this.value;render()">
+      </div>
+      ${masters.length ? `<div style="overflow-x:auto"><table>
+        <tr><th>Name</th><th>Email</th><th>Master ID</th><th>Paid</th><th>Status</th><th>Clients</th><th>Active</th><th>Trades</th><th>Joined</th><th>Actions</th></tr>
+        ${masters.map(x => `<tr>
+          <td style="color:var(--txt);font-weight:700">${x.name}</td>
+          <td>${x.email}</td>
+          <td style="color:var(--gold);font-family:monospace;font-size:0.78rem">${x.master_id}</td>
+          <td>${x.is_paid ? '<span class="b-paid">✓ PAID</span>' : '<span class="b-unpaid">✕ UNPAID</span>'}</td>
+          <td>${x.is_active !== false ? '<span class="b-active">Active</span>' : '<span class="b-expired">Expired</span>'}</td>
+          <td style="font-weight:700">${x.total_clients}</td>
+          <td style="color:var(--green);font-weight:700">${x.active_clients}</td>
+          <td>${x.trade_count || 0}</td>
+          <td style="font-size:0.75rem">${new Date(x.created_at).toLocaleDateString()}</td>
+          <td><div class="actions">
+            <button class="btn-sm btn-view" onclick="viewMaster(${x.id})">👁 View</button>
+            ${!x.is_paid ? `<button class="btn-sm btn-approve" onclick="togglePaid(${x.id},true)">✓ Activate</button>` : `<button class="btn-sm btn-expire" onclick="togglePaid(${x.id},false)">⏸ Revoke</button>`}
+            ${x.is_active !== false ? `<button class="btn-sm btn-expire" onclick="toggleActive(${x.id},false)">🚫 Expire</button>` : `<button class="btn-sm btn-approve" onclick="toggleActive(${x.id},true)">✓ Enable</button>`}
+            <button class="btn-sm btn-delete" onclick="deleteUser(${x.id},'${x.name}')">🗑</button>
+          </div></td>
+        </tr>`).join('')}
+      </table></div>` : '<div class="empty">No masters found</div>'}
+    </div>`;
+}
+
+function renderClients(m) {
+  m.innerHTML = `
+    <div class="page-header">
+      <div><h2>📡 All Client Connections</h2><div class="subtitle">EA heartbeat tracking across all masters</div></div>
+    </div>
+    <div class="panel"><div class="panel-header"><h3>Loading...</h3></div></div>`;
+  
+  fetch('/api/admin/all-clients').then(r => r.json()).then(data => {
+    const c = data.clients || [];
+    document.querySelector('.panel').innerHTML = `
+      <div class="panel-header"><h3>Client EAs (${c.length})</h3></div>
+      ${c.length ? `<div style="overflow-x:auto"><table>
+        <tr><th>Client ID</th><th>Master</th><th>Account</th><th>Broker</th><th>Acc #</th><th>Balance</th><th>Status</th><th>Last Seen</th><th>First Seen</th></tr>
+        ${c.map(x => `<tr>
+          <td style="font-family:monospace;font-size:0.75rem;color:var(--blue)">${x.client_uid}</td>
+          <td><span style="color:var(--gold);font-family:monospace;font-size:0.75rem">${x.master_id}</span><br><span style="font-size:0.7rem;color:var(--muted)">${x.master_name||''}</span></td>
+          <td style="color:var(--txt);font-weight:600">${x.account_name||'—'}</td>
+          <td>${x.broker||'—'}</td>
+          <td>${x.account_number||'—'}</td>
+          <td style="font-weight:700">${x.balance ? '$'+parseFloat(x.balance).toLocaleString() : '—'}</td>
+          <td>${x.is_active ? '<span class="b-active">Online</span>' : '<span class="b-inactive">Offline</span>'}</td>
+          <td style="font-size:0.75rem">${timeAgo(x.last_heartbeat)}</td>
+          <td style="font-size:0.75rem">${new Date(x.first_seen).toLocaleDateString()}</td>
+        </tr>`).join('')}
+      </table></div>` : '<div class="empty">No client EAs connected yet</div>'}`;
+  });
+}
+
+function renderPayments(m) {
+  const pp = D.pending_payments || [];
+  m.innerHTML = `
+    <div class="page-header">
+      <div><h2>💳 Payments</h2><div class="subtitle">Manage master account activations</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h3>Pending Approvals ${pp.length ? '<span class="badge">'+pp.length+'</span>' : ''}</h3></div>
+      ${pp.length ? `<div style="overflow-x:auto"><table>
+        <tr><th>Name</th><th>Email</th><th>Master ID</th><th>Method</th><th>Reference</th><th>Date</th><th>Actions</th></tr>
+        ${pp.map(p => `<tr>
+          <td style="color:var(--txt);font-weight:700">${p.name}</td>
+          <td>${p.email}</td>
+          <td style="color:var(--gold);font-family:monospace">${p.master_id||'—'}</td>
+          <td>${p.method}</td>
+          <td style="font-family:monospace;font-size:0.75rem">${p.reference}</td>
+          <td style="font-size:0.75rem">${new Date(p.created_at).toLocaleDateString()}</td>
+          <td><div class="actions">
+            <button class="btn-sm btn-approve" onclick="approvePayment(${p.user_id})">✓ Approve</button>
+            <button class="btn-sm btn-reject" onclick="rejectPayment(${p.user_id})">✕ Reject</button>
+          </div></td>
+        </tr>`).join('')}
+      </table></div>` : '<div class="empty">No pending payments 🎉</div>'}
+    </div>`;
+}
+
+function renderTrades(m) {
+  m.innerHTML = `
+    <div class="page-header">
+      <div><h2>📈 Trade History</h2><div class="subtitle">All trades across platform</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h3>Recent Trades (${D.total_trades} total)</h3></div>
+      ${D.recent_trades.length ? `<div style="overflow-x:auto"><table>
+        <tr><th>#</th><th>Master</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>SL</th><th>TP</th><th>Ticket</th><th>Time</th></tr>
+        ${D.recent_trades.map(t => `<tr>
+          <td style="color:var(--muted)">${t.id}</td>
+          <td style="color:var(--gold);font-family:monospace;font-size:0.75rem">${t.master_id}</td>
+          <td style="color:var(--txt);font-weight:700">${t.symbol}</td>
+          <td class="${t.action?.toLowerCase().includes('buy')?'buy':'sell'}">${t.action}</td>
+          <td>${t.volume}</td><td>${t.price}</td>
+          <td>${t.sl||0}</td><td>${t.tp||0}</td>
+          <td style="font-family:monospace;font-size:0.75rem;color:var(--muted)">${t.ticket||'—'}</td>
+          <td style="font-size:0.75rem">${new Date(t.created_at).toLocaleString()}</td>
+        </tr>`).join('')}
+      </table></div>` : '<div class="empty">No trades yet</div>'}
+    </div>`;
+}
+
+function renderSettings(m) {
+  m.innerHTML = `
+    <div class="page-header">
+      <div><h2>⚙️ Settings</h2><div class="subtitle">Platform configuration</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h3>Platform Settings</h3></div>
+      <table>
+        <tr><td style="color:var(--txt);font-weight:700;width:200px">Platform Name</td><td>TradeBridge</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">Version</td><td>v3.8</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">Master Price</td><td style="color:var(--gold);font-weight:800">$200 (one-time)</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">Testing Mode</td><td style="color:var(--green);font-weight:700">ON — Auto-paid enabled</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">Heartbeat Timeout</td><td>2 minutes (inactive after)</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">Auto-Refresh</td><td>Every 10 seconds</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">Server</td><td>Render · Oregon</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">Database</td><td>PostgreSQL 18 · tradebridge_db_2</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">EA Type</td><td>.ex5 compiled (MQL5)</td></tr>
+        <tr><td style="color:var(--txt);font-weight:700">Admin URL</td><td style="font-family:monospace;font-size:0.78rem">/admin</td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><h3>Quick Actions</h3></div>
+      <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+        <button class="btn-gold" onclick="loadData();toast('Data refreshed')">↻ Refresh All Data</button>
+        <a href="/" target="_blank" class="btn-gold" style="text-decoration:none">🌐 View Live Site</a>
+        <a href="/dashboard" target="_blank" class="btn-gold" style="text-decoration:none">📊 Open Dashboard</a>
+      </div>
+    </div>`;
+}
+
+// ═══ MASTER DETAIL VIEW ═══
+async function viewMaster(id) {
+  document.getElementById('detailOverlay').classList.add('show');
+  document.getElementById('detailContent').innerHTML = '<div class="empty">Loading master details...</div>';
+
+  try {
+    const r = await fetch('/api/admin/master/' + id);
+    const d = await r.json();
+    const x = d.master;
+    let detailTab = 'clients';
+
+    function renderDetail(tab) {
+      detailTab = tab;
+      let tabContent = '';
+      if (tab === 'clients') {
+        tabContent = d.clients.length ? `<div style="overflow-x:auto"><table>
+          <tr><th>Client ID</th><th>Account</th><th>Broker</th><th>Acc #</th><th>Balance</th><th>Status</th><th>Last Seen</th></tr>
+          ${d.clients.map(c => `<tr>
+            <td style="font-family:monospace;font-size:0.75rem;color:var(--blue)">${c.client_uid}</td>
+            <td style="color:var(--txt);font-weight:600">${c.account_name||'—'}</td>
+            <td>${c.broker||'—'}</td>
+            <td>${c.account_number||'—'}</td>
+            <td style="font-weight:700">${c.balance ? '$'+parseFloat(c.balance).toLocaleString() : '—'}</td>
+            <td>${c.is_active ? '<span class="b-active">Online</span>' : '<span class="b-inactive">Offline</span>'}</td>
+            <td style="font-size:0.75rem">${timeAgo(c.last_heartbeat)}</td>
+          </tr>`).join('')}
+        </table></div>` : '<div class="empty">No clients connected</div>';
+      } else if (tab === 'trades') {
+        tabContent = d.trades.length ? `<div style="overflow-x:auto"><table>
+          <tr><th>#</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>
+          ${d.trades.map(t => `<tr>
+            <td style="color:var(--muted)">${t.id}</td>
+            <td style="color:var(--txt);font-weight:600">${t.symbol}</td>
+            <td class="${t.action?.toLowerCase().includes('buy')?'buy':'sell'}">${t.action}</td>
+            <td>${t.volume}</td><td>${t.price}</td>
+            <td style="font-size:0.75rem">${new Date(t.created_at).toLocaleString()}</td>
+          </tr>`).join('')}
+        </table></div>` : '<div class="empty">No trades</div>';
+      } else {
+        tabContent = d.payments.length ? `<div style="overflow-x:auto"><table>
+          <tr><th>Amount</th><th>Method</th><th>Reference</th><th>Status</th><th>Date</th></tr>
+          ${d.payments.map(p => `<tr>
+            <td style="color:var(--gold);font-weight:700">$${p.amount}</td>
+            <td>${p.method}</td>
+            <td style="font-family:monospace;font-size:0.75rem">${p.reference}</td>
+            <td>${p.status === 'approved' ? '<span class="b-paid">Approved</span>' : p.status === 'rejected' ? '<span class="b-unpaid">Rejected</span>' : '<span style="color:var(--orange);font-weight:600">Pending</span>'}</td>
+            <td style="font-size:0.75rem">${new Date(p.created_at).toLocaleDateString()}</td>
+          </tr>`).join('')}
+        </table></div>` : '<div class="empty">No payments</div>';
+      }
+
+      document.getElementById('detailContent').innerHTML = `
+        <div class="detail-header">
+          <div class="detail-avatar">${x.name.charAt(0)}</div>
+          <div class="detail-info">
+            <h3>${x.name}</h3>
+            <div class="dm-id">${x.master_id}</div>
+            <div class="dm-meta">${x.email} · Joined ${new Date(x.created_at).toLocaleDateString()}</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:0.5rem;flex-wrap:wrap">
+            ${x.is_paid ? '<span class="b-paid" style="font-size:0.85rem">✓ PAID</span>' : '<span class="b-unpaid" style="font-size:0.85rem">✕ UNPAID</span>'}
+            ${x.is_active !== false ? '<span class="b-active" style="font-size:0.85rem">Active</span>' : '<span class="b-expired" style="font-size:0.85rem">Expired</span>'}
+          </div>
+        </div>
+        <div class="detail-stats">
+          <div class="ds"><div class="ds-val" style="color:var(--gold)">${x.total_clients}</div><div class="ds-label">Total Clients</div></div>
+          <div class="ds"><div class="ds-val" style="color:var(--green)">${x.active_clients}</div><div class="ds-label">Active Now</div></div>
+          <div class="ds"><div class="ds-val">${x.trade_count}</div><div class="ds-label">Trades</div></div>
+          <div class="ds"><div class="ds-val" style="color:var(--gold)">${x.is_paid ? '$200' : '$0'}</div><div class="ds-label">Revenue</div></div>
+        </div>
+        <div class="detail-tabs">
+          <button class="dt ${tab==='clients'?'active':''}" onclick="renderDetailTab('clients')">👥 Clients (${d.clients.length})</button>
+          <button class="dt ${tab==='trades'?'active':''}" onclick="renderDetailTab('trades')">📈 Trades (${d.trades.length})</button>
+          <button class="dt ${tab==='payments'?'active':''}" onclick="renderDetailTab('payments')">💳 Payments (${d.payments.length})</button>
+        </div>
+        ${tabContent}
+      `;
+    }
+
+    window.renderDetailTab = function(tab) { renderDetail(tab); };
+    renderDetail('clients');
+  } catch(e) {
+    document.getElementById('detailContent').innerHTML = '<div class="empty">Error loading master details</div>';
+  }
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('show');
+}
+
+// ═══ ADMIN ACTIONS ═══
+async function approvePayment(uid) {
+  await fetch('/api/admin/approve-payment', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid})});
+  toast('Payment approved ✓');
+  loadData();
+}
+async function rejectPayment(uid) {
+  if (!confirm('Reject this payment?')) return;
+  await fetch('/api/admin/reject-payment', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid})});
+  toast('Payment rejected');
+  loadData();
+}
+async function togglePaid(uid, paid) {
+  await fetch('/api/admin/toggle-paid', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid,is_paid:paid})});
+  toast(paid ? 'Master activated ✓' : 'Access revoked');
+  loadData();
+}
+async function toggleActive(uid, active) {
+  await fetch('/api/admin/toggle-master', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid,is_active:active})});
+  toast(active ? 'Master enabled ✓' : 'Master expired 🚫');
+  loadData();
+}
+async function deleteUser(uid, name) {
+  if (!confirm('DELETE master "' + name + '"? This will remove all their data permanently.')) return;
+  if (!confirm('Are you SURE? This cannot be undone.')) return;
+  await fetch('/api/admin/delete-user', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid})});
+  toast('Master deleted');
+  loadData();
+}
+
+function timeAgo(ts) {
+  if (!ts) return '—';
+  const diff = Date.now() - new Date(ts).getTime();
+  if (diff < 60000) return 'Just now';
+  if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+  if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
+  return Math.floor(diff/86400000) + 'd ago';
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeDetail(); });
+
+loadData();
+setInterval(loadData, 10000);
 </script>
 </body>
 </html>

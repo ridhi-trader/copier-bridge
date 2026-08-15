@@ -480,6 +480,126 @@ app.post('/api/master/profile', authMiddleware, masterOnly, async (req, res) => 
   }
 });
 
+
+// Admin: Expire/Deactivate master
+app.post('/api/admin/toggle-master', async (req, res) => {
+  try {
+    const { user_id, is_active } = req.body;
+    if (!user_id) return res.status(400).json({ error: 'user_id required' });
+    await pool.query('UPDATE users SET is_active = $1 WHERE id = $2', [is_active !== false, user_id]);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Admin: Toggle payment status directly
+app.post('/api/admin/toggle-paid', async (req, res) => {
+  try {
+    const { user_id, is_paid } = req.body;
+    if (!user_id) return res.status(400).json({ error: 'user_id required' });
+    await pool.query('UPDATE users SET is_paid = $1 WHERE id = $2', [is_paid !== false, user_id]);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Admin: Delete master account
+app.post('/api/admin/delete-user', async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    if (!user_id) return res.status(400).json({ error: 'user_id required' });
+    // Get master_id first
+    const u = await pool.query('SELECT master_id FROM users WHERE id = $1', [user_id]);
+    const mid = u.rows[0]?.master_id;
+    if (mid) {
+      await pool.query('DELETE FROM client_connections WHERE master_id = $1', [mid]);
+      await pool.query('DELETE FROM trades WHERE master_id = $1', [mid]);
+    }
+    await pool.query('DELETE FROM subscriptions WHERE master_user_id = $1 OR client_user_id = $1', [user_id]);
+    await pool.query('DELETE FROM payments WHERE user_id = $1', [user_id]);
+    await pool.query('DELETE FROM users WHERE id = $1', [user_id]);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Admin: Get master detail with all clients
+app.get('/api/admin/master/:id', async (req, res) => {
+  try {
+    const master = await pool.query(
+      `SELECT u.*, 
+        (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id) as total_clients,
+        (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id AND is_active = true) as active_clients,
+        (SELECT COUNT(*) FROM trades WHERE master_id = u.master_id) as trade_count
+       FROM users u WHERE u.id = $1`, [req.params.id]
+    );
+    if (!master.rows.length) return res.status(404).json({ error: 'Not found' });
+
+    // Update inactive clients
+    await pool.query(
+      "UPDATE client_connections SET is_active = false WHERE master_id = $1 AND last_heartbeat < NOW() - INTERVAL '2 minutes'",
+      [master.rows[0].master_id]
+    );
+
+    const clients = await pool.query(
+      'SELECT * FROM client_connections WHERE master_id = $1 ORDER BY is_active DESC, last_heartbeat DESC',
+      [master.rows[0].master_id]
+    );
+    const trades = await pool.query(
+      'SELECT * FROM trades WHERE master_id = $1 ORDER BY created_at DESC LIMIT 20',
+      [master.rows[0].master_id]
+    );
+    const payments = await pool.query(
+      'SELECT * FROM payments WHERE user_id = $1 ORDER BY created_at DESC',
+      [req.params.id]
+    );
+
+    res.json({
+      master: master.rows[0],
+      clients: clients.rows,
+      trades: trades.rows,
+      payments: payments.rows
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Admin: Get all clients
+app.get('/api/admin/all-clients', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT cc.*, u.name as master_name 
+       FROM client_connections cc 
+       LEFT JOIN users u ON u.master_id = cc.master_id 
+       ORDER BY cc.last_heartbeat DESC LIMIT 100`
+    );
+    res.json({ clients: result.rows });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Admin: Platform settings
+app.get('/api/admin/settings', async (req, res) => {
+  try {
+    // Return platform config
+    res.json({
+      master_price: 200,
+      auto_paid: true,
+      heartbeat_timeout: 120,
+      max_clients_per_master: 0,
+      platform_name: 'TradeBridge',
+      version: '3.8'
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // ── Page Routes ──
 app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
