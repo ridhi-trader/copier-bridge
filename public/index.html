@@ -932,6 +932,39 @@
   .risk-warning{font-size:0.68rem;color:var(--text-muted);line-height:1.6;margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,0.04);max-width:800px;text-align:center;margin-left:auto;margin-right:auto;opacity:0.6}
   @media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr}.test-grid{grid-template-columns:1fr}}
 
+
+  /* ===== Feature Card Popup Modal ===== */
+  .feat-card,.built-card{cursor:pointer}
+  .feat-card:active,.built-card:active{transform:scale(0.97)}
+
+  /* Modal Overlay */
+  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,2,8,0.85);backdrop-filter:blur(12px);z-index:10000;display:none;align-items:center;justify-content:center;padding:2rem;animation:fadeOverlay 0.3s ease}
+  .modal-overlay.show{display:flex}
+  @keyframes fadeOverlay{from{opacity:0}to{opacity:1}}
+
+  .modal-card{background:var(--bg-card);border:1px solid rgba(201,168,76,0.2);border-radius:24px;padding:3rem;max-width:580px;width:100%;position:relative;animation:popIn 0.4s cubic-bezier(0.16,1,0.3,1);box-shadow:0 30px 100px rgba(0,0,0,0.5),0 0 60px rgba(201,168,76,0.08)}
+  @keyframes popIn{from{opacity:0;transform:scale(0.7) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+  .modal-card .modal-icon{font-size:3rem;margin-bottom:1.2rem;display:inline-block;animation:iconBounce 0.5s ease 0.2s both}
+  @keyframes iconBounce{0%{transform:scale(0) rotate(-20deg)}60%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+
+  .modal-card h3{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;margin-bottom:0.8rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .modal-card .modal-desc{font-size:0.95rem;color:var(--text-secondary);line-height:1.8;margin-bottom:1.5rem}
+  .modal-card .modal-features{list-style:none;padding:0;margin:0 0 1.5rem}
+  .modal-card .modal-features li{font-size:0.88rem;color:var(--text-secondary);padding:0.4rem 0;border-bottom:1px solid rgba(201,168,76,0.04);display:flex;align-items:center;gap:0.6rem}
+  .modal-card .modal-features li::before{content:'✦';color:var(--gold);font-size:0.7rem;flex-shrink:0}
+
+  .modal-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+  .modal-close:hover{background:rgba(248,113,113,0.1);color:#F87171}
+
+  .modal-cta{display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--bg-primary);padding:0.75rem 1.5rem;border-radius:12px;font-size:0.9rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;transition:transform 0.2s,box-shadow 0.3s}
+  .modal-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
+
+  @media(max-width:640px){
+    .modal-card{padding:2rem 1.5rem;margin:1rem;border-radius:18px}
+    .modal-card h3{font-size:1.3rem}
+  }
+
 </style>
 </head>
 <body>
@@ -1123,32 +1156,32 @@
       <p class="section-sub" style="margin:0 auto;">Professional-grade tools built for traders who want reliability, speed, and control.</p>
     </div>
     <div class="feat-grid">
-      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover" onclick="openModal('⚡','Sub-30ms Execution','Our proprietary push-based architecture ensures trades are copied to all connected client accounts in under 30 milliseconds. No polling delays, no missed entries — your clients get the exact same entry as you.',['Push-based real-time execution','No polling delays or missed trades','Handles 10,000+ concurrent connections','Sub-30ms average copy latency','Works across all market conditions'])">
         <div class="feat-icon">⚡</div>
         <h3>Sub-30ms Execution</h3>
         <p>Trades copy before the candle closes. Zero polling — instant push to every connected client.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover" onclick="openModal('🔐','Encrypted & Secure','Enterprise-grade security with end-to-end HTTPS encryption, JWT token authentication, and zero credential storage. Your MT5 login details never touch our servers.',['End-to-end HTTPS/TLS encryption','JWT token-based authentication','Zero credential storage on server','HTTP-only secure cookies','Bcrypt password hashing'])">
         <div class="feat-icon">🔐</div>
         <h3>Encrypted & Secure</h3>
         <p>Secret-key authentication, HTTPS encryption. No credentials stored. Your accounts stay yours.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover" onclick="openModal('📊','Live Dashboard','A comprehensive real-time dashboard that shows you everything: connected clients with active/inactive status, account balances, trade history, and performance metrics — auto-refreshing every 15 seconds.',['Real-time client monitoring (active/inactive)','Account balance and broker info','Trade history with full audit trail','Auto-refresh every 15 seconds','Manual refresh + toast notifications'])">
         <div class="feat-icon">📊</div>
         <h3>Live Dashboard</h3>
         <p>Real-time admin panel. See connected clients, active trades, and server health — all in one view.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover" onclick="openModal('⚙️','Custom Risk Control','Every client can customize their own risk parameters independently. Choose fixed lot sizes, lot multipliers, or equity-based percentage — giving each account the risk profile that fits their capital.',['Fixed lot size per client','Lot multiplier (e.g. 2x master volume)','Custom slippage settings','Independent SL/TP copying','Per-client risk isolation'])">
         <div class="feat-icon">⚙️</div>
         <h3>Custom Risk Control</h3>
         <p>Clients set their own lot sizing — fixed, multiplier, or percentage. Full control over risk per trade.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover" onclick="openModal('🌐','Cross-Broker Compatible','Copy trades between any MT5 brokers seamlessly. Master on Exness, clients on IC Markets, FTMO, or any other broker — our intelligent symbol suffix handling takes care of the rest.',['Works with 2000+ MT5 brokers','Automatic symbol suffix handling','XAUUSD → GOLD auto-mapping','No manual symbol configuration needed','Prop firm accounts supported'])">
         <div class="feat-icon">🌐</div>
         <h3>Cross-Broker</h3>
         <p>Master on Exness, clients on IC Markets. Symbol mapping handles suffix differences automatically.</p>
       </div>
-      <div class="feat-card reveal tilt-card glow-border glow-on-hover">
+      <div class="feat-card reveal tilt-card glow-border glow-on-hover" onclick="openModal('📈','Scale to Thousands','Built for serious fund managers and signal providers. Our cloud infrastructure handles unlimited concurrent connections with the same sub-30ms latency whether you have 10 clients or 10,000.',['Unlimited client connections','Cloud-hosted — no VPS needed','99.9% uptime SLA','Auto-scaling infrastructure','Same speed at any scale'])">
         <div class="feat-icon">📈</div>
         <h3>Scale to Thousands</h3>
         <p>Architecture built for high concurrency. 10 clients or 10,000 — same speed, same reliability.</p>
@@ -1272,27 +1305,27 @@
       <div class="section-title glow-text">Whatever You Trade, We Copy It</div>
     </div>
     <div class="built-grid">
-      <div class="built-card reveal tilt-card">
+      <div class="built-card reveal tilt-card glow-on-hover" onclick="openModal('🛡️','Equity Protection','Protect your clients\' capital with automated drawdown limits. Set maximum loss thresholds per account — when the limit is hit, trade copying stops instantly before further damage occurs.',['Set max drawdown per client','Auto-stop copying on threshold hit','Percentage or fixed amount limits','Protects prop firm accounts','Real-time equity monitoring'])">
         <h3><span class="bi">🛡️</span> Equity Protection</h3>
         <p>Set maximum drawdown per client account. When limits hit, copying stops automatically — protecting capital before damage spreads.</p>
       </div>
-      <div class="built-card reveal tilt-card">
+      <div class="built-card reveal tilt-card glow-on-hover" onclick="openModal('🏆','Prop Firm Ready','Designed with prop firm traders in mind. Dedicated risk controls, compliance-friendly execution, and isolated environments keep your funded accounts safe while copying master trades.',['FTMO, MyForexFunds, TFT compatible','Dedicated risk per funded account','Compliance-friendly execution','Daily loss limit protection','Challenge & funded account support'])">
         <h3><span class="bi">🏆</span> Prop Firm Ready</h3>
         <p>Built to keep prop accounts safe. Dedicated environments, risk limits, and compliance-friendly settings for funded accounts.</p>
       </div>
-      <div class="built-card reveal tilt-card">
+      <div class="built-card reveal tilt-card glow-on-hover" onclick="openModal('🔄','Auto Symbol Mapping','No more manual symbol configuration. TradeBridge automatically handles broker-specific symbol names and suffixes, so XAUUSD maps to GOLD, EURUSDm maps to EURUSD — seamlessly.',['Automatic suffix detection','XAUUSD ↔ GOLD mapping','Handles .m, .pro, .raw suffixes','Zero manual configuration','Works across all brokers'])">
         <h3><span class="bi">🔄</span> Auto Symbol Mapping</h3>
         <p>Master trades XAUUSD, client broker uses GOLD? Auto-mapping handles suffix differences without manual config.</p>
       </div>
-      <div class="built-card reveal tilt-card">
+      <div class="built-card reveal tilt-card glow-on-hover" onclick="openModal('📋','Full Trade Logs','Complete transparency with every trade. Every copied position is logged with timestamp, execution speed, fill price, status, and any errors — giving you a full audit trail.',['Timestamped execution logs','Fill price and slippage data','Error tracking and diagnostics','Exportable trade history','Per-client audit trail'])">
         <h3><span class="bi">📋</span> Full Trade Logs</h3>
         <p>Every copied trade logged with execution time, status, and any errors. Complete audit trail for every account.</p>
       </div>
-      <div class="built-card reveal tilt-card">
+      <div class="built-card reveal tilt-card glow-on-hover" onclick="openModal('🔔','Instant Notifications','Stay informed 24/7 with real-time alerts. Get notified on Telegram or WhatsApp when trades are copied, errors occur, or clients go offline — so you never miss anything.',['Telegram bot notifications','Trade copied alerts','Error and failure warnings','Client disconnect alerts','Customizable notification rules'])">
         <h3><span class="bi">🔔</span> Instant Notifications</h3>
         <p>Get alerts on Telegram the moment a trade is copied, an error occurs, or a client disconnects.</p>
       </div>
-      <div class="built-card reveal tilt-card">
+      <div class="built-card reveal tilt-card glow-on-hover" onclick="openModal('🖥️','Dedicated Environment','Each master account runs on its own isolated cloud instance. No shared resources, no noisy neighbors — pure, dedicated performance with guaranteed uptime.',['Isolated cloud instance per master','No shared resources','Guaranteed compute allocation','99.9% uptime guarantee','Auto-scaling on demand'])">
         <h3><span class="bi">🖥️</span> Dedicated Environment</h3>
         <p>Your own isolated server instance. No shared resources, no noisy neighbors. Pure, dedicated performance.</p>
       </div>
@@ -1984,6 +2017,34 @@
     if(termSection)termObs.observe(termSection);
   })();
 
+
+  // ═══ Feature Card Popup Modal ═══
+  function openModal(icon, title, desc, features){
+    var modal=document.getElementById('featureModal');
+    document.getElementById('modalIcon').textContent=icon;
+    document.getElementById('modalTitle').textContent=title;
+    document.getElementById('modalDesc').textContent=desc;
+    var fl=document.getElementById('modalFeatures');
+    fl.innerHTML='';
+    if(features&&features.length){
+      features.forEach(function(f){
+        var li=document.createElement('li');
+        li.textContent=f;
+        fl.appendChild(li);
+      });
+    }
+    modal.classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+  function closeModal(){
+    document.getElementById('featureModal').classList.remove('show');
+    document.body.style.overflow='';
+  }
+  // Close on Escape key
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')closeModal();
+  });
+
 </script>
 
 
@@ -2018,6 +2079,19 @@
     <p><strong>Risk Warning:</strong> Trading foreign exchange and CFDs on margin carries a high level of risk and may not be suitable for all investors. The high degree of leverage can work against you as well as for you. Before deciding to trade, you should carefully consider your investment objectives, level of experience, and risk appetite. The possibility exists that you could sustain a loss of some or all of your initial investment. TradeBridge is a trade copying platform and does not provide financial advice. Past performance is not indicative of future results.</p>
   </div>
 </section>
+
+
+<!-- Feature Modal -->
+<div class="modal-overlay" id="featureModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-icon" id="modalIcon"></div>
+    <h3 id="modalTitle"></h3>
+    <div class="modal-desc" id="modalDesc"></div>
+    <ul class="modal-features" id="modalFeatures"></ul>
+    <a href="/register" class="modal-cta">Get Started →</a>
+  </div>
+</div>
 
 </body>
 </html>
