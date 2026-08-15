@@ -104,6 +104,27 @@
       <label>Email</label>
       <input type="email" id="email" placeholder="you@example.com" required>
     </div>
+
+    <!-- MT5 Fields (Master only) -->
+    <div id="masterFields" style="display:block">
+      <div class="field">
+        <label>MT5 Account Number</label>
+        <input type="text" id="mt5Account" placeholder="e.g. 12345678" required>
+      </div>
+      <div class="field">
+        <label>Broker Name</label>
+        <input type="text" id="mt5Broker" placeholder="e.g. Exness, IC Markets, FTMO...">
+      </div>
+      <div class="field">
+        <label>Number of Clients Needed</label>
+        <div class="client-count-wrap" style="display:flex;align-items:center;gap:0.8rem">
+          <input type="range" id="maxClientsSlider" min="20" max="500" value="20" step="10" oninput="updateClientCount(this.value)" style="flex:1;accent-color:var(--gold)">
+          <div id="clientCountDisplay" style="background:var(--bg2);border:1px solid var(--glass-b);border-radius:8px;padding:0.5rem 1rem;font-size:1.1rem;font-weight:800;color:var(--gold);min-width:60px;text-align:center">20</div>
+        </div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem">Minimum 20 clients. Slide to select how many client slots you need.</div>
+      </div>
+    </div>
+
     <div class="field">
       <label>Password</label>
       <div class="input-wrap">
@@ -140,6 +161,19 @@
     role = r;
     document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`[data-role="${r}"]`).classList.add('active');
+    const mf = document.getElementById('masterFields');
+    const mt5 = document.getElementById('mt5Account');
+    if (r === 'master') {
+      mf.style.display = 'block';
+      mt5.required = true;
+    } else {
+      mf.style.display = 'none';
+      mt5.required = false;
+    }
+  }
+
+  function updateClientCount(val) {
+    document.getElementById('clientCountDisplay').textContent = val;
   }
 
   function togglePw() {
@@ -183,7 +217,10 @@
           name: document.getElementById('name').value.trim(),
           email: document.getElementById('email').value.trim(),
           password: document.getElementById('password').value,
-          role
+          role,
+          mt5_account: document.getElementById('mt5Account')?.value.trim() || '',
+          mt5_broker: document.getElementById('mt5Broker')?.value.trim() || '',
+          max_clients: parseInt(document.getElementById('maxClientsSlider')?.value) || 20
         })
       });
       const data = await res.json();

@@ -33,6 +33,9 @@ async function initDB() {
       role VARCHAR(20) NOT NULL CHECK (role IN ('master','client')),
       master_id VARCHAR(50) UNIQUE,
       bio TEXT DEFAULT '',
+      mt5_account VARCHAR(100) DEFAULT '',
+      mt5_broker VARCHAR(255) DEFAULT '',
+      max_clients INTEGER DEFAULT 20,
       is_active BOOLEAN DEFAULT true,
       is_paid BOOLEAN DEFAULT false,
       created_at TIMESTAMP DEFAULT NOW()
@@ -83,6 +86,9 @@ async function initDB() {
 
   // Add columns if they don't exist (safe migration)
   try { await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_paid BOOLEAN DEFAULT false"); } catch(e){}
+  try { await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS mt5_account VARCHAR(100) DEFAULT ''"); } catch(e){}
+  try { await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS mt5_broker VARCHAR(255) DEFAULT ''"); } catch(e){}
+  try { await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS max_clients INTEGER DEFAULT 20"); } catch(e){}
   try { await pool.query("ALTER TABLE client_connections ADD COLUMN IF NOT EXISTS balance DOUBLE PRECISION DEFAULT 0"); } catch(e){}
 
   console.log('✅ Database tables ready');
@@ -132,8 +138,10 @@ function genMasterID() {
 
 app.post('/api/register', async (req, res) => {
   try {
-    const { email, password, name, role } = req.body;
+    const { email, password, name, role, mt5_account, mt5_broker, max_clients } = req.body;
     if (!email || !password || !name || !role) return res.status(400).json({ error: 'All fields required' });
+    if (role === 'master' && !mt5_account) return res.status(400).json({ error: 'MT5 Account Number is required for masters' });
+    const clientCount = Math.max(20, parseInt(max_clients) || 20);
     if (!['master', 'client'].includes(role)) return res.status(400).json({ error: 'Invalid role' });
     if (password.length < 6) return res.status(400).json({ error: 'Password must be 6+ characters' });
 
@@ -144,8 +152,8 @@ app.post('/api/register', async (req, res) => {
     const master_id = role === 'master' ? genMasterID() : null;
 
     const result = await pool.query(
-      'INSERT INTO users (email, password, name, role, master_id, is_paid) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id, email, name, role, master_id, is_paid',
-      [email, hash, name, role, master_id, true]
+      'INSERT INTO users (email, password, name, role, master_id, mt5_account, mt5_broker, max_clients, is_paid) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id, email, name, role, master_id, is_paid, mt5_account, max_clients',
+      [email, hash, name, role, master_id, mt5_account || '', mt5_broker || '', role === 'master' ? clientCount : 0, true]
     );
 
     const user = result.rows[0];
@@ -395,9 +403,10 @@ app.get('/api/admin/stats', async (req, res) => {
       `SELECT p.*, u.name, u.email, u.master_id FROM payments p JOIN users u ON u.id = p.user_id WHERE p.status = 'pending' ORDER BY p.created_at DESC`
     );
     const allMasters = await pool.query(
-      `SELECT u.id, u.name, u.email, u.master_id, u.is_paid, u.created_at,
+      `SELECT u.id, u.name, u.email, u.master_id, u.is_paid, u.is_active, u.mt5_account, u.mt5_broker, u.max_clients, u.created_at,
         (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id) as total_clients,
-        (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id AND is_active = true) as active_clients
+        (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id AND is_active = true) as active_clients,
+        (SELECT COUNT(*) FROM trades WHERE master_id = u.master_id) as trade_count
        FROM users u WHERE u.role = 'master' ORDER BY u.created_at DESC`
     );
 
@@ -530,7 +539,7 @@ app.post('/api/admin/delete-user', async (req, res) => {
 app.get('/api/admin/master/:id', async (req, res) => {
   try {
     const master = await pool.query(
-      `SELECT u.*, 
+      `SELECT u.id, u.email, u.name, u.role, u.master_id, u.bio, u.mt5_account, u.mt5_broker, u.max_clients, u.is_active, u.is_paid, u.created_at,
         (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id) as total_clients,
         (SELECT COUNT(*) FROM client_connections WHERE master_id = u.master_id AND is_active = true) as active_clients,
         (SELECT COUNT(*) FROM trades WHERE master_id = u.master_id) as trade_count

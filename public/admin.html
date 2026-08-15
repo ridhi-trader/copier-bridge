@@ -245,33 +245,36 @@ function renderMasters(m) {
   }
   m.innerHTML = `
     <div class="page-header">
-      <div><h2>👑 Master Accounts (${D.total_masters})</h2><div class="subtitle">Manage all master traders</div></div>
+      <div><h2>👑 Master Accounts (${D.total_masters})</h2><div class="subtitle">Click any master to expand details & clients</div></div>
     </div>
     <div class="panel">
       <div class="panel-header">
         <h3>All Masters</h3>
         <input class="search-input" placeholder="Search name, ID, email..." value="${masterSearch}" oninput="masterSearch=this.value;render()">
       </div>
-      ${masters.length ? `<div style="overflow-x:auto"><table>
-        <tr><th>Name</th><th>Email</th><th>Master ID</th><th>Paid</th><th>Status</th><th>Clients</th><th>Active</th><th>Trades</th><th>Joined</th><th>Actions</th></tr>
-        ${masters.map(x => `<tr>
-          <td style="color:var(--txt);font-weight:700">${x.name}</td>
-          <td>${x.email}</td>
-          <td style="color:var(--gold);font-family:monospace;font-size:0.78rem">${x.master_id}</td>
-          <td>${x.is_paid ? '<span class="b-paid">✓ PAID</span>' : '<span class="b-unpaid">✕ UNPAID</span>'}</td>
-          <td>${x.is_active !== false ? '<span class="b-active">Active</span>' : '<span class="b-expired">Expired</span>'}</td>
-          <td style="font-weight:700">${x.total_clients}</td>
-          <td style="color:var(--green);font-weight:700">${x.active_clients}</td>
-          <td>${x.trade_count || 0}</td>
-          <td style="font-size:0.75rem">${new Date(x.created_at).toLocaleDateString()}</td>
-          <td><div class="actions">
-            <button class="btn-sm btn-view" onclick="viewMaster(${x.id})">👁 View</button>
-            ${!x.is_paid ? `<button class="btn-sm btn-approve" onclick="togglePaid(${x.id},true)">✓ Activate</button>` : `<button class="btn-sm btn-expire" onclick="togglePaid(${x.id},false)">⏸ Revoke</button>`}
-            ${x.is_active !== false ? `<button class="btn-sm btn-expire" onclick="toggleActive(${x.id},false)">🚫 Expire</button>` : `<button class="btn-sm btn-approve" onclick="toggleActive(${x.id},true)">✓ Enable</button>`}
-            <button class="btn-sm btn-delete" onclick="deleteUser(${x.id},'${x.name}')">🗑</button>
-          </div></td>
-        </tr>`).join('')}
-      </table></div>` : '<div class="empty">No masters found</div>'}
+      ${masters.length ? masters.map(x => `
+        <div class="master-row" id="mrow-${x.id}" style="border:1px solid var(--gb);border-radius:12px;margin-bottom:0.8rem;overflow:hidden;transition:all 0.3s;cursor:pointer" onclick="toggleMasterExpand(${x.id})">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem;gap:1rem;flex-wrap:wrap;background:var(--bg2)">
+            <div style="display:flex;align-items:center;gap:1rem;flex:1;min-width:200px">
+              <div style="width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--wine),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:1rem;flex-shrink:0">${x.name.charAt(0)}</div>
+              <div>
+                <div style="font-weight:700;color:var(--txt);font-size:0.9rem">${x.name}</div>
+                <div style="font-family:monospace;color:var(--gold);font-size:0.78rem">${x.master_id}</div>
+                <div style="font-size:0.7rem;color:var(--muted)">${x.email}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap">
+              <div style="text-align:center"><div style="font-size:1.1rem;font-weight:800;color:var(--gold)">${x.total_clients}</div><div style="font-size:0.6rem;color:var(--muted);text-transform:uppercase">Clients</div></div>
+              <div style="text-align:center"><div style="font-size:1.1rem;font-weight:800;color:var(--green)">${x.active_clients}</div><div style="font-size:0.6rem;color:var(--muted);text-transform:uppercase">Active</div></div>
+              <div style="text-align:center"><div style="font-size:1.1rem;font-weight:800">${x.trade_count||0}</div><div style="font-size:0.6rem;color:var(--muted);text-transform:uppercase">Trades</div></div>
+              ${x.is_paid ? '<span class="b-paid" style="font-size:0.8rem">✓ PAID</span>' : '<span class="b-unpaid" style="font-size:0.8rem">✕ UNPAID</span>'}
+              ${x.is_active !== false ? '<span class="b-active">Active</span>' : '<span class="b-expired">Expired</span>'}
+            </div>
+            <div style="font-size:1rem;color:var(--muted);transition:transform 0.3s" id="arrow-${x.id}">▼</div>
+          </div>
+          <div id="expand-${x.id}" style="display:none;padding:0;border-top:1px solid var(--gb)" onclick="event.stopPropagation()"></div>
+        </div>
+      `).join('') : '<div class="empty">No masters found</div>'}
     </div>`;
 }
 
@@ -382,7 +385,83 @@ function renderSettings(m) {
     </div>`;
 }
 
-// ═══ MASTER DETAIL VIEW ═══
+// ═══ MASTER INLINE EXPAND ═══
+async function toggleMasterExpand(id) {
+  const expand = document.getElementById('expand-' + id);
+  const arrow = document.getElementById('arrow-' + id);
+  
+  if (expand.style.display === 'block') {
+    expand.style.display = 'none';
+    arrow.style.transform = 'rotate(0deg)';
+    return;
+  }
+  
+  // Close all others
+  document.querySelectorAll('[id^="expand-"]').forEach(e => e.style.display = 'none');
+  document.querySelectorAll('[id^="arrow-"]').forEach(a => a.style.transform = 'rotate(0deg)');
+  
+  expand.style.display = 'block';
+  arrow.style.transform = 'rotate(180deg)';
+  expand.innerHTML = '<div style="padding:1.5rem;color:var(--muted)">Loading details...</div>';
+  
+  try {
+    const r = await fetch('/api/admin/master/' + id);
+    const d = await r.json();
+    const x = d.master;
+    
+    expand.innerHTML = `
+      <div style="padding:1.5rem">
+        <!-- Master Info -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.8rem;margin-bottom:1.5rem">
+          <div class="ds"><div class="ds-val" style="color:var(--gold)">${x.mt5_account || '—'}</div><div class="ds-label">MT5 Account</div></div>
+          <div class="ds"><div class="ds-val">${x.mt5_broker || '—'}</div><div class="ds-label">Broker</div></div>
+          <div class="ds"><div class="ds-val" style="color:var(--gold)">${x.max_clients || 20}</div><div class="ds-label">Max Clients</div></div>
+          <div class="ds"><div class="ds-val" style="color:var(--green)">${x.active_clients}</div><div class="ds-label">Active Now</div></div>
+          <div class="ds"><div class="ds-val">${x.trade_count}</div><div class="ds-label">Total Trades</div></div>
+          <div class="ds"><div class="ds-val">${new Date(x.created_at).toLocaleDateString()}</div><div class="ds-label">Joined</div></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.5rem">
+          ${!x.is_paid ? '<button class="btn-sm btn-approve" onclick="togglePaid('+x.id+',true)">✓ Activate Payment</button>' : '<button class="btn-sm btn-expire" onclick="togglePaid('+x.id+',false)">⏸ Revoke Access</button>'}
+          ${x.is_active !== false ? '<button class="btn-sm btn-expire" onclick="toggleActive('+x.id+',false)">🚫 Expire Account</button>' : '<button class="btn-sm btn-approve" onclick="toggleActive('+x.id+',true)">✓ Enable Account</button>'}
+          <button class="btn-sm btn-delete" onclick="deleteUser(${x.id},'${x.name.replace(/'/g,"\\'")}')">🗑 Delete</button>
+        </div>
+
+        <!-- Connected Clients -->
+        <h4 style="font-size:0.85rem;font-weight:700;margin-bottom:0.8rem;color:var(--gold)">👥 Connected Clients (${d.clients.length}/${x.max_clients || 20})</h4>
+        ${d.clients.length ? '<div style="overflow-x:auto"><table>' +
+          '<tr><th>Client ID</th><th>Account</th><th>Broker</th><th>Acc #</th><th>Balance</th><th>Status</th><th>Last Seen</th><th>First Seen</th></tr>' +
+          d.clients.map(c => '<tr>' +
+            '<td style="font-family:monospace;font-size:0.75rem;color:var(--blue)">' + c.client_uid + '</td>' +
+            '<td style="color:var(--txt);font-weight:600">' + (c.account_name||'—') + '</td>' +
+            '<td>' + (c.broker||'—') + '</td>' +
+            '<td>' + (c.account_number||'—') + '</td>' +
+            '<td style="font-weight:700">' + (c.balance ? '$'+parseFloat(c.balance).toLocaleString() : '—') + '</td>' +
+            '<td>' + (c.is_active ? '<span class="b-active">Online</span>' : '<span class="b-inactive">Offline</span>') + '</td>' +
+            '<td style="font-size:0.75rem">' + timeAgo(c.last_heartbeat) + '</td>' +
+            '<td style="font-size:0.75rem">' + new Date(c.first_seen).toLocaleDateString() + '</td>' +
+          '</tr>').join('') +
+        '</table></div>' : '<div class="empty" style="padding:1rem">No clients connected yet</div>'}
+
+        ${d.trades.length ? '<h4 style="font-size:0.85rem;font-weight:700;margin:1.5rem 0 0.8rem;color:var(--gold)">📈 Recent Trades</h4><div style="overflow-x:auto"><table>' +
+          '<tr><th>#</th><th>Symbol</th><th>Action</th><th>Vol</th><th>Price</th><th>Time</th></tr>' +
+          d.trades.slice(0,10).map(t => '<tr>' +
+            '<td style="color:var(--muted)">' + t.id + '</td>' +
+            '<td style="color:var(--txt);font-weight:600">' + t.symbol + '</td>' +
+            '<td class="' + (t.action?.toLowerCase().includes('buy')?'buy':'sell') + '">' + t.action + '</td>' +
+            '<td>' + t.volume + '</td><td>' + t.price + '</td>' +
+            '<td style="font-size:0.75rem">' + new Date(t.created_at).toLocaleString() + '</td>' +
+          '</tr>').join('') +
+        '</table></div>' : ''}
+      </div>
+    `;
+  } catch(e) {
+    expand.innerHTML = '<div style="padding:1.5rem;color:var(--red)">Error loading details</div>';
+  }
+}
+
+// ═══ MASTER DETAIL VIEW (modal - kept as backup) ═══
 async function viewMaster(id) {
   document.getElementById('detailOverlay').classList.add('show');
   document.getElementById('detailContent').innerHTML = '<div class="empty">Loading master details...</div>';
